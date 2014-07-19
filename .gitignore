@@ -1,4 +1,9 @@
+[Oo]bj
+[Bb]in
 *.suo
 *.user
+*.dll
+*.xap
+*.js.map
 src/packages
 src/Fayde.Controls.Test/ViewModels/MainViewModel.js
