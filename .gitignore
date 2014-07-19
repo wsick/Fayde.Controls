@@ -1,0 +1,4 @@
+*.suo
+*.user
+src/packages
+src/Fayde.Controls.Test/ViewModels/MainViewModel.js
