@@ -1,0 +1,12 @@
+{
+    "name": "Fayde-Controls",
+    "version": "0.9.9",
+    "homepage": "http://fayde.wsick.com",
+    "authors": [
+        "BSick7 <brad.sickles@gmail.com>"
+    ],
+    "ignore": [
+        "nuget",
+        "src"
+    ]
+}
