@@ -1,0 +1,24 @@
+{
+  "name": "fayde.controls",
+  "version": "0.9.9",
+  "description": "Extended control library for Fayde",
+  "main": "Fayde.Controls.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/BSick7/Fayde.Controls.git"
+  },
+  "keywords": [
+    "fayde",
+    "controls",
+    "xaml"
+  ],
+  "author": "Brad Sickles <brad.sickles@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BSick7/Fayde.Controls/issues"
+  },
+  "homepage": "https://github.com/BSick7/Fayde.Controls"
+}
