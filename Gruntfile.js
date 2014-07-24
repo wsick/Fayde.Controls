@@ -41,6 +41,13 @@ module.exports = function (grunt) {
                     { expand: true, flatten: true, src: ['Fayde.Controls.js'], dest: 'testsite/lib/Fayde.Controls', filter: 'isFile' },
                     { expand: true, flatten: true, src: ['Fayde.Controls.d.ts'], dest: 'testsite/lib/Fayde.Controls', filter: 'isFile' }
                 ]
+            },
+            deploy: {
+                files: [
+                    { expand: true, flatten: true, src: ['Themes/*'], dest: 'nuget/content/lib/Fayde.Controls/Themes', filter: 'isFile' },
+                    { expand: true, flatten: true, src: ['Fayde.Controls.js'], dest: 'nuget/content/lib/Fayde.Controls', filter: 'isFile' },
+                    { expand: true, flatten: true, src: ['Fayde.Controls.d.ts'], dest: 'nuget/content/lib/Fayde.Controls', filter: 'isFile' }
+                ]
             }
         },
         connect: {
@@ -89,6 +96,20 @@ module.exports = function (grunt) {
                 src: './build/_VersionTemplate._ts',
                 dest: './src/_Version.ts'
             }
+        },
+        nugetpack: {
+            dist: {
+                src: './nuget/Fayde.Controls.nuspec',
+                dest: './nuget/',
+                options: {
+                    version: '<%= pkg.version %>'
+                }
+            }
+        },
+        nugetpush: {
+            dist: {
+                src: './nuget/Fayde.Controls.<%= pkg.version %>.nupkg'
+            }
         }
     });
 
@@ -96,4 +117,6 @@ module.exports = function (grunt) {
     grunt.registerTask('testsite', ['setup:testsite', 'version:apply', 'typescript:build', 'copy:pretestsite', 'typescript:testsite', 'connect', 'open', 'watch']);
     setup(grunt);
     version(grunt);
+    grunt.registerTask('package', ['copy:desploy', 'nugetpack:dist']);
+    grunt.registerTask('publish', ['copy:desploy', 'nugetpack:dist', 'nugetpush:dist']);
 };
