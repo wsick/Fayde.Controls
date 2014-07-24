@@ -1,3 +1,6 @@
+var version = require('./build/version'),
+    setup = require('./build/setup');
+
 module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-typescript');
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -8,16 +11,13 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('./package.json'),
         setup: {
-            test: {
-                cwd: './test'
-            },
             testsite: {
                 cwd: './testsite'
             }
         },
         typescript: {
             build: {
-                src: ['src/_Version.ts', 'src/**/*.ts'],
+                src: ['src/*.ts', 'src/**/*.ts'],
                 dest: 'Fayde.Controls.js',
                 options: {
                     target: 'es5',
@@ -37,7 +37,7 @@ module.exports = function (grunt) {
         copy: {
             pretestsite: {
                 files: [
-                    { expand: true, flatten: true, src: ['Themes/*'], dest: 'testsite/lib/Fayde/Themes', filter: 'isFile' },
+                    { expand: true, flatten: true, src: ['Themes/*'], dest: 'testsite/lib/Fayde.Controls/Themes', filter: 'isFile' },
                     { expand: true, flatten: true, src: ['Fayde.Controls.js'], dest: 'testsite/lib/Fayde.Controls', filter: 'isFile' },
                     { expand: true, flatten: true, src: ['Fayde.Controls.d.ts'], dest: 'testsite/lib/Fayde.Controls', filter: 'isFile' }
                 ]
@@ -81,9 +81,19 @@ module.exports = function (grunt) {
             testsite: {
                 path: 'http://localhost:8002/default.html'
             }
+        },
+        version: {
+            bump: {
+            },
+            apply: {
+                src: './build/_VersionTemplate._ts',
+                dest: './src/_Version.ts'
+            }
         }
     });
 
-    grunt.registerTask('default', ['typescript:build']);
-    grunt.registerTask('testsite', ['setup:testsite', 'typescript:build', 'copy:pretestsite', 'typescript:testsite', 'connect', 'open', 'watch']);
+    grunt.registerTask('default', ['version:apply', 'typescript:build']);
+    grunt.registerTask('testsite', ['setup:testsite', 'version:apply', 'typescript:build', 'copy:pretestsite', 'typescript:testsite', 'connect', 'open', 'watch']);
+    setup(grunt);
+    version(grunt);
 };

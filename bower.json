@@ -6,7 +6,10 @@
         "BSick7 <brad.sickles@gmail.com>"
     ],
     "ignore": [
+        "build",
         "nuget",
-        "src"
+        "src",
+        "testsite",
+        "Gruntfile.js"
     ]
 }

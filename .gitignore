@@ -10,3 +10,4 @@ src/Fayde.Controls.Test/ViewModels/MainViewModel.js
 .idea
 node_modules
 testsite/lib
+testsite/ViewModels/MainViewModel.js
