@@ -7,6 +7,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-open');
+    grunt.loadNpmTasks('grunt-nuget');
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('./package.json'),
@@ -17,7 +18,7 @@ module.exports = function (grunt) {
         },
         typescript: {
             build: {
-                src: ['src/*.ts', 'src/**/*.ts'],
+                src: ['src/_Version.ts', 'src/*.ts', 'src/**/*.ts'],
                 dest: 'Fayde.Controls.js',
                 options: {
                     target: 'es5',
@@ -117,6 +118,6 @@ module.exports = function (grunt) {
     grunt.registerTask('testsite', ['setup:testsite', 'version:apply', 'typescript:build', 'copy:pretestsite', 'typescript:testsite', 'connect', 'open', 'watch']);
     setup(grunt);
     version(grunt);
-    grunt.registerTask('package', ['copy:desploy', 'nugetpack:dist']);
-    grunt.registerTask('publish', ['copy:desploy', 'nugetpack:dist', 'nugetpush:dist']);
+    grunt.registerTask('package', ['copy:deploy', 'nugetpack:dist']);
+    grunt.registerTask('publish', ['copy:deploy', 'nugetpack:dist', 'nugetpush:dist']);
 };

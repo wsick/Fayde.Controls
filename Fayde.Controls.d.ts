@@ -1,3 +1,6 @@
+declare module Fayde.Controls {
+    var Version: string;
+}
 declare module Fayde.Controls.Primitives {
     class MenuBase extends ItemsControl {
         static ItemContainerStyleProperty: DependencyProperty;
@@ -665,9 +668,6 @@ declare module Fayde.Controls {
         public MeasureOverride(availableSize: size): size;
         public ArrangeOverride(finalSize: size): size;
     }
-}
-declare module Fayde.Controls {
-    var Version: string;
 }
 declare module Fayde.Controls.Internal {
     class BindingSourceEvaluator<T> extends FrameworkElement {

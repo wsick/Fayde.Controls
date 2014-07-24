@@ -1,4 +1,11 @@
-﻿var __extends = this.__extends || function (d, b) {
+﻿var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        Controls.Version = '0.10.0';
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
@@ -4218,13 +4225,6 @@ var Fayde;
             return WrapPanel;
         })(Fayde.Controls.Panel);
         Controls.WrapPanel = WrapPanel;
-    })(Fayde.Controls || (Fayde.Controls = {}));
-    var Controls = Fayde.Controls;
-})(Fayde || (Fayde = {}));
-var Fayde;
-(function (Fayde) {
-    (function (Controls) {
-        Controls.Version = '0.9.9';
     })(Fayde.Controls || (Fayde.Controls = {}));
     var Controls = Fayde.Controls;
 })(Fayde || (Fayde = {}));
