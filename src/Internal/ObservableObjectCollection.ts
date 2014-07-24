@@ -7,9 +7,9 @@ module Fayde.Controls.Internal {
             super();
             if (!collection)
                 return;
-            var enumerator = collection.GetEnumerator();
-            while (enumerator.MoveNext()) {
-                this.Add(enumerator.Current);
+            var enumerator = collection.getEnumerator();
+            while (enumerator.moveNext()) {
+                this.Add(enumerator.current);
             }
         }
 

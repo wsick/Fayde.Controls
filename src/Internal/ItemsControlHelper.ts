@@ -53,9 +53,9 @@ module Fayde.Controls.Internal {
             var itemsHost = this.ItemsHost;
             if (!itemsHost || !itemsHost.Children)
                 return;
-            var enumerator = itemsHost.Children.GetEnumerator();
-            while (enumerator.MoveNext()) {
-                var cur = <FrameworkElement>enumerator.Current;
+            var enumerator = itemsHost.Children.getEnumerator();
+            while (enumerator.moveNext()) {
+                var cur = <FrameworkElement>enumerator.current;
                 if (!cur.Style)
                     cur.Style = itemContainerStyle;
             }

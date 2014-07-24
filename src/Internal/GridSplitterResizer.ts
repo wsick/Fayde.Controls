@@ -92,10 +92,10 @@
             }
 
             var enumerator: IEnumerator<DependencyObject> = this.Direction === GridResizeDirection.Columns
-                ? grid.ColumnDefinitions.GetEnumerator() : grid.RowDefinitions.GetEnumerator();
+                ? grid.ColumnDefinitions.getEnumerator() : grid.RowDefinitions.getEnumerator();
             var i = 0;
-            while (enumerator.MoveNext()) {
-                var ds = createSize(enumerator.Current);
+            while (enumerator.moveNext()) {
+                var ds = createSize(enumerator.current);
                 if (this.DS1.Index === i)
                     ds.Size = new GridLength(definition1Pixels, GridUnitType.Star);
                 else if (this.DS2.Index === i)

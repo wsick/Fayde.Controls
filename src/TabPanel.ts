@@ -17,15 +17,15 @@ module Fayde.Controls {
             this._NumberOfRows = 1;
             this._RowHeight = 0.0;
 
-            var childEnumerator = this.Children.GetEnumerator();
+            var childEnumerator = this.Children.getEnumerator();
             var element: UIElement;
 
             if (tabAlignment == Dock.Top || tabAlignment == Dock.Bottom) {
                 var num1 = 0;
                 var num2 = 0.0;
                 var num3 = 0.0;
-                while (childEnumerator.MoveNext()) {
-                    element = childEnumerator.Current;
+                while (childEnumerator.moveNext()) {
+                    element = childEnumerator.current;
                     element.Measure(availableSize);
                     if (element.Visibility !== Visibility.Collapsed) {
                         var sizeWithoutMargin = getDesiredSizeWithoutMargin(element);
@@ -49,8 +49,8 @@ module Fayde.Controls {
                 s.Height = this._RowHeight * this._NumberOfRows;
                 s.Width = !isFinite(s.Width) || isNaN(s.Width) || num3 < availableSize.Width ? num3 : availableSize.Width;
             } else if (tabAlignment === Dock.Left || tabAlignment === Dock.Right) {
-                while (childEnumerator.MoveNext()) {
-                    element = childEnumerator.Current;
+                while (childEnumerator.moveNext()) {
+                    element = childEnumerator.current;
                     if (element.Visibility != Visibility.Collapsed) {
                         element.Measure(availableSize);
                         var sizeWithoutMargin = getDesiredSizeWithoutMargin(element);
@@ -93,10 +93,10 @@ module Fayde.Controls {
             }
             var index1 = 0;
             var index2 = 0;
-            var childEnumerator = this.Children.GetEnumerator();
+            var childEnumerator = this.Children.getEnumerator();
             var uie: UIElement;
-            while (childEnumerator.MoveNext()) {
-                uie = childEnumerator.Current;
+            while (childEnumerator.moveNext()) {
+                uie = childEnumerator.current;
                 var thickness = (<FrameworkElement>uie).Margin || new Thickness();
                 var left = thickness.Left;
                 var right = thickness.Right;
@@ -133,10 +133,10 @@ module Fayde.Controls {
         }
         private _ArrangeVertical(arrangeSize: size) {
             var y = 0.0;
-            var childEnumerator = this.Children.GetEnumerator();
+            var childEnumerator = this.Children.getEnumerator();
             var uie: UIElement;
-            while (childEnumerator.MoveNext()) {
-                uie = childEnumerator.Current;
+            while (childEnumerator.moveNext()) {
+                uie = childEnumerator.current;
                 if (uie.Visibility !== Visibility.Collapsed) {
                     var tabItem = <TabItem>uie;
                     if (tabItem instanceof TabItem) {
@@ -158,10 +158,10 @@ module Fayde.Controls {
             var index = 0;
             var num = 0;
             if (solution.length > 0) {
-                var childEnumerator = this.Children.GetEnumerator();
+                var childEnumerator = this.Children.getEnumerator();
                 var uie: UIElement;
-                while (childEnumerator.MoveNext()) {
-                    uie = childEnumerator.Current;
+                while (childEnumerator.moveNext()) {
+                    uie = childEnumerator.current;
                     if (<boolean>uie.GetValue(TabItem.IsSelectedProperty))
                         return index;
                     if (index < solution.length && solution[index] === num)
@@ -262,10 +262,10 @@ module Fayde.Controls {
 
             var index6 = 0;
             var index7 = 0;
-            var enumerator = this.Children.GetEnumerator();
+            var enumerator = this.Children.getEnumerator();
             var uie: UIElement;
-            while (enumerator.MoveNext()) {
-                uie = enumerator.Current;
+            while (enumerator.moveNext()) {
+                uie = enumerator.current;
                 if (uie.Visibility === Visibility.Visible)
                     headerWidth[index7] += numArray6[index6];
                 if (index6 < length2 && numArray2[index6] == index7)
@@ -277,10 +277,10 @@ module Fayde.Controls {
         private _GetHeadersSize(): number[] {
             var arr = [];
             var index = 0;
-            var enumerator = this.Children.GetEnumerator();
+            var enumerator = this.Children.getEnumerator();
             var uie: UIElement;
-            while (enumerator.MoveNext()) {
-                uie = enumerator.Current;
+            while (enumerator.moveNext()) {
+                uie = enumerator.current;
                 if (uie.Visibility === Visibility.Collapsed) {
                     arr.push(0.0);
                 } else {

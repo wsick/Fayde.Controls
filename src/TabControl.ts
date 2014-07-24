@@ -73,9 +73,9 @@ module Fayde.Controls {
             this._ElementContentLeft = <ContentPresenter>this.GetTemplateChild("ContentLeft", ContentPresenter);
             this._ElementContentRight = <ContentPresenter>this.GetTemplateChild("ContentRight", ContentPresenter);
 
-            var enumerator = this.Items.GetEnumerator();
-            while (enumerator.MoveNext()) {
-                var tabItem = <TabItem>enumerator.Current;
+            var enumerator = this.Items.getEnumerator();
+            while (enumerator.moveNext()) {
+                var tabItem = <TabItem>enumerator.current;
                 if (!(tabItem instanceof TabItem))
                     this._ThrowInvalidTabItem(tabItem);
                 this._AddToTabPanel(tabItem);
@@ -124,10 +124,10 @@ module Fayde.Controls {
         }
         private OnTabStripPlacementPropertyChanged(args: IDependencyPropertyChangedEventArgs) {
             this.UpdateTabPanelLayout(<Dock> args.OldValue, <Dock> args.NewValue);
-            var enumerator = this.Items.GetEnumerator();
+            var enumerator = this.Items.getEnumerator();
             var ti: TabItem;
-            while (enumerator.MoveNext()) {
-                ti = <TabItem>enumerator.Current;
+            while (enumerator.moveNext()) {
+                ti = <TabItem>enumerator.current;
                 if (ti != null)
                     ti.UpdateVisualState();
             }
@@ -155,9 +155,9 @@ module Fayde.Controls {
                         tabItem.UpdateVisualState();
                     }
                     if (index1 === -1) {
-                        var enumerator = this.Items.GetEnumerator();
-                        while (enumerator.MoveNext()) {
-                            var tabItem = <TabItem>enumerator.Current;
+                        var enumerator = this.Items.getEnumerator();
+                        while (enumerator.moveNext()) {
+                            var tabItem = <TabItem>enumerator.current;
                             if (!(tabItem instanceof TabItem))
                                 this._ThrowInvalidTabItem(tabItem);
                             if (tabItem.IsSelected)
@@ -193,9 +193,9 @@ module Fayde.Controls {
                     this._ClearTabPanel();
                     this.SelectedIndex = -1;
                     var tabItem: TabItem;
-                    var enumerator = this.Items.GetEnumerator();
-                    while (enumerator.MoveNext()) {
-                        tabItem = <TabItem>enumerator.Current;
+                    var enumerator = this.Items.getEnumerator();
+                    while (enumerator.moveNext()) {
+                        tabItem = <TabItem>enumerator.current;
                         if (!(tabItem instanceof TabItem))
                             this._ThrowInvalidTabItem(tabItem);
                         this._AddToTabPanel(tabItem);
@@ -262,9 +262,9 @@ module Fayde.Controls {
                 this.SetValue(TabControl.SelectedContentProperty, null);
             }
             var tabItem: TabItem;
-            var enumerator = this.Items.GetEnumerator();
-            while (enumerator.MoveNext()) {
-                var tabItem = <TabItem>enumerator.Current;
+            var enumerator = this.Items.getEnumerator();
+            while (enumerator.moveNext()) {
+                var tabItem = <TabItem>enumerator.current;
                 if (!(tabItem instanceof TabItem))
                     this._ThrowInvalidTabItem(tabItem);
                 if (tabItem !== newItem && tabItem.IsSelected) {
@@ -301,10 +301,10 @@ module Fayde.Controls {
                 if (tabPanel1 != null)
                     tabPanel1.Children.Clear();
                 if (tabPanel2 != null) {
-                    var enumerator = this.Items.GetEnumerator();
+                    var enumerator = this.Items.getEnumerator();
                     var ti: TabItem;
-                    while (enumerator.MoveNext()) {
-                        ti = <TabItem>enumerator.Current;
+                    while (enumerator.moveNext()) {
+                        ti = <TabItem>enumerator.current;
                         if (!(ti instanceof TabItem))
                             this._ThrowInvalidTabItem(ti);
                         this._AddToTabPanel(ti);
@@ -374,9 +374,9 @@ module Fayde.Controls {
             var tabPanel = this._GetTabPanel(this.TabStripPlacement);
             if (!tabPanel)
                 return;
-            var enumerator = tabPanel.Children.GetEnumerator();
-            while (enumerator.MoveNext()) {
-                var tabItem = <TabItem>enumerator.Current;
+            var enumerator = tabPanel.Children.getEnumerator();
+            while (enumerator.moveNext()) {
+                var tabItem = <TabItem>enumerator.current;
                 if (tabItem != null)
                     this.ClearLanguageBinding(tabItem);
             }

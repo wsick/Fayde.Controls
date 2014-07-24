@@ -12,26 +12,29 @@ module Fayde.Controls {
         static ItemsSourceProperty = DependencyProperty.Register("ItemsSource", () => Fayde.IEnumerable_, DomainUpDown, undefined, (d, args) => (<DomainUpDown>d)._OnItemsSourceChanged(args.OldValue, args.NewValue));
         static ItemTemplateProperty = DependencyProperty.Register("ItemTemplate", () => DataTemplate, DomainUpDown);
 
-        Value: any;
-        IsEditable: boolean;
-        SpinnerStyle: Style;
-        CurrentIndex: number;
-        IsCyclic: boolean;
-        InvalidInputAction: InvalidInputAction;
-        FallbackItem: any;
-        ItemsSource: Fayde.IEnumerable<any>;
-        ItemTemplate: DataTemplate;
-        Items: Internal.ObservableObjectCollection;
+        Value:any;
+        IsEditable:boolean;
+        SpinnerStyle:Style;
+        CurrentIndex:number;
+        IsCyclic:boolean;
+        InvalidInputAction:InvalidInputAction;
+        FallbackItem:any;
+        ItemsSource:Fayde.IEnumerable<any>;
+        ItemTemplate:DataTemplate;
+        Items:Internal.ObservableObjectCollection;
 
-        OnValueChanged(oldItem: any, newItem: any) {
+        OnValueChanged(oldItem:any, newItem:any) {
         }
-        OnCurrentIndexChanged(oldIndex: number, newIndex: number) {
+
+        OnCurrentIndexChanged(oldIndex:number, newIndex:number) {
             this.UpdateValidSpinDirection();
         }
-        private _OnIsCyclicChanged(args: IDependencyPropertyChangedEventArgs) {
+
+        private _OnIsCyclicChanged(args:IDependencyPropertyChangedEventArgs) {
             this.UpdateValidSpinDirection();
         }
-        private _OnItemsSourceChanged(oldItemsSource: IEnumerable<any>, newItemsSource: IEnumerable<any>) {
+
+        private _OnItemsSourceChanged(oldItemsSource:IEnumerable<any>, newItemsSource:IEnumerable<any>) {
             var cc = Collections.INotifyCollectionChanged_.As(oldItemsSource);
             if (cc)
                 cc.CollectionChanged.Unsubscribe(this._ItemsSourceModified, this);
@@ -42,8 +45,18 @@ module Fayde.Controls {
                 return;
 
             var en = IEnumerable_.As(newItemsSource);
+            var arr: any[];
             if (en) {
-                this.Items.AddRange(Enumerable.ToArray(en));
+                var enu = en.getEnumerator();
+                arr = [];
+                while (enu.moveNext()) {
+                    arr.push(enu.current);
+                }
+            } else if (newItemsSource instanceof Array) {
+                arr = <any[]><any>newItemsSource;
+            }
+            if (arr) {
+                this.Items.AddRange(arr);
                 this.Items.IsReadOnly = true;
             }
 
@@ -51,30 +64,31 @@ module Fayde.Controls {
             if (cc)
                 cc.CollectionChanged.Subscribe(this._ItemsSourceModified, this);
         }
-        private _ItemsSourceModified(sender: any, e: Collections.CollectionChangedEventArgs) {
+
+        private _ItemsSourceModified(sender:any, e:Collections.CollectionChangedEventArgs) {
             var coll = <Collections.ObservableCollection<any>>sender;
-            var index: number;
+            var index:number;
             this.Items.IsReadOnly = false;
             switch (e.Action) {
                 case Collections.CollectionChangedAction.Add:
                     var enumerator = ArrayEx.GetEnumerator(e.NewItems);
                     index = e.NewStartingIndex;
-                    while (enumerator.MoveNext()) {
-                        this.Items.Insert(index, enumerator.Current);
+                    while (enumerator.moveNext()) {
+                        this.Items.Insert(index, enumerator.current);
                         index++;
                     }
                     break;
                 case Collections.CollectionChangedAction.Remove:
                     var enumerator = ArrayEx.GetEnumerator(e.OldItems);
-                    while (enumerator.MoveNext()) {
+                    while (enumerator.moveNext()) {
                         this.Items.RemoveAt(e.OldStartingIndex);
                     }
                     break;
                 case Collections.CollectionChangedAction.Replace:
                     var enumerator = ArrayEx.GetEnumerator(e.NewItems);
                     index = e.NewStartingIndex;
-                    while (enumerator.MoveNext()) {
-                        this.Items.SetValueAt(index, enumerator.Current);
+                    while (enumerator.moveNext()) {
+                        this.Items.SetValueAt(index, enumerator.current);
                         index++;
                     }
                     break;
@@ -85,18 +99,20 @@ module Fayde.Controls {
             }
             this.Items.IsReadOnly = true;
         }
-        private _OnItemsChanged(sender: any, e: Collections.CollectionChangedEventArgs) {
+
+        private _OnItemsChanged(sender:any, e:Collections.CollectionChangedEventArgs) {
             this._Coercer.UpdateTextBoxText();
         }
-        
+
         ValueChanging = new RoutedPropertyChangingEvent<number>();
         ParseError = new RoutedEvent<UpDownParseErrorEventArgs>();
 
-        get ValueMemberPath(): string {
+        get ValueMemberPath():string {
             var vb = this.ValueMemberBinding;
             return vb ? vb.Path.Path : null;
         }
-        set ValueMemberPath(value: string) {
+
+        set ValueMemberPath(value:string) {
             var vb = this.ValueMemberBinding;
             if (!value) {
                 if (!vb)
@@ -116,17 +132,19 @@ module Fayde.Controls {
                 this.ValueMemberBinding = new Fayde.Data.Binding(value);
         }
 
-        private _ValueBindingEvaluator: Internal.BindingSourceEvaluator<string> = null;
-        get ValueMemberBinding(): Fayde.Data.Binding {
+        private _ValueBindingEvaluator:Internal.BindingSourceEvaluator<string> = null;
+
+        get ValueMemberBinding():Fayde.Data.Binding {
             var vbe = this._ValueBindingEvaluator;
             return vbe ? vbe.ValueBinding : null;
         }
-        set ValueMemberBinding(value: Fayde.Data.Binding) {
+
+        set ValueMemberBinding(value:Fayde.Data.Binding) {
             this._ValueBindingEvaluator = new Internal.BindingSourceEvaluator<string>(value);
         }
-        
-        private _Coercer: Internal.IDomainCoercer;
-        private _SpinFlow: Internal.ISpinFlow;
+
+        private _Coercer:Internal.IDomainCoercer;
+        private _SpinFlow:Internal.ISpinFlow;
         private _CanEditByFocus = false;
 
         constructor() {
@@ -155,31 +173,36 @@ module Fayde.Controls {
             this.UpdateVisualState();
         }
 
-        OnGotFocus(e: RoutedEventArgs) {
+        OnGotFocus(e:RoutedEventArgs) {
             super.OnGotFocus(e);
             this.UpdateVisualState();
             if (this.IsEnabled)
                 this.TryEnterEditMode();
         }
-        OnLostFocus(e: RoutedEventArgs) {
+
+        OnLostFocus(e:RoutedEventArgs) {
             super.OnLostFocus(e);
             this.UpdateVisualState();
             if (this.IsEnabled)
                 this._Coercer.EscapeFocus();
         }
-        OnMouseEnter(e: Fayde.Input.MouseEventArgs) {
+
+        OnMouseEnter(e:Fayde.Input.MouseEventArgs) {
             super.OnMouseEnter(e);
             this.UpdateVisualState();
         }
-        OnMouseLeave(e: Fayde.Input.MouseEventArgs) {
+
+        OnMouseLeave(e:Fayde.Input.MouseEventArgs) {
             super.OnMouseLeave(e);
             this.UpdateVisualState();
         }
-        OnMouseLeftButtonDown(e: Fayde.Input.MouseButtonEventArgs) {
+
+        OnMouseLeftButtonDown(e:Fayde.Input.MouseButtonEventArgs) {
             super.OnMouseLeftButtonDown(e);
             this.UpdateVisualState();
         }
-        OnMouseLeftButtonUp(e: Fayde.Input.MouseButtonEventArgs) {
+
+        OnMouseLeftButtonUp(e:Fayde.Input.MouseButtonEventArgs) {
             super.OnMouseLeftButtonUp(e);
             this.UpdateVisualState();
             if (this.IsEnabled && !this._Coercer.IsEditing) {
@@ -188,15 +211,17 @@ module Fayde.Controls {
             }
         }
 
-        GoToStates(gotoFunc: (state: string) => boolean) {
+        GoToStates(gotoFunc:(state:string) => boolean) {
             super.GoToStates(gotoFunc);
             this.GoToStateEditing(gotoFunc);
             this.GoToStateValid(gotoFunc);
         }
-        GoToStateEditing(gotoFunc: (state: string) => boolean): boolean {
+
+        GoToStateEditing(gotoFunc:(state:string) => boolean):boolean {
             return gotoFunc(this._Coercer.IsEditing ? "Edit" : "Display");
         }
-        GoToStateValid(gotoFunc: (state: string) => boolean): boolean {
+
+        GoToStateValid(gotoFunc:(state:string) => boolean):boolean {
             return gotoFunc(this._Coercer.IsInvalidInput ? "InvalidDomain" : "ValidDomain");
         }
 
@@ -207,6 +232,7 @@ module Fayde.Controls {
             var curIndex = this.CurrentIndex;
             this._SpinFlow.UpdateValid(isCyclic || curIndex > 0, isCyclic || curIndex < this.Items.Count - 1);
         }
+
         private TryEnterEditMode() {
             if (this._Coercer.IsEditing)
                 return;
@@ -214,16 +240,18 @@ module Fayde.Controls {
                 this._Coercer.IsEditing = true;
         }
 
-        OnIsEditingChanged(isEditing: boolean) {
+        OnIsEditingChanged(isEditing:boolean) {
             this.UpdateVisualState();
         }
-        OnIsInvalidInputChanged(isInvalid: boolean) {
+
+        OnIsInvalidInputChanged(isInvalid:boolean) {
             this.UpdateVisualState();
         }
 
         OnSpin() {
             this._Coercer.ProcessUserInput();
         }
+
         OnIncrement() {
             if (this.CurrentIndex < this.Items.Count - 1)
                 this.CurrentIndex++;
@@ -234,6 +262,7 @@ module Fayde.Controls {
             this.Focus();
             window.setTimeout(() => this._CanEditByFocus = false, 1);
         }
+
         OnDecrement() {
             if (this.CurrentIndex > 0)
                 this.CurrentIndex--;
@@ -245,13 +274,16 @@ module Fayde.Controls {
             window.setTimeout(() => this._CanEditByFocus = false, 1);
         }
 
-        TryParseValue(text: string, ov: IOutValue): boolean {
+        TryParseValue(text:string, ov:IOutValue):boolean {
             if (!text) {
                 ov.Value = this.Value;
                 return true;
             }
             var vb = this._ValueBindingEvaluator;
-            ov.Value = Enumerable.FirstOrDefault<any>(this.Items, (item) => matchItem(vb, item, text));
+            var enu = this.Items.getEnumerator();
+            while (enu.moveNext() && ov.Value == null) {
+                ov.Value = matchItem(vb, enu.current, text);
+            }
             if (ov.Value != null)
                 return true;
 
@@ -266,7 +298,8 @@ module Fayde.Controls {
             }
             return true;
         }
-        FormatValue(): string {
+
+        FormatValue():string {
             var val = this.Value;
             if (!val)
                 return "";
@@ -297,7 +330,7 @@ module Fayde.Controls {
         { GroupName: "DomainStates", Name: "InvalidDomain" });
 
 
-    function inputActionValidator(d: DependencyObject, propd: DependencyProperty, value: any):boolean {
+    function inputActionValidator(d:DependencyObject, propd:DependencyProperty, value:any):boolean {
         switch (value) {
             case InvalidInputAction.UseFallbackItem:
             case InvalidInputAction.TextBoxCannotLoseFocus:
@@ -306,7 +339,8 @@ module Fayde.Controls {
                 return false;
         }
     }
-    function matchItem(evaluator: Internal.BindingSourceEvaluator<string>, item: any, text: string): boolean {
+
+    function matchItem(evaluator:Internal.BindingSourceEvaluator<string>, item:any, text:string):boolean {
         if (!evaluator)
             return text === item.toString();
         return text === (evaluator.GetDynamicValue(item) || "");
