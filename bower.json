@@ -1,14 +1,11 @@
 {
-  "name": "Fayde-Controls",
+  "name": "Fayde.Controls",
   "version": "0.10.0",
-  "homepage": "http://fayde.wsick.com",
-  "authors": [
-    "BSick7 <brad.sickles@gmail.com>"
-  ],
   "ignore": [
     "build",
     "nuget",
     "src",
+    "test",
     "testsite",
     "Gruntfile.js"
   ]

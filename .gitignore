@@ -11,3 +11,6 @@ src/Fayde.Controls.Test/ViewModels/MainViewModel.js
 node_modules
 testsite/lib
 testsite/ViewModels/MainViewModel.js
+test/lib
+test/runner.js
+test/tests/test1.js

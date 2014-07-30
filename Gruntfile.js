@@ -3,15 +3,29 @@ var version = require('./build/version'),
 
 module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-typescript');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-open');
     grunt.loadNpmTasks('grunt-nuget');
 
+    var ports = {
+        server: 8002,
+        livereload: 35730
+    };
+    var meta = {
+        name: 'Fayde.Controls'
+    };
+
     grunt.initConfig({
+        ports: ports,
+        meta: meta,
         pkg: grunt.file.readJSON('./package.json'),
         setup: {
+            test: {
+                cwd: './test'
+            },
             testsite: {
                 cwd: './testsite'
             }
@@ -19,15 +33,23 @@ module.exports = function (grunt) {
         typescript: {
             build: {
                 src: ['src/_Version.ts', 'src/*.ts', 'src/**/*.ts'],
-                dest: 'Fayde.Controls.js',
+                dest: '<%= meta.name %>.js',
                 options: {
                     target: 'es5',
                     declaration: true,
                     sourceMap: true
                 }
             },
+            test: {
+                src: ['test/**/*.ts'],
+                options: {
+                    target: 'es5',
+                    module: 'amd',
+                    sourceMap: true
+                }
+            },
             testsite: {
-                src: ['testsite/**/*.ts'],
+                src: ['testsite/**/*.ts', '!testsite/lib/**/*.ts'],
                 options: {
                     target: 'es5',
                     module: 'amd',
@@ -36,18 +58,28 @@ module.exports = function (grunt) {
             }
         },
         copy: {
+            pretest: {
+                files: [
+                    { expand: true, flatten: true, src: ['Themes/*'], dest: 'test/lib/<%= meta.name %>/Themes', filter: 'isFile' },
+                    { expand: true, flatten: true, src: ['<%= meta.name %>.js'], dest: 'test/lib/<%= meta.name %>', filter: 'isFile' },
+                    { expand: true, flatten: true, src: ['<%= meta.name %>.d.ts'], dest: 'test/lib/<%= meta.name %>', filter: 'isFile' }
+                ]
+            },
             pretestsite: {
                 files: [
-                    { expand: true, flatten: true, src: ['Themes/*'], dest: 'testsite/lib/Fayde.Controls/Themes', filter: 'isFile' },
-                    { expand: true, flatten: true, src: ['Fayde.Controls.js'], dest: 'testsite/lib/Fayde.Controls', filter: 'isFile' },
-                    { expand: true, flatten: true, src: ['Fayde.Controls.d.ts'], dest: 'testsite/lib/Fayde.Controls', filter: 'isFile' }
+                    { expand: true, flatten: true, src: ['Themes/*'], dest: 'testsite/lib/<%= meta.name %>/Themes', filter: 'isFile' },
+                    { expand: true, flatten: true, src: ['<%= meta.name %>.js'], dest: 'testsite/lib/<%= meta.name %>', filter: 'isFile' },
+                    { expand: true, flatten: true, src: ['<%= meta.name %>.d.ts'], dest: 'testsite/lib/<%= meta.name %>', filter: 'isFile' }
                 ]
             }
+        },
+        qunit: {
+            all: ['test/**/*.html']
         },
         connect: {
             server: {
                 options: {
-                    port: 8002,
+                    port: ports.server,
                     base: './testsite/'
                 }
             }
@@ -58,7 +90,7 @@ module.exports = function (grunt) {
                 tasks: ['typescript:build']
             },
             dist: {
-                files: ['Fayde.Controls.js'],
+                files: ['<%= meta.name %>.js'],
                 tasks: ['copy:pretestsite']
             },
             testsitets: {
@@ -68,19 +100,19 @@ module.exports = function (grunt) {
             testsitejs: {
                 files: ['testsite/**/*.js'],
                 options: {
-                    livereload: 35730
+                    livereload: ports.livereload
                 }
             },
             testsitefay: {
                 files: ['testsite/**/*.fap', 'testsite/**/*.fayde'],
                 options: {
-                    livereload: 35730
+                    livereload: ports.livereload
                 }
             }
         },
         open: {
             testsite: {
-                path: 'http://localhost:8002/default.html'
+                path: 'http://localhost:<%= ports.server %>/default.html'
             }
         },
         version: {
@@ -93,7 +125,7 @@ module.exports = function (grunt) {
         },
         nugetpack: {
             dist: {
-                src: './nuget/Fayde.Controls.nuspec',
+                src: './nuget/<%= meta.name %>.nuspec',
                 dest: './nuget/',
                 options: {
                     version: '<%= pkg.version %>'
@@ -102,12 +134,13 @@ module.exports = function (grunt) {
         },
         nugetpush: {
             dist: {
-                src: './nuget/Fayde.Controls.<%= pkg.version %>.nupkg'
+                src: './nuget/<%= meta.name %>.<%= pkg.version %>.nupkg'
             }
         }
     });
 
     grunt.registerTask('default', ['version:apply', 'typescript:build']);
+    grunt.registerTask('test', ['setup:test', 'version:apply', 'typescript:build', 'copy:pretest', 'typescript:test', 'qunit']);
     grunt.registerTask('testsite', ['setup:testsite', 'version:apply', 'typescript:build', 'copy:pretestsite', 'typescript:testsite', 'connect', 'open', 'watch']);
     setup(grunt);
     version(grunt);
