@@ -1,4 +1,6 @@
 ﻿module Fayde.Controls.Internal {
+    import GridUnitType = minerva.controls.grid.GridUnitType;
+
     export enum GridResizeDirection {
         Auto,
         Columns,

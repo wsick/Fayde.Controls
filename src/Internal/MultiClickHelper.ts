@@ -25,11 +25,11 @@ module Fayde.Controls.Internal {
     }
 
     function getDistance(oldPosition: Point, newPosition: Point): number {
-        var xdiff = newPosition.X;
-        var ydiff = newPosition.Y;
+        var xdiff = newPosition.x;
+        var ydiff = newPosition.y;
         if (oldPosition) {
-            xdiff -= oldPosition.X;
-            ydiff -= oldPosition.Y;
+            xdiff -= oldPosition.x;
+            ydiff -= oldPosition.y;
         }
         return xdiff * xdiff + ydiff * ydiff;
     }

@@ -75,8 +75,8 @@ module Fayde.Controls.Internal {
 
         static GetTopAndBottom(element: FrameworkElement, parent: FrameworkElement, top: IOutValue, bottom: IOutValue) {
             var xform = element.TransformToVisual(parent);
-            top.Value = xform.Transform(new Point(0.0, 0.0)).Y;
-            bottom.Value = xform.Transform(new Point(0.0, element.ActualHeight)).Y;
+            top.Value = xform.Transform(new Point(0.0, 0.0)).y;
+            bottom.Value = xform.Transform(new Point(0.0, element.ActualHeight)).y;
         }
     }
 
