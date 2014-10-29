@@ -3,9 +3,11 @@ var version = require('./build/version'),
 
 module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-typescript');
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-qunit');
+    grunt.loadNpmTasks('grunt-contrib-symlink');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-open');
     grunt.loadNpmTasks('grunt-nuget');
@@ -22,12 +24,52 @@ module.exports = function (grunt) {
         ports: ports,
         meta: meta,
         pkg: grunt.file.readJSON('./package.json'),
+        clean: {
+            bower: ['./lib'],
+            testsite: ['./testsite/lib'],
+            test: ['./test/lib']
+        },
         setup: {
+            base: {
+                cwd: '.'
+            }
+        },
+        symlink: {
+            options: {
+                overwrite: true
+            },
             test: {
-                cwd: './test'
+                files: [
+                    { src: './lib/fayde', dest: './test/lib/fayde' },
+                    { src: './lib/minerva', dest: './test/lib/minerva' },
+                    { src: './lib/qunit', dest: './test/lib/qunit' },
+                    { src: './lib/requirejs', dest: './test/lib/requirejs' },
+                    { src: './lib/requirejs-text', dest: './test/lib/requirejs-text' },
+                    { src: './themes', dest: './test/lib/fayde.controls/themes' },
+                    { src: './fayde.controls.js', dest: './test/lib/fayde.controls/fayde.controls.js' },
+                    { src: './fayde.controls.d.ts', dest: './test/lib/fayde.controls/fayde.controls.d.ts' },
+                    { src: './fayde.controls.js.map', dest: './test/lib/fayde.controls/fayde.controls.js.map' },
+                    { src: './src', dest: './test/lib/fayde.controls/src' }
+                ]
             },
             testsite: {
-                cwd: './testsite'
+                files: [
+                    { src: './lib/fayde', dest: './testsite/lib/fayde' },
+                    { src: './lib/minerva', dest: './testsite/lib/minerva' },
+                    { src: './lib/qunit', dest: './testsite/lib/qunit' },
+                    { src: './lib/requirejs', dest: './testsite/lib/requirejs' },
+                    { src: './lib/requirejs-text', dest: './testsite/lib/requirejs-text' },
+                    { src: './themes', dest: './testsite/lib/fayde.controls/themes' },
+                    { src: './fayde.controls.js', dest: './testsite/lib/fayde.controls/fayde.controls.js' },
+                    { src: './fayde.controls.d.ts', dest: './testsite/lib/fayde.controls/fayde.controls.d.ts' },
+                    { src: './fayde.controls.js.map', dest: './testsite/lib/fayde.controls/fayde.controls.js.map' },
+                    { src: './src', dest: './testsite/lib/fayde.controls/src' }
+                ]
+            },
+            localfayde: {
+                files: [
+                    { src: '../fayde', dest: './lib/fayde' }
+                ]
             }
         },
         typescript: {
@@ -55,22 +97,6 @@ module.exports = function (grunt) {
                     module: 'amd',
                     sourceMap: true
                 }
-            }
-        },
-        copy: {
-            pretest: {
-                files: [
-                    { expand: true, flatten: true, src: ['Themes/*'], dest: 'test/lib/<%= meta.name %>/Themes', filter: 'isFile' },
-                    { expand: true, flatten: true, src: ['<%= meta.name %>.js'], dest: 'test/lib/<%= meta.name %>', filter: 'isFile' },
-                    { expand: true, flatten: true, src: ['<%= meta.name %>.d.ts'], dest: 'test/lib/<%= meta.name %>', filter: 'isFile' }
-                ]
-            },
-            pretestsite: {
-                files: [
-                    { expand: true, flatten: true, src: ['Themes/*'], dest: 'testsite/lib/<%= meta.name %>/Themes', filter: 'isFile' },
-                    { expand: true, flatten: true, src: ['<%= meta.name %>.js'], dest: 'testsite/lib/<%= meta.name %>', filter: 'isFile' },
-                    { expand: true, flatten: true, src: ['<%= meta.name %>.d.ts'], dest: 'testsite/lib/<%= meta.name %>', filter: 'isFile' }
-                ]
             }
         },
         qunit: {
@@ -140,10 +166,12 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('default', ['version:apply', 'typescript:build']);
-    grunt.registerTask('test', ['setup:test', 'version:apply', 'typescript:build', 'copy:pretest', 'typescript:test', 'qunit']);
-    grunt.registerTask('testsite', ['setup:testsite', 'version:apply', 'typescript:build', 'copy:pretestsite', 'typescript:testsite', 'connect', 'open', 'watch']);
+    grunt.registerTask('test', ['version:apply', 'typescript:build', 'typescript:test', 'qunit']);
+    grunt.registerTask('testsite', ['version:apply', 'typescript:build', 'typescript:testsite', 'connect', 'open', 'watch']);
     setup(grunt);
     version(grunt);
     grunt.registerTask('package', ['nugetpack:dist']);
     grunt.registerTask('publish', ['nugetpack:dist', 'nugetpush:dist']);
+    grunt.registerTask('lib:reset', ['clean', 'setup', 'symlink:test', 'symlink:testsite']);
+    grunt.registerTask('link:fayde', ['symlink:localfayde']);
 };

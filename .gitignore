@@ -14,3 +14,4 @@ testsite/ViewModels/MainViewModel.js
 test/lib
 test/runner.js
 test/tests/test1.js
+lib/
