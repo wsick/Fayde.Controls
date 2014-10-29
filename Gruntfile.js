@@ -66,6 +66,11 @@ module.exports = function (grunt) {
                     { src: './src', dest: './testsite/lib/fayde.controls/src' }
                 ]
             },
+            localminerva: {
+                files: [
+                    { src: '../minerva', dest: './lib/minerva' }
+                ]
+            },
             localfayde: {
                 files: [
                     { src: '../fayde', dest: './lib/fayde' }
@@ -74,7 +79,7 @@ module.exports = function (grunt) {
         },
         typescript: {
             build: {
-                src: ['src/_Version.ts', 'src/*.ts', 'src/**/*.ts'],
+                src: ['./lib/minerva/minerva.d.ts', './lib/fayde/fayde.d.ts', './src/_Version.ts', './src/*.ts', './src/**/*.ts'],
                 dest: '<%= meta.name %>.js',
                 options: {
                     target: 'es5',
@@ -83,15 +88,17 @@ module.exports = function (grunt) {
                 }
             },
             test: {
-                src: ['test/**/*.ts'],
+                src: ['./lib/minerva/minerva.d.ts', './lib/fayde/fayde.d.ts', './test/**/*.ts', '!./test/lib/**/*.ts'],
+                dest: './test/.build',
                 options: {
                     target: 'es5',
+                    basePath: './test/tests',
                     module: 'amd',
                     sourceMap: true
                 }
             },
             testsite: {
-                src: ['testsite/**/*.ts', '!testsite/lib/**/*.ts'],
+                src: ['./lib/minerva/minerva.d.ts', './lib/fayde/fayde.d.ts', './testsite/**/*.ts', '!./testsite/lib/**/*.ts'],
                 options: {
                     target: 'es5',
                     module: 'amd',
@@ -114,10 +121,6 @@ module.exports = function (grunt) {
             src: {
                 files: ['src/**/*.ts'],
                 tasks: ['typescript:build']
-            },
-            dist: {
-                files: ['<%= meta.name %>.js'],
-                tasks: ['copy:pretestsite']
             },
             testsitets: {
                 files: ['testsite/**/*.ts'],
@@ -173,5 +176,6 @@ module.exports = function (grunt) {
     grunt.registerTask('package', ['nugetpack:dist']);
     grunt.registerTask('publish', ['nugetpack:dist', 'nugetpush:dist']);
     grunt.registerTask('lib:reset', ['clean', 'setup', 'symlink:test', 'symlink:testsite']);
+    grunt.registerTask('link:minerva', ['symlink:localminerva']);
     grunt.registerTask('link:fayde', ['symlink:localfayde']);
 };
