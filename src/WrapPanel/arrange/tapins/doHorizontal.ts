@@ -1,4 +1,5 @@
-export module Fayde.Controls.wrappanel.arrange.tapins {
+module Fayde.Controls.wrappanel.arrange.tapins {
+    import Size = minerva.Size;
     import Rect = minerva.Rect;
 
     export function doHorizontal (input: IInput, state: IState, output: IOutput, tree: minerva.core.IUpdaterTree, finalRect: Rect): boolean {

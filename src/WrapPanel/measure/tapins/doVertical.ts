@@ -1,4 +1,4 @@
-export module Fayde.Controls.wrappanel.measure.tapins {
+module Fayde.Controls.wrappanel.measure.tapins {
     import Size = minerva.Size;
 
     export function doVertical (input: IInput, state: IState, output: IOutput, tree: minerva.core.IUpdaterTree, availableSize: Size): boolean {

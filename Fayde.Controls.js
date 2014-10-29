@@ -181,8 +181,8 @@ var Fayde;
             ContextMenu.prototype.UpdateContextMenuPlacement = function () {
                 if (!this._RootVisual || !this._Overlay)
                     return;
-                var x = this._PopupAlignmentPoint.X;
-                var y = this._PopupAlignmentPoint.Y;
+                var x = this._PopupAlignmentPoint.x;
+                var y = this._PopupAlignmentPoint.y;
                 var val1_1 = x + this.HorizontalOffset;
                 var val1_2 = y + this.VerticalOffset;
                 var val1_3 = Math.min(val1_1, this._RootVisual.ActualWidth - this.ActualWidth);
@@ -260,7 +260,8 @@ var Fayde;
             ContextMenu.prototype.FocusNextItem = function (down) {
                 var count = this.Items.Count;
                 var num = down ? -1 : count;
-                var menuItem1 = this.XamlNode.GetFocusedElement();
+
+                var menuItem1 = Fayde.Surface.GetFocusedElement(this);
                 if (menuItem1 instanceof Controls.MenuItem && this === menuItem1.ParentMenuBase)
                     num = this.ItemContainersManager.IndexFromContainer(menuItem1);
                 var index = num;
@@ -1339,7 +1340,7 @@ var Fayde;
                     return;
                 var pos = this._GetTransformedPos(e);
                 if (pos)
-                    this._HandleMove(pos.X - this._DragStart.X, pos.Y - this._DragStart.Y, false);
+                    this._HandleMove(pos.X - this._DragStart.x, pos.y - this._DragStart.y, false);
             };
 
             GridSplitter.prototype.InitHelper = function () {
@@ -1811,6 +1812,10 @@ var Fayde;
                 this._ElementTabPanelBottom = this.GetTemplateChild("TabPanelBottom", Controls.TabPanel);
                 this._ElementTabPanelLeft = this.GetTemplateChild("TabPanelLeft", Controls.TabPanel);
                 this._ElementTabPanelRight = this.GetTemplateChild("TabPanelRight", Controls.TabPanel);
+                Controls.TabPanel.setTabAlignment(this._ElementTabPanelTop, 1 /* Top */);
+                Controls.TabPanel.setTabAlignment(this._ElementTabPanelBottom, 3 /* Bottom */);
+                Controls.TabPanel.setTabAlignment(this._ElementTabPanelLeft, 0 /* Left */);
+                Controls.TabPanel.setTabAlignment(this._ElementTabPanelRight, 2 /* Right */);
                 this._ElementContentTop = this.GetTemplateChild("ContentTop", Controls.ContentPresenter);
                 this._ElementContentBottom = this.GetTemplateChild("ContentBottom", Controls.ContentPresenter);
                 this._ElementContentLeft = this.GetTemplateChild("ContentLeft", Controls.ContentPresenter);
@@ -1841,6 +1846,7 @@ var Fayde;
                     this.SelectItem(oldItem, newItem);
                 }
             };
+
             TabControl.prototype.OnSelectedIndexChanged = function (args) {
                 var index = args.NewValue;
                 var num = args.OldValue;
@@ -1862,9 +1868,11 @@ var Fayde;
                     this.SelectedItem = item;
                 }
             };
+
             TabControl.prototype.OnSelectedContentChanged = function (args) {
                 this.UpdateSelectedContent(args.NewValue);
             };
+
             TabControl.prototype.OnTabStripPlacementPropertyChanged = function (args) {
                 this.UpdateTabPanelLayout(args.OldValue, args.NewValue);
                 var enumerator = this.Items.getEnumerator();
@@ -1974,6 +1982,7 @@ var Fayde;
                 this.SelectedItem = nextTabItem;
                 nextTabItem.Focus();
             };
+
             TabControl.prototype._FindEndTabItem = function () {
                 var items = this.Items;
                 var len = items.Count;
@@ -1985,6 +1994,7 @@ var Fayde;
                 }
                 return null;
             };
+
             TabControl.prototype._FindHomeTabItem = function () {
                 var items = this.Items;
                 var len = items.Count;
@@ -2029,6 +2039,7 @@ var Fayde;
                 this.OnSelectionChanged(e);
                 this.SelectionChanged.Raise(this, e);
             };
+
             TabControl.prototype.OnSelectionChanged = function (e) {
             };
 
@@ -2063,6 +2074,7 @@ var Fayde;
                     return;
                 template2.Visibility = 0 /* Visible */;
             };
+
             TabControl.prototype.UpdateSelectedContent = function (content) {
                 var tabItem = this.SelectedItem;
                 if (!(tabItem instanceof Controls.TabItem))
@@ -2086,6 +2098,7 @@ var Fayde;
                 binding.Source = this;
                 frameworkElement.SetBinding(Fayde.FrameworkElement.LanguageProperty, binding);
             };
+
             TabControl.prototype.ClearLanguageBinding = function (tabItem) {
                 if (tabItem == null)
                     return;
@@ -2102,18 +2115,21 @@ var Fayde;
                 tabPanel.Children.Add(ti);
                 this.EnsureLanguageBinding(ti);
             };
+
             TabControl.prototype._InsertIntoTabPanel = function (index, ti) {
                 var tabPanel = this._GetTabPanel(this.TabStripPlacement);
                 if (!tabPanel || tabPanel.Children.Contains(ti))
                     return;
                 tabPanel.Children.Insert(index, ti);
             };
+
             TabControl.prototype._RemoveFromTabPanel = function (ti) {
                 var tabPanel = this._GetTabPanel(this.TabStripPlacement);
                 if (!tabPanel || !tabPanel.Children.Contains(ti))
                     return;
                 tabPanel.Children.Remove(ti);
             };
+
             TabControl.prototype._ClearTabPanel = function () {
                 var tabPanel = this._GetTabPanel(this.TabStripPlacement);
                 if (!tabPanel)
@@ -2141,6 +2157,7 @@ var Fayde;
                         return null;
                 }
             };
+
             TabControl.prototype._GetTemplate = function (tabPlacement) {
                 switch (tabPlacement) {
                     case 0 /* Left */:
@@ -2155,6 +2172,7 @@ var Fayde;
                         return null;
                 }
             };
+
             TabControl.prototype._GetContentHost = function (tabPlacement) {
                 switch (tabPlacement) {
                     case 0 /* Left */:
@@ -2453,327 +2471,6 @@ var Fayde;
             };
             return Element;
         })();
-    })(Fayde.Controls || (Fayde.Controls = {}));
-    var Controls = Fayde.Controls;
-})(Fayde || (Fayde = {}));
-var Fayde;
-(function (Fayde) {
-    (function (Controls) {
-        var TabPanel = (function (_super) {
-            __extends(TabPanel, _super);
-            function TabPanel() {
-                _super.apply(this, arguments);
-                this._NumberOfRows = 1;
-            }
-            Object.defineProperty(TabPanel.prototype, "TabAlignment", {
-                get: function () {
-                    var tabControlParent = Fayde.VisualTreeHelper.GetParentOfType(this, Controls.TabControl);
-                    if (tabControlParent != null)
-                        return tabControlParent.TabStripPlacement;
-                    return 1 /* Top */;
-                },
-                enumerable: true,
-                configurable: true
-            });
-
-            TabPanel.prototype.MeasureOverride = function (availableSize) {
-                var s = new size();
-                var tabAlignment = this.TabAlignment;
-                this._NumberOfRows = 1;
-                this._RowHeight = 0.0;
-
-                var childEnumerator = this.Children.getEnumerator();
-                var element;
-
-                if (tabAlignment == 1 /* Top */ || tabAlignment == 3 /* Bottom */) {
-                    var num1 = 0;
-                    var num2 = 0.0;
-                    var num3 = 0.0;
-                    while (childEnumerator.moveNext()) {
-                        element = childEnumerator.current;
-                        element.Measure(availableSize);
-                        if (element.Visibility !== 1 /* Collapsed */) {
-                            var sizeWithoutMargin = getDesiredSizeWithoutMargin(element);
-                            if (this._RowHeight < sizeWithoutMargin.Height)
-                                this._RowHeight = sizeWithoutMargin.Height;
-                            if (num2 + sizeWithoutMargin.Width > availableSize.Width && num1 > 0) {
-                                if (num3 < num2)
-                                    num3 = num2;
-                                num2 = sizeWithoutMargin.Width;
-                                num1 = 1;
-                                ++this._NumberOfRows;
-                            } else {
-                                num2 += sizeWithoutMargin.Width;
-                                ++num1;
-                            }
-                        }
-                    }
-                    if (num3 < num2)
-                        num3 = num2;
-                    s.Height = this._RowHeight * this._NumberOfRows;
-                    s.Width = !isFinite(s.Width) || isNaN(s.Width) || num3 < availableSize.Width ? num3 : availableSize.Width;
-                } else if (tabAlignment === 0 /* Left */ || tabAlignment === 2 /* Right */) {
-                    while (childEnumerator.moveNext()) {
-                        element = childEnumerator.current;
-                        if (element.Visibility != 1 /* Collapsed */) {
-                            element.Measure(availableSize);
-                            var sizeWithoutMargin = getDesiredSizeWithoutMargin(element);
-                            if (s.Width < sizeWithoutMargin.Width)
-                                s.Width = sizeWithoutMargin.Width;
-                            s.Height += sizeWithoutMargin.Height;
-                        }
-                    }
-                }
-                return s;
-            };
-            TabPanel.prototype.ArrangeOverride = function (finalSize) {
-                switch (this.TabAlignment) {
-                    case 1 /* Top */:
-                    case 3 /* Bottom */:
-                        this._ArrangeHorizontal(finalSize);
-                        break;
-                    case 0 /* Left */:
-                    case 2 /* Right */:
-                        this._ArrangeVertical(finalSize);
-                        break;
-                }
-                return finalSize;
-            };
-
-            TabPanel.prototype._ArrangeHorizontal = function (arrangeSize) {
-                var tabAlignment = this.TabAlignment;
-                var flag1 = this._NumberOfRows > 1;
-                var num = 0;
-                var solution = [];
-                var size1 = new size();
-                var headersSize = this._GetHeadersSize();
-                if (flag1) {
-                    solution = this._CalculateHeaderDistribution(arrangeSize.Width, headersSize);
-                    num = this._GetActiveRow(solution);
-                    if (tabAlignment === 1 /* Top */)
-                        size1.Height = (this._NumberOfRows - 1.0 - num) * this._RowHeight;
-                    if (tabAlignment === 3 /* Bottom */ && num !== 0)
-                        size1.Height = (this._NumberOfRows - num) * this._RowHeight;
-                }
-                var index1 = 0;
-                var index2 = 0;
-                var childEnumerator = this.Children.getEnumerator();
-                var uie;
-                while (childEnumerator.moveNext()) {
-                    uie = childEnumerator.current;
-                    var thickness = uie.Margin || new Thickness();
-                    var left = thickness.Left;
-                    var right = thickness.Right;
-                    var top = thickness.Top;
-                    var bottom = thickness.Bottom;
-                    var flag2 = flag1 && (index2 < solution.length && solution[index2] === index1 || index1 === this.Children.Count - 1);
-                    var size2 = size.fromRaw(headersSize[index1], this._RowHeight);
-                    if (flag2)
-                        size2.Width = arrangeSize.Width - size1.Width;
-                    var tabItem = uie;
-                    if (tabItem instanceof Controls.TabItem) {
-                        if (tabItem.IsSelected)
-                            tabItem.SetValue(Controls.Canvas.ZIndexProperty, 1);
-                        else
-                            tabItem.SetValue(Controls.Canvas.ZIndexProperty, 0);
-                    }
-                    var arrSize = new rect();
-                    rect.set(arrSize, size1.Width, size1.Height, size2.Width, size2.Height);
-                    uie.Arrange(arrSize);
-                    var size3 = size2;
-                    size3.Height = Math.max(0.0, size3.Height - top - bottom);
-                    size3.Width = Math.max(0.0, size3.Width - left - right);
-                    size1.Width += size2.Width;
-                    if (flag2) {
-                        if (index2 === num && tabAlignment === 1 /* Top */ || index2 === num - 1 && tabAlignment === 3 /* Bottom */)
-                            size1.Height = 0.0;
-                        else
-                            size1.Height += this._RowHeight;
-                        size1.Width = 0.0;
-                        ++index2;
-                    }
-                    ++index1;
-                }
-            };
-            TabPanel.prototype._ArrangeVertical = function (arrangeSize) {
-                var y = 0.0;
-                var childEnumerator = this.Children.getEnumerator();
-                var uie;
-                while (childEnumerator.moveNext()) {
-                    uie = childEnumerator.current;
-                    if (uie.Visibility !== 1 /* Collapsed */) {
-                        var tabItem = uie;
-                        if (tabItem instanceof Controls.TabItem) {
-                            if (tabItem.IsSelected)
-                                tabItem.SetValue(Controls.Canvas.ZIndexProperty, 1);
-                            else
-                                tabItem.SetValue(Controls.Canvas.ZIndexProperty, 0);
-                        }
-                        var sizeWithoutMargin = getDesiredSizeWithoutMargin(uie);
-                        var arrSize = new rect();
-                        rect.set(arrSize, 0.0, y, arrangeSize.Width, sizeWithoutMargin.Height);
-                        uie.Arrange(arrSize);
-                        y += sizeWithoutMargin.Height;
-                    }
-                }
-            };
-
-            TabPanel.prototype._GetActiveRow = function (solution) {
-                var index = 0;
-                var num = 0;
-                if (solution.length > 0) {
-                    var childEnumerator = this.Children.getEnumerator();
-                    var uie;
-                    while (childEnumerator.moveNext()) {
-                        uie = childEnumerator.current;
-                        if (uie.GetValue(Controls.TabItem.IsSelectedProperty))
-                            return index;
-                        if (index < solution.length && solution[index] === num)
-                            ++index;
-                        ++num;
-                    }
-                }
-                if (this.TabAlignment === 1 /* Top */)
-                    index = this._NumberOfRows - 1;
-                return index;
-            };
-            TabPanel.prototype._CalculateHeaderDistribution = function (rowWidthLimit, headerWidth) {
-                var num1 = 0.0;
-                var length1 = headerWidth.length;
-                var length2 = this._NumberOfRows - 1;
-                var num2 = 0.0;
-                var num3 = 0;
-                var numArray1 = new Array(length2);
-                var numArray2 = new Array(length2);
-
-                var numArray3 = new Array(this._NumberOfRows);
-                var numArray4 = numArray3.slice(0);
-                var numArray5 = numArray3.slice(0);
-                var numArray6 = numArray3.slice(0);
-
-                var index1 = 0;
-                for (var index2 = 0; index2 < length1; ++index2) {
-                    if (num2 + headerWidth[index2] > rowWidthLimit && num3 > 0) {
-                        numArray4[index1] = num2;
-                        numArray3[index1] = num3;
-                        var num4 = Math.max(0.0, (rowWidthLimit - num2) / num3);
-                        numArray5[index1] = num4;
-                        numArray1[index1] = index2 - 1;
-                        if (num1 < num4)
-                            num1 = num4;
-                        ++index1;
-                        num2 = headerWidth[index2];
-                        num3 = 1;
-                    } else {
-                        num2 += headerWidth[index2];
-                        if (headerWidth[index2] != 0.0)
-                            ++num3;
-                    }
-                }
-                if (index1 === 0)
-                    return [];
-                numArray4[index1] = num2;
-                numArray3[index1] = num3;
-                var num5 = (rowWidthLimit - num2) / num3;
-                numArray5[index1] = num5;
-                if (num1 < num5)
-                    num1 = num5;
-
-                numArray2 = numArray1.slice(0);
-                numArray6 = numArray5.slice(0);
-                while (true) {
-                    var num4 = 0;
-                    do {
-                        var num6 = 0;
-                        var num7 = 0.0;
-                        for (var index2 = 0; index2 < this._NumberOfRows; ++index2) {
-                            if (num7 < numArray5[index2]) {
-                                num7 = numArray5[index2];
-                                num6 = index2;
-                            }
-                        }
-                        if (num6 != 0) {
-                            var index2 = num6;
-                            var index3 = index2 - 1;
-                            var index4 = numArray1[index3];
-                            var num8 = headerWidth[index4];
-                            numArray4[index2] += num8;
-                            if (numArray4[index2] <= rowWidthLimit) {
-                                --numArray1[index3];
-                                ++numArray3[index2];
-                                numArray4[index3] -= num8;
-                                --numArray3[index3];
-                                numArray5[index3] = (rowWidthLimit - numArray4[index3]) / numArray3[index3];
-                                numArray5[index2] = (rowWidthLimit - numArray4[index2]) / numArray3[index2];
-                                num4 = 0.0;
-                                for (var index5 = 0; index5 < this._NumberOfRows; ++index5) {
-                                    if (num4 < numArray5[index5])
-                                        num4 = numArray5[index5];
-                                }
-                            } else
-                                break;
-                        } else
-                            break;
-                    } while(num4 >= num1);
-                    num1 = num4;
-                    numArray2 = numArray1.slice(0);
-                    numArray6 = numArray5.slice(0);
-                }
-
-                var index6 = 0;
-                var index7 = 0;
-                var enumerator = this.Children.getEnumerator();
-                var uie;
-                while (enumerator.moveNext()) {
-                    uie = enumerator.current;
-                    if (uie.Visibility === 0 /* Visible */)
-                        headerWidth[index7] += numArray6[index6];
-                    if (index6 < length2 && numArray2[index6] == index7)
-                        ++index6;
-                    ++index7;
-                }
-                return numArray2;
-            };
-            TabPanel.prototype._GetHeadersSize = function () {
-                var arr = [];
-                var index = 0;
-                var enumerator = this.Children.getEnumerator();
-                var uie;
-                while (enumerator.moveNext()) {
-                    uie = enumerator.current;
-                    if (uie.Visibility === 1 /* Collapsed */) {
-                        arr.push(0.0);
-                    } else {
-                        arr.push(getDesiredSizeWithoutMargin(uie).Width);
-                    }
-                }
-                return arr;
-            };
-            return TabPanel;
-        })(Controls.Panel);
-        Controls.TabPanel = TabPanel;
-
-        function getDesiredSizeWithoutMargin(uie) {
-            var num = 0.0;
-            var tabItem = uie;
-            if (tabItem instanceof Controls.TabItem && tabItem.IsSelected) {
-                var panel = tabItem.GetTemplate(tabItem.IsSelected, tabItem.TabStripPlacement);
-                if (!(panel instanceof Controls.Panel))
-                    panel = null;
-                var fe = ((panel == null || panel.Children.Count <= 0) ? null : panel.Children.GetValueAt(0));
-                if (fe instanceof Fayde.FrameworkElement)
-                    num += Math.abs(fe.Margin.Left + fe.Margin.Right);
-            }
-            var s = new size();
-            s.Width = uie.DesiredSize.Width;
-            s.Height = uie.DesiredSize.Height;
-            var thickness = uie.Margin;
-            if (thickness) {
-                s.Height = Math.max(0.0, uie.DesiredSize.Height - thickness.Top - thickness.Bottom);
-                s.Width = Math.max(0.0, uie.DesiredSize.Width - thickness.Left - thickness.Right + num);
-            }
-            return s;
-        }
     })(Fayde.Controls || (Fayde.Controls = {}));
     var Controls = Fayde.Controls;
 })(Fayde || (Fayde = {}));
@@ -4103,134 +3800,6 @@ var Fayde;
 var Fayde;
 (function (Fayde) {
     (function (Controls) {
-        var WrapPanel = (function (_super) {
-            __extends(WrapPanel, _super);
-            function WrapPanel() {
-                _super.apply(this, arguments);
-            }
-            WrapPanel.prototype.OnPropertyChange = function () {
-                this.InvalidateMeasure();
-            };
-
-            WrapPanel.prototype.MeasureOverride = function (availableSize) {
-                var measured = new size();
-                if (this.Orientation === 1 /* Vertical */) {
-                    if (!isNaN(this.Width))
-                        availableSize.Width = this.Width;
-                    availableSize.Width = Math.min(availableSize.Width, this.MaxWidth);
-                    availableSize.Width = Math.max(availableSize.Width, this.MinWidth);
-                } else {
-                    if (!isNaN(this.Height))
-                        availableSize.Height = this.Height;
-                    availableSize.Height = Math.min(availableSize.Height, this.MaxHeight);
-                    availableSize.Height = Math.max(availableSize.Height, this.MinHeight);
-                }
-                var colWidth = 0;
-                var rowHeight = 0;
-                var offsetX = 0;
-                var offsetY = 0;
-                for (var i = 0; i < this.Children.Count; i++) {
-                    var child = this.Children.GetValueAt(i);
-                    if (child != null) {
-                        if (isNaN(child.Width) && !isNaN(this.ItemWidth))
-                            child.Width = this.ItemWidth;
-                        if (isNaN(child.Height) && !isNaN(this.ItemHeight))
-                            child.Height = this.ItemHeight;
-                    }
-                    child.Measure(availableSize);
-                    var s = child.DesiredSize;
-
-                    if (this.Orientation === 1 /* Vertical */) {
-                        if (availableSize.Height < (offsetY + s.Height)) {
-                            offsetX += colWidth;
-                            offsetY = 0;
-                            colWidth = 0;
-                        }
-                        colWidth = Math.max(colWidth, s.Width);
-                        measured.Height = Math.max(measured.Height, offsetY + s.Height);
-                        measured.Width = Math.max(measured.Width, offsetX + s.Width);
-                        offsetY += s.Height;
-                    } else {
-                        if (availableSize.Width < (offsetX + s.Width)) {
-                            offsetX = 0;
-                            offsetY += rowHeight;
-                            rowHeight = 0;
-                        }
-                        rowHeight = Math.max(rowHeight, s.Height);
-
-                        measured.Height = Math.max(measured.Height, offsetY + s.Height);
-                        measured.Width = Math.max(measured.Width, offsetX + s.Width);
-                        offsetX += s.Width;
-                    }
-                }
-                return measured;
-            };
-
-            WrapPanel.prototype.ArrangeOverride = function (finalSize) {
-                var arranged = size.copyTo(finalSize);
-                var offsetX = 0;
-                var offsetY = 0;
-                var colWidth = 0;
-                var rowHeight = 0;
-                var childFinal = new rect();
-                for (var i = 0; i < this.Children.Count; i++) {
-                    var child = this.Children.GetValueAt(i);
-                    var s = child.DesiredSize;
-                    if (this.Orientation === 1 /* Vertical */) {
-                        if (finalSize.Height < (offsetY + s.Height)) {
-                            offsetX += colWidth;
-                            offsetY = 0;
-                            colWidth = 0;
-                        }
-                        colWidth = Math.max(colWidth, s.Width);
-                        rect.set(childFinal, offsetX, offsetY, s.Width, s.Height);
-                        child.Arrange(childFinal);
-                        offsetY += s.Height;
-                    } else {
-                        if (finalSize.Width < (offsetX + s.Width)) {
-                            offsetX = 0;
-                            offsetY += rowHeight;
-                            rowHeight = 0;
-                        }
-                        rowHeight = Math.max(rowHeight, s.Height);
-                        rect.set(childFinal, offsetX, offsetY, s.Width, s.Height);
-                        child.Arrange(childFinal);
-                        offsetX += s.Width;
-                    }
-                }
-                if (this.Orientation === 1 /* Vertical */)
-                    arranged.Height = Math.max(arranged.Height, finalSize.Height);
-                else
-                    arranged.Width = Math.max(arranged.Width, finalSize.Width);
-
-                return arranged;
-            };
-            WrapPanel.OrientationProperty = DependencyProperty.Register("Orientation", function () {
-                return new Enum(Fayde.Orientation);
-            }, WrapPanel, 0 /* Horizontal */, function (d, args) {
-                return d.OnPropertyChange();
-            });
-
-            WrapPanel.ItemWidthProperty = DependencyProperty.Register("ItemWidth", function () {
-                return Number;
-            }, WrapPanel, Number.NaN, function (d, args) {
-                return d.OnPropertyChange();
-            });
-
-            WrapPanel.ItemHeightProperty = DependencyProperty.Register("ItemHeight", function () {
-                return Number;
-            }, WrapPanel, Number.NaN, function (d, args) {
-                return d.OnPropertyChange();
-            });
-            return WrapPanel;
-        })(Fayde.Controls.Panel);
-        Controls.WrapPanel = WrapPanel;
-    })(Fayde.Controls || (Fayde.Controls = {}));
-    var Controls = Fayde.Controls;
-})(Fayde || (Fayde = {}));
-var Fayde;
-(function (Fayde) {
-    (function (Controls) {
         (function (Internal) {
             var BindingSourceEvaluator = (function (_super) {
                 __extends(BindingSourceEvaluator, _super);
@@ -4530,6 +4099,8 @@ var Fayde;
 (function (Fayde) {
     (function (Controls) {
         (function (Internal) {
+            var GridUnitType = minerva.controls.grid.GridUnitType;
+
             (function (GridResizeDirection) {
                 GridResizeDirection[GridResizeDirection["Auto"] = 0] = "Auto";
                 GridResizeDirection[GridResizeDirection["Columns"] = 1] = "Columns";
@@ -4768,6 +4339,7 @@ var Fayde;
                     enumerable: true,
                     configurable: true
                 });
+
                 Object.defineProperty(ItemsControlHelper.prototype, "ScrollHost", {
                     get: function () {
                         if (!this._scrollHost) {
@@ -4828,30 +4400,29 @@ var Fayde;
                     }
                     var tl = generalTransform.Transform(new Point());
                     var sz = generalTransform.Transform(new Point(element.ActualWidth, element.ActualHeight));
-                    var r = new rect();
-                    rect.set(r, tl.X, tl.Y, sz.X, sz.Y);
+                    var r = new minerva.Rect(tl.x, tl.y, sz.x, sz.y);
 
                     var verticalOffset = scrollHost.VerticalOffset;
                     var num1 = 0.0;
                     var viewportHeight = scrollHost.ViewportHeight;
-                    var bottom = r.Y + r.Height;
+                    var bottom = r.y + r.height;
                     if (viewportHeight < bottom) {
                         num1 = bottom - viewportHeight;
                         verticalOffset += num1;
                     }
-                    var top = r.Y;
+                    var top = r.y;
                     if (top - num1 < 0.0)
                         verticalOffset -= num1 - top;
                     scrollHost.ScrollToVerticalOffset(verticalOffset);
                     var horizontalOffset = scrollHost.HorizontalOffset;
                     var num2 = 0.0;
                     var viewportWidth = scrollHost.ViewportWidth;
-                    var right = r.X + r.Width;
+                    var right = r.x + r.width;
                     if (viewportWidth < right) {
                         num2 = right - viewportWidth;
                         horizontalOffset += num2;
                     }
-                    var left = r.X;
+                    var left = r.x;
                     if (left - num2 < 0.0)
                         horizontalOffset -= num2 - left;
                     scrollHost.ScrollToHorizontalOffset(horizontalOffset);
@@ -4896,11 +4467,11 @@ var Fayde;
             Internal.MultiClickHelper = MultiClickHelper;
 
             function getDistance(oldPosition, newPosition) {
-                var xdiff = newPosition.X;
-                var ydiff = newPosition.Y;
+                var xdiff = newPosition.x;
+                var ydiff = newPosition.y;
                 if (oldPosition) {
-                    xdiff -= oldPosition.X;
-                    ydiff -= oldPosition.Y;
+                    xdiff -= oldPosition.x;
+                    ydiff -= oldPosition.y;
                 }
                 return xdiff * xdiff + ydiff * ydiff;
             }
@@ -5045,8 +4616,8 @@ var Fayde;
 
                 ScrollEx.GetTopAndBottom = function (element, parent, top, bottom) {
                     var xform = element.TransformToVisual(parent);
-                    top.Value = xform.Transform(new Point(0.0, 0.0)).Y;
-                    bottom.Value = xform.Transform(new Point(0.0, element.ActualHeight)).Y;
+                    top.Value = xform.Transform(new Point(0.0, 0.0)).y;
+                    bottom.Value = xform.Transform(new Point(0.0, element.ActualHeight)).y;
                 };
                 return ScrollEx;
             })();
@@ -5326,6 +4897,863 @@ var Fayde;
             Internal.TextBoxFormatter = TextBoxFormatter;
         })(Controls.Internal || (Controls.Internal = {}));
         var Internal = Controls.Internal;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        var TabPanel = (function (_super) {
+            __extends(TabPanel, _super);
+            function TabPanel() {
+                _super.apply(this, arguments);
+            }
+            TabPanel.prototype.CreateLayoutUpdater = function () {
+                return new Controls.tabpanel.TabPanelUpdater();
+            };
+
+            Object.defineProperty(TabPanel.prototype, "TabAlignment", {
+                get: function () {
+                    var tabControlParent = Fayde.VisualTreeHelper.GetParentOfType(this, Controls.TabControl);
+                    if (tabControlParent != null)
+                        return tabControlParent.TabStripPlacement;
+                    return 1 /* Top */;
+                },
+                enumerable: true,
+                configurable: true
+            });
+
+            TabPanel.setTabAlignment = function (tp, alignment) {
+                if (!tp)
+                    return;
+                var upd = tp.XamlNode.LayoutUpdater;
+                upd.assets.tabAlignment = alignment;
+            };
+            return TabPanel;
+        })(Controls.Panel);
+        Controls.TabPanel = TabPanel;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (tabpanel) {
+            var TabPanelUpdater = (function (_super) {
+                __extends(TabPanelUpdater, _super);
+                function TabPanelUpdater() {
+                    _super.apply(this, arguments);
+                }
+                TabPanelUpdater.prototype.init = function () {
+                    this.setMeasurePipe(minerva.singleton(tabpanel.measure.TabPanelMeasurePipeDef)).setArrangePipe(minerva.singleton(tabpanel.arrange.TabPanelArrangePipeDef));
+
+                    var assets = this.assets;
+                    assets.tabAlignment = 1 /* Top */;
+                    assets.numRows = 1;
+                    assets.numHeaders = 0;
+                    assets.rowHeight = 0.0;
+
+                    _super.prototype.init.call(this);
+                };
+                return TabPanelUpdater;
+            })(minerva.controls.panel.PanelUpdater);
+            tabpanel.TabPanelUpdater = TabPanelUpdater;
+        })(Controls.tabpanel || (Controls.tabpanel = {}));
+        var tabpanel = Controls.tabpanel;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (tabpanel) {
+            (function (arrange) {
+                var TabPanelArrangePipeDef = (function (_super) {
+                    __extends(TabPanelArrangePipeDef, _super);
+                    function TabPanelArrangePipeDef() {
+                        _super.call(this);
+                    }
+                    return TabPanelArrangePipeDef;
+                })(minerva.controls.panel.arrange.PanelArrangePipeDef);
+                arrange.TabPanelArrangePipeDef = TabPanelArrangePipeDef;
+            })(tabpanel.arrange || (tabpanel.arrange = {}));
+            var arrange = tabpanel.arrange;
+        })(Controls.tabpanel || (Controls.tabpanel = {}));
+        var tabpanel = Controls.tabpanel;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (tabpanel) {
+            (function (arrange) {
+                (function (tapins) {
+                    var Point = minerva.Point;
+
+                    function doHorizontal(input, state, output, tree, finalRect) {
+                        if (input.tabAlignment !== 1 /* Top */ && input.tabAlignment !== 3 /* Bottom */)
+                            return true;
+
+                        var fs = state.finalSize;
+
+                        var isMultiRow = input.numRows > 1;
+                        var activeRow = 0;
+                        var solution = [];
+                        var childOffset = new Point();
+                        var headersSize = tabpanel.helpers.getHeadersSize(tree);
+                        if (isMultiRow) {
+                            solution = tabpanel.helpers.calculateHeaderDistribution(tree, fs.width, headersSize);
+                            activeRow = tabpanel.helpers.getActiveRow(tree, solution, input.tabAlignment === 1 /* Top */);
+                            if (input.tabAlignment === 1 /* Top */)
+                                childOffset.y = (input.numRows - 1.0 - activeRow) * input.rowHeight;
+                            if (input.tabAlignment === 3 /* Bottom */ && activeRow !== 0)
+                                childOffset.y = (input.numRows - activeRow) * input.rowHeight;
+                        }
+
+                        var cr = state.childRect;
+                        cr.x = cr.y = cr.width = cr.height = 0;
+                        cr.height = input.rowHeight;
+
+                        var childIndex = 0;
+                        var separatorIndex = 0;
+                        for (var walker = tree.walk(); walker.step();) {
+                            var child = walker.current;
+                            if (child.assets.visibility === 1 /* Collapsed */)
+                                continue;
+
+                            cr.width = headersSize[childIndex];
+                            cr.height = input.rowHeight;
+                            var isLastHeaderInRow = isMultiRow && (separatorIndex < solution.length && solution[separatorIndex] === childIndex || childIndex === (input.numHeaders - 1));
+                            if (isLastHeaderInRow)
+                                cr.width = fs.width - childOffset.x;
+                            child.arrange(cr);
+
+                            cr.x += cr.width;
+                            if (isLastHeaderInRow) {
+                                if ((separatorIndex === activeRow && input.tabAlignment === 1 /* Top */) || (separatorIndex === activeRow - 1 && input.tabAlignment === 3 /* Bottom */))
+                                    childOffset.y = 0;
+                                else
+                                    childOffset.y += input.rowHeight;
+
+                                childOffset.x = 0;
+                                separatorIndex++;
+                            }
+                            childIndex++;
+                        }
+
+                        return true;
+                    }
+                    tapins.doHorizontal = doHorizontal;
+                })(arrange.tapins || (arrange.tapins = {}));
+                var tapins = arrange.tapins;
+            })(tabpanel.arrange || (tabpanel.arrange = {}));
+            var arrange = tabpanel.arrange;
+        })(Controls.tabpanel || (Controls.tabpanel = {}));
+        var tabpanel = Controls.tabpanel;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (tabpanel) {
+            (function (arrange) {
+                (function (tapins) {
+                    function doVertical(input, state, output, tree, finalRect) {
+                        if (input.tabAlignment !== 0 /* Left */ && input.tabAlignment !== 2 /* Right */)
+                            return true;
+
+                        var cr = state.childRect;
+                        cr.x = cr.y = 0;
+                        cr.width = state.finalSize.width;
+                        for (var walker = tree.walk(); walker.step();) {
+                            var child = walker.current;
+                            if (child.assets.visibility === 1 /* Collapsed */)
+                                continue;
+                            tabpanel.helpers.setTabItemZ(child);
+                            var sizeWithoutMargin = tabpanel.helpers.getDesiredSizeWithoutMargin(child);
+                            cr.height = sizeWithoutMargin.height;
+                            child.arrange(cr);
+                            cr.y += sizeWithoutMargin.height;
+                        }
+
+                        return true;
+                    }
+                    tapins.doVertical = doVertical;
+                })(arrange.tapins || (arrange.tapins = {}));
+                var tapins = arrange.tapins;
+            })(tabpanel.arrange || (tabpanel.arrange = {}));
+            var arrange = tabpanel.arrange;
+        })(Controls.tabpanel || (Controls.tabpanel = {}));
+        var tabpanel = Controls.tabpanel;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (tabpanel) {
+            var Size = minerva.Size;
+            var Visibility = minerva.Visibility;
+
+            (function (helpers) {
+                function getDesiredSizeWithoutMargin(upd) {
+                    var timargin = getTabItemMargin(upd);
+
+                    var size = new Size();
+                    Size.copyTo(upd.assets.desiredSize, size);
+                    var margin = upd.assets.margin;
+                    size.height = Math.max(0.0, size.height - margin.top - margin.bottom);
+                    size.width = Math.max(0.0, size.width - margin.left - margin.right + timargin);
+                    return size;
+                }
+                helpers.getDesiredSizeWithoutMargin = getDesiredSizeWithoutMargin;
+
+                function getTabItemMargin(upd) {
+                    var node = upd.getAttachedValue("$node");
+                    var ti = node ? node.XObject : null;
+                    if (!(ti instanceof Controls.TabItem) || ti.IsSelected)
+                        return 0;
+
+                    var panel = ti.GetTemplate(ti.IsSelected, ti.TabStripPlacement);
+                    if (!(panel instanceof Controls.Panel) || panel.Children.Count <= 0)
+                        return 0;
+
+                    var fe = panel.Children.GetValueAt(0);
+                    if (!(fe instanceof Fayde.FrameworkElement))
+                        return 0;
+
+                    return Math.abs(fe.Margin.left + fe.Margin.right);
+                }
+
+                function getHeadersSize(tree) {
+                    var arr = [];
+                    for (var walker = tree.walk(); walker.step();) {
+                        var child = walker.current;
+                        var width = child.assets.visibility === 1 /* Collapsed */ ? 0.0 : getDesiredSizeWithoutMargin(child).width;
+                        arr.push(width);
+                    }
+                    return arr;
+                }
+                helpers.getHeadersSize = getHeadersSize;
+
+                function setTabItemZ(upd) {
+                    var node = upd.getAttachedValue("$node");
+                    var ti = node ? node.XObject : null;
+                    if (!(ti instanceof Controls.TabItem))
+                        return;
+                    var zi = ti.IsSelected ? 1 : 0;
+                    ti.SetCurrentValue(Controls.Canvas.ZIndexProperty, zi);
+                }
+                helpers.setTabItemZ = setTabItemZ;
+
+                function getTabItemIsSelected(upd) {
+                    var node = upd.getAttachedValue("$node");
+                    var ti = node ? node.XObject : null;
+                    if (!(ti instanceof Controls.TabItem))
+                        return;
+                    return ti.IsSelected === true;
+                }
+
+                function getActiveRow(tree, solution, isDockTop) {
+                    var index = 0;
+                    var num = 0;
+                    if (solution.length > 0) {
+                        for (var walker = tree.walk(); walker.step();) {
+                            var child = walker.current;
+                            if (getTabItemIsSelected(child))
+                                return index;
+                            if (index < solution.length && solution[index] === num)
+                                ++index;
+                            ++num;
+                        }
+                    }
+                    if (isDockTop)
+                        index = this._NumberOfRows - 1;
+                    return index;
+                }
+                helpers.getActiveRow = getActiveRow;
+
+                function calculateHeaderDistribution(tree, rowWidthLimit, headerWidth) {
+                    var num1 = 0.0;
+                    var length1 = headerWidth.length;
+                    var length2 = this._NumberOfRows - 1;
+                    var num2 = 0.0;
+                    var num3 = 0;
+                    var numArray1 = new Array(length2);
+                    var numArray2 = new Array(length2);
+
+                    var numArray3 = new Array(this._NumberOfRows);
+                    var numArray4 = numArray3.slice(0);
+                    var numArray5 = numArray3.slice(0);
+                    var numArray6 = numArray3.slice(0);
+
+                    var index1 = 0;
+                    for (var index2 = 0; index2 < length1; ++index2) {
+                        if (num2 + headerWidth[index2] > rowWidthLimit && num3 > 0) {
+                            numArray4[index1] = num2;
+                            numArray3[index1] = num3;
+                            var num4 = Math.max(0.0, (rowWidthLimit - num2) / num3);
+                            numArray5[index1] = num4;
+                            numArray1[index1] = index2 - 1;
+                            if (num1 < num4)
+                                num1 = num4;
+                            ++index1;
+                            num2 = headerWidth[index2];
+                            num3 = 1;
+                        } else {
+                            num2 += headerWidth[index2];
+                            if (headerWidth[index2] != 0.0)
+                                ++num3;
+                        }
+                    }
+                    if (index1 === 0)
+                        return [];
+                    numArray4[index1] = num2;
+                    numArray3[index1] = num3;
+                    var num5 = (rowWidthLimit - num2) / num3;
+                    numArray5[index1] = num5;
+                    if (num1 < num5)
+                        num1 = num5;
+
+                    numArray2 = numArray1.slice(0);
+                    numArray6 = numArray5.slice(0);
+                    while (true) {
+                        var num4 = 0;
+                        do {
+                            var num6 = 0;
+                            var num7 = 0.0;
+                            for (var index2 = 0; index2 < this._NumberOfRows; ++index2) {
+                                if (num7 < numArray5[index2]) {
+                                    num7 = numArray5[index2];
+                                    num6 = index2;
+                                }
+                            }
+                            if (num6 != 0) {
+                                var index2 = num6;
+                                var index3 = index2 - 1;
+                                var index4 = numArray1[index3];
+                                var num8 = headerWidth[index4];
+                                numArray4[index2] += num8;
+                                if (numArray4[index2] <= rowWidthLimit) {
+                                    --numArray1[index3];
+                                    ++numArray3[index2];
+                                    numArray4[index3] -= num8;
+                                    --numArray3[index3];
+                                    numArray5[index3] = (rowWidthLimit - numArray4[index3]) / numArray3[index3];
+                                    numArray5[index2] = (rowWidthLimit - numArray4[index2]) / numArray3[index2];
+                                    num4 = 0.0;
+                                    for (var index5 = 0; index5 < this._NumberOfRows; ++index5) {
+                                        if (num4 < numArray5[index5])
+                                            num4 = numArray5[index5];
+                                    }
+                                } else
+                                    break;
+                            } else
+                                break;
+                        } while(num4 >= num1);
+                        num1 = num4;
+                        numArray2 = numArray1.slice(0);
+                        numArray6 = numArray5.slice(0);
+                    }
+
+                    var index6 = 0;
+                    var index7 = 0;
+                    for (var walker = tree.walk(); walker.step();) {
+                        var child = walker.current;
+                        if (child.assets.visibility === 0 /* Visible */)
+                            headerWidth[index7] += numArray6[index6];
+                        if (index6 < length2 && numArray2[index6] == index7)
+                            ++index6;
+                        ++index7;
+                    }
+                    return numArray2;
+                }
+                helpers.calculateHeaderDistribution = calculateHeaderDistribution;
+            })(tabpanel.helpers || (tabpanel.helpers = {}));
+            var helpers = tabpanel.helpers;
+        })(Controls.tabpanel || (Controls.tabpanel = {}));
+        var tabpanel = Controls.tabpanel;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (tabpanel) {
+            (function (measure) {
+                var panel = minerva.controls.panel;
+
+                var TabPanelMeasurePipeDef = (function (_super) {
+                    __extends(TabPanelMeasurePipeDef, _super);
+                    function TabPanelMeasurePipeDef() {
+                        _super.call(this);
+                        this.addTapinAfter('doOverride', 'doVertical', measure.tapins.doVertical).addTapinAfter('doVertical', 'doHorizontal', measure.tapins.doHorizontal).removeTapin('doOverride');
+                    }
+                    TabPanelMeasurePipeDef.prototype.createOutput = function () {
+                        var output = _super.prototype.createOutput.call(this);
+                        output.numRows = 1;
+                        output.numHeaders = 0;
+                        output.rowHeight = 0.0;
+                        return output;
+                    };
+
+                    TabPanelMeasurePipeDef.prototype.prepare = function (input, state, output) {
+                        output.numRows = input.numRows;
+                        output.numHeaders = input.numHeaders;
+                        output.rowHeight = input.rowHeight;
+                        _super.prototype.prepare.call(this, input, state, output);
+                    };
+
+                    TabPanelMeasurePipeDef.prototype.flush = function (input, state, output) {
+                        _super.prototype.flush.call(this, input, state, output);
+                        input.numRows = output.numRows;
+                        input.numHeaders = output.numHeaders;
+                        input.rowHeight = output.rowHeight;
+                    };
+                    return TabPanelMeasurePipeDef;
+                })(panel.measure.PanelMeasurePipeDef);
+                measure.TabPanelMeasurePipeDef = TabPanelMeasurePipeDef;
+            })(tabpanel.measure || (tabpanel.measure = {}));
+            var measure = tabpanel.measure;
+        })(Controls.tabpanel || (Controls.tabpanel = {}));
+        var tabpanel = Controls.tabpanel;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (tabpanel) {
+            (function (measure) {
+                (function (tapins) {
+                    function doHorizontal(input, state, output, tree, availableSize) {
+                        if (input.tabAlignment !== 1 /* Top */ && input.tabAlignment !== 3 /* Bottom */)
+                            return true;
+
+                        var ds = output.desiredSize;
+                        ds.width = ds.height = 0;
+                        output.numRows = 1;
+                        output.numHeaders = 0;
+                        output.rowHeight = 0.0;
+
+                        var num1 = 0;
+                        var num2 = 0.0;
+                        var num3 = 0.0;
+                        for (var walker = tree.walk(); walker.step();) {
+                            var child = walker.current;
+                            if (child.assets.visibility === 1 /* Collapsed */)
+                                break;
+                            output.numHeaders++;
+                            child.measure(state.availableSize);
+
+                            var sizeWithoutMargin = tabpanel.helpers.getDesiredSizeWithoutMargin(child);
+                            if (output.rowHeight < sizeWithoutMargin.height)
+                                output.rowHeight = sizeWithoutMargin.height;
+                            if (num2 + sizeWithoutMargin.width > availableSize.width && num1 > 0) {
+                                if (num3 < num2)
+                                    num3 = num2;
+                                num2 = sizeWithoutMargin.width;
+                                num1 = 1;
+                                output.numRows++;
+                            } else {
+                                num2 += sizeWithoutMargin.width;
+                                num1++;
+                            }
+                        }
+
+                        if (num3 < num2)
+                            num3 = num2;
+                        ds.height = output.rowHeight * output.numRows;
+                        ds.width = !isFinite(ds.width) || isNaN(ds.width) || num3 < availableSize.width ? num3 : availableSize.width;
+
+                        return true;
+                    }
+                    tapins.doHorizontal = doHorizontal;
+                })(measure.tapins || (measure.tapins = {}));
+                var tapins = measure.tapins;
+            })(tabpanel.measure || (tabpanel.measure = {}));
+            var measure = tabpanel.measure;
+        })(Controls.tabpanel || (Controls.tabpanel = {}));
+        var tabpanel = Controls.tabpanel;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (tabpanel) {
+            (function (measure) {
+                (function (tapins) {
+                    function doVertical(input, state, output, tree, availableSize) {
+                        if (input.tabAlignment !== 0 /* Left */ && input.tabAlignment !== 2 /* Right */)
+                            return true;
+
+                        var ds = output.desiredSize;
+                        ds.width = ds.height = 0;
+                        output.numRows = 1;
+                        output.numHeaders = 0;
+                        output.rowHeight = 0.0;
+
+                        for (var walker = tree.walk(); walker.step();) {
+                            var child = walker.current;
+                            if (child.assets.visibility === 1 /* Collapsed */)
+                                break;
+                            output.numHeaders++;
+                            child.measure(state.availableSize);
+
+                            var sizeWithoutMargin = tabpanel.helpers.getDesiredSizeWithoutMargin(child);
+                            if (ds.width < sizeWithoutMargin.width)
+                                ds.width = sizeWithoutMargin.width;
+                            ds.height += sizeWithoutMargin.height;
+                        }
+
+                        return true;
+                    }
+                    tapins.doVertical = doVertical;
+                })(measure.tapins || (measure.tapins = {}));
+                var tapins = measure.tapins;
+            })(tabpanel.measure || (tabpanel.measure = {}));
+            var measure = tabpanel.measure;
+        })(Controls.tabpanel || (Controls.tabpanel = {}));
+        var tabpanel = Controls.tabpanel;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        var WrapPanel = (function (_super) {
+            __extends(WrapPanel, _super);
+            function WrapPanel() {
+                _super.apply(this, arguments);
+            }
+            WrapPanel.prototype.CreateLayoutUpdater = function () {
+                return new Controls.wrappanel.WrapPanelUpdater();
+            };
+
+            WrapPanel.OrientationProperty = DependencyProperty.Register("Orientation", function () {
+                return new Enum(Fayde.Orientation);
+            }, WrapPanel, 0 /* Horizontal */);
+            WrapPanel.ItemWidthProperty = DependencyProperty.Register("ItemWidth", function () {
+                return Number;
+            }, WrapPanel, NaN);
+            WrapPanel.ItemHeightProperty = DependencyProperty.Register("ItemHeight", function () {
+                return Number;
+            }, WrapPanel, NaN);
+            return WrapPanel;
+        })(Fayde.Controls.Panel);
+        Controls.WrapPanel = WrapPanel;
+
+        var reactions;
+        (function (reactions) {
+            Fayde.UIReaction(WrapPanel.OrientationProperty, function (upd, ov, nv) {
+                return upd.invalidateMeasure();
+            }, false);
+            Fayde.UIReaction(WrapPanel.ItemWidthProperty, function (upd, ov, nv) {
+                return upd.invalidateMeasure();
+            }, false);
+            Fayde.UIReaction(WrapPanel.ItemHeightProperty, function (upd, ov, nv) {
+                return upd.invalidateMeasure();
+            }, false);
+        })(reactions || (reactions = {}));
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (wrappanel) {
+            var WrapPanelUpdater = (function (_super) {
+                __extends(WrapPanelUpdater, _super);
+                function WrapPanelUpdater() {
+                    _super.apply(this, arguments);
+                }
+                WrapPanelUpdater.prototype.init = function () {
+                    this.setMeasurePipe(minerva.singleton(wrappanel.measure.WrapPanelMeasurePipeDef)).setArrangePipe(minerva.singleton(wrappanel.arrange.WrapPanelArrangePipeDef));
+
+                    var assets = this.assets;
+                    assets.orientation = 0 /* Horizontal */;
+                    assets.itemWidth = NaN;
+                    assets.itemHeight = NaN;
+
+                    _super.prototype.init.call(this);
+                };
+                return WrapPanelUpdater;
+            })(minerva.controls.panel.PanelUpdater);
+            wrappanel.WrapPanelUpdater = WrapPanelUpdater;
+        })(Controls.wrappanel || (Controls.wrappanel = {}));
+        var wrappanel = Controls.wrappanel;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (wrappanel) {
+            (function (arrange) {
+                var panel = minerva.controls.panel;
+
+                var WrapPanelArrangePipeDef = (function (_super) {
+                    __extends(WrapPanelArrangePipeDef, _super);
+                    function WrapPanelArrangePipeDef() {
+                        _super.call(this);
+                        this.addTapinAfter('doOverride', 'doHorizontal', arrange.tapins.doHorizontal).addTapinAfter('doOverride', 'doVertical', arrange.tapins.doVertical).removeTapin('doOverride');
+                    }
+                    return WrapPanelArrangePipeDef;
+                })(panel.arrange.PanelArrangePipeDef);
+                arrange.WrapPanelArrangePipeDef = WrapPanelArrangePipeDef;
+            })(wrappanel.arrange || (wrappanel.arrange = {}));
+            var arrange = wrappanel.arrange;
+        })(Controls.wrappanel || (Controls.wrappanel = {}));
+        var wrappanel = Controls.wrappanel;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (wrappanel) {
+            (function (arrange) {
+                (function (tapins) {
+                    var Size = minerva.Size;
+
+                    function doHorizontal(input, state, output, tree, finalRect) {
+                        if (input.orientation !== 0 /* Horizontal */)
+                            return true;
+
+                        var fs = state.finalSize;
+                        var as = state.arrangedSize;
+                        Size.copyTo(fs, as);
+
+                        var cr = state.childRect;
+                        cr.x = cr.y = cr.width = cr.height = 0;
+
+                        var rowHeight = 0;
+                        for (var walker = tree.walk(); walker.step();) {
+                            var child = walker.current;
+                            var childDesired = child.assets.desiredSize;
+                            if (fs.width < (cr.x + childDesired.width)) {
+                                cr.x = 0;
+                                cr.y += rowHeight;
+                                rowHeight = 0;
+                            }
+                            rowHeight = Math.max(rowHeight, childDesired.height);
+                            Size.copyTo(childDesired, cr);
+                            child.arrange(cr);
+                            cr.x += childDesired.width;
+                        }
+                        as.width = Math.max(as.width, fs.width);
+
+                        return true;
+                    }
+                    tapins.doHorizontal = doHorizontal;
+                })(arrange.tapins || (arrange.tapins = {}));
+                var tapins = arrange.tapins;
+            })(wrappanel.arrange || (wrappanel.arrange = {}));
+            var arrange = wrappanel.arrange;
+        })(Controls.wrappanel || (Controls.wrappanel = {}));
+        var wrappanel = Controls.wrappanel;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (wrappanel) {
+            (function (arrange) {
+                (function (tapins) {
+                    var Size = minerva.Size;
+
+                    function doVertical(input, state, output, tree, finalRect) {
+                        if (input.orientation !== 1 /* Vertical */)
+                            return true;
+
+                        var fs = state.finalSize;
+                        var as = state.arrangedSize;
+                        Size.copyTo(fs, as);
+
+                        var cr = state.childRect;
+                        cr.x = cr.y = cr.width = cr.height = 0;
+
+                        var colWidth = 0;
+                        for (var walker = tree.walk(); walker.step();) {
+                            var child = walker.current;
+                            var childDesired = child.assets.desiredSize;
+                            if (fs.height < (cr.y + childDesired.height)) {
+                                cr.x += colWidth;
+                                cr.y = 0;
+                                colWidth = 0;
+                            }
+                            colWidth = Math.max(colWidth, childDesired.width);
+                            Size.copyTo(childDesired, cr);
+                            child.arrange(cr);
+                            cr.y += childDesired.height;
+                        }
+                        as.height = Math.max(as.height, fs.height);
+
+                        return true;
+                    }
+                    tapins.doVertical = doVertical;
+                })(arrange.tapins || (arrange.tapins = {}));
+                var tapins = arrange.tapins;
+            })(wrappanel.arrange || (wrappanel.arrange = {}));
+            var arrange = wrappanel.arrange;
+        })(Controls.wrappanel || (Controls.wrappanel = {}));
+        var wrappanel = Controls.wrappanel;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (wrappanel) {
+            (function (helpers) {
+                function coerceChildSize(child, itemWidth, itemHeight) {
+                    var node = child.getAttachedValue("$node");
+                    var xobj = node ? node.XObject : null;
+                    if (!xobj)
+                        return;
+                    if (isNaN(child.assets.width) && !isNaN(itemWidth))
+                        xobj.Width = itemWidth;
+                    if (isNaN(child.assets.height) && !isNaN(itemHeight))
+                        xobj.Height = itemHeight;
+                }
+                helpers.coerceChildSize = coerceChildSize;
+            })(wrappanel.helpers || (wrappanel.helpers = {}));
+            var helpers = wrappanel.helpers;
+        })(Controls.wrappanel || (Controls.wrappanel = {}));
+        var wrappanel = Controls.wrappanel;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (wrappanel) {
+            (function (measure) {
+                var panel = minerva.controls.panel;
+
+                var WrapPanelMeasurePipeDef = (function (_super) {
+                    __extends(WrapPanelMeasurePipeDef, _super);
+                    function WrapPanelMeasurePipeDef() {
+                        _super.call(this);
+                        this.addTapinAfter('doOverride', 'doHorizontal', measure.tapins.doHorizontal).addTapinAfter('doOverride', 'doVertical', measure.tapins.doVertical).removeTapin('doOverride');
+                    }
+                    return WrapPanelMeasurePipeDef;
+                })(panel.measure.PanelMeasurePipeDef);
+                measure.WrapPanelMeasurePipeDef = WrapPanelMeasurePipeDef;
+            })(wrappanel.measure || (wrappanel.measure = {}));
+            var measure = wrappanel.measure;
+        })(Controls.wrappanel || (Controls.wrappanel = {}));
+        var wrappanel = Controls.wrappanel;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (wrappanel) {
+            (function (measure) {
+                (function (tapins) {
+                    function doHorizontal(input, state, output, tree, availableSize) {
+                        if (input.orientation !== 0 /* Horizontal */)
+                            return true;
+
+                        var as = state.availableSize;
+                        if (!isNaN(input.height))
+                            as.height = input.height;
+                        as.height = Math.min(as.height, input.maxHeight);
+                        as.height = Math.max(as.height, input.minHeight);
+
+                        var ds = output.desiredSize;
+                        ds.width = ds.height = 0;
+
+                        var rowHeight = 0;
+                        var offsetX = 0;
+                        var offsetY = 0;
+                        for (var walker = tree.walk(); walker.step();) {
+                            var child = walker.current;
+
+                            wrappanel.helpers.coerceChildSize(child, input.itemWidth, input.itemHeight);
+                            child.measure(as);
+
+                            var childDesired = child.assets.desiredSize;
+                            if (as.width < (offsetX + childDesired.width)) {
+                                offsetX = 0;
+                                offsetY += rowHeight;
+                                rowHeight = 0;
+                            }
+                            rowHeight = Math.max(rowHeight, childDesired.height);
+
+                            ds.height = Math.max(ds.height, offsetY + childDesired.height);
+                            ds.width = Math.max(ds.width, offsetX + childDesired.width);
+                            offsetX += childDesired.width;
+                        }
+
+                        return true;
+                    }
+                    tapins.doHorizontal = doHorizontal;
+                })(measure.tapins || (measure.tapins = {}));
+                var tapins = measure.tapins;
+            })(wrappanel.measure || (wrappanel.measure = {}));
+            var measure = wrappanel.measure;
+        })(Controls.wrappanel || (Controls.wrappanel = {}));
+        var wrappanel = Controls.wrappanel;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (wrappanel) {
+            (function (measure) {
+                (function (tapins) {
+                    function doVertical(input, state, output, tree, availableSize) {
+                        if (input.orientation !== 1 /* Vertical */)
+                            return true;
+
+                        var as = state.availableSize;
+                        if (!isNaN(input.width))
+                            as.width = input.width;
+                        as.width = Math.min(as.width, input.maxWidth);
+                        as.width = Math.max(as.width, input.minWidth);
+
+                        var ds = output.desiredSize;
+                        ds.width = ds.height = 0;
+
+                        var colWidth = 0;
+                        var offsetX = 0;
+                        var offsetY = 0;
+                        for (var walker = tree.walk(); walker.step();) {
+                            var child = walker.current;
+
+                            wrappanel.helpers.coerceChildSize(child, input.itemWidth, input.itemHeight);
+                            child.measure(as);
+
+                            var childDesired = child.assets.desiredSize;
+                            if (as.height < (offsetY + childDesired.height)) {
+                                offsetX += colWidth;
+                                offsetY = 0;
+                                colWidth = 0;
+                            }
+                            colWidth = Math.max(colWidth, childDesired.width);
+
+                            ds.height = Math.max(ds.height, offsetY + childDesired.height);
+                            ds.width = Math.max(ds.width, offsetX + childDesired.width);
+                            offsetY += childDesired.height;
+                        }
+
+                        return true;
+                    }
+                    tapins.doVertical = doVertical;
+                })(measure.tapins || (measure.tapins = {}));
+                var tapins = measure.tapins;
+            })(wrappanel.measure || (wrappanel.measure = {}));
+            var measure = wrappanel.measure;
+        })(Controls.wrappanel || (Controls.wrappanel = {}));
+        var wrappanel = Controls.wrappanel;
     })(Fayde.Controls || (Fayde.Controls = {}));
     var Controls = Fayde.Controls;
 })(Fayde || (Fayde = {}));
