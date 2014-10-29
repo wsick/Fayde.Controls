@@ -21,7 +21,7 @@ module Fayde.Controls {
         SelectedIndex: number;
         SelectedContent: any;
         TabStripPlacement: Dock;
-        SelectionChanged: RoutedEvent<Controls.Primitives.SelectionChangedEventArgs> = new RoutedEvent<Controls.Primitives.SelectionChangedEventArgs>();
+        SelectionChanged = new RoutedEvent<Controls.Primitives.SelectionChangedEventArgs>();
 
         private _ElementTemplateTop: FrameworkElement;
         private _ElementTemplateBottom: FrameworkElement;
@@ -41,12 +41,12 @@ module Fayde.Controls {
         private _UpdateIndex = true;
         private _DesiredIndex: number = 0;
 
-        constructor() {
+        constructor () {
             super();
             this.DefaultStyleKey = (<any>this).constructor;
         }
 
-        OnApplyTemplate() {
+        OnApplyTemplate () {
             super.OnApplyTemplate();
             if (this._ElementTabPanelTop != null)
                 this._ElementTabPanelTop.Children.Clear();
@@ -68,6 +68,10 @@ module Fayde.Controls {
             this._ElementTabPanelBottom = <TabPanel>this.GetTemplateChild("TabPanelBottom", TabPanel);
             this._ElementTabPanelLeft = <TabPanel>this.GetTemplateChild("TabPanelLeft", TabPanel);
             this._ElementTabPanelRight = <TabPanel>this.GetTemplateChild("TabPanelRight", TabPanel);
+            TabPanel.setTabAlignment(this._ElementTabPanelTop, Dock.Top);
+            TabPanel.setTabAlignment(this._ElementTabPanelBottom, Dock.Bottom);
+            TabPanel.setTabAlignment(this._ElementTabPanelLeft, Dock.Left);
+            TabPanel.setTabAlignment(this._ElementTabPanelRight, Dock.Right);
             this._ElementContentTop = <ContentPresenter>this.GetTemplateChild("ContentTop", ContentPresenter);
             this._ElementContentBottom = <ContentPresenter>this.GetTemplateChild("ContentBottom", ContentPresenter);
             this._ElementContentLeft = <ContentPresenter>this.GetTemplateChild("ContentLeft", ContentPresenter);
@@ -87,7 +91,7 @@ module Fayde.Controls {
             this.UpdateVisualState(false);
         }
 
-        private OnSelectedItemChanged(args: IDependencyPropertyChangedEventArgs) {
+        private OnSelectedItemChanged (args: IDependencyPropertyChangedEventArgs) {
             var oldItem = <TabItem>args.OldValue;
             var newItem = <TabItem>args.NewValue;
             var num = newItem == null ? -1 : this.Items.IndexOf(newItem);
@@ -98,7 +102,8 @@ module Fayde.Controls {
                 this.SelectItem(oldItem, newItem);
             }
         }
-        private OnSelectedIndexChanged(args: IDependencyPropertyChangedEventArgs) {
+
+        private OnSelectedIndexChanged (args: IDependencyPropertyChangedEventArgs) {
             var index = <number>args.NewValue;
             var num = <number>args.OldValue;
             if (index < -1)
@@ -119,10 +124,12 @@ module Fayde.Controls {
                 this.SelectedItem = item;
             }
         }
-        private OnSelectedContentChanged(args: IDependencyPropertyChangedEventArgs) {
+
+        private OnSelectedContentChanged (args: IDependencyPropertyChangedEventArgs) {
             this.UpdateSelectedContent(args.NewValue);
         }
-        private OnTabStripPlacementPropertyChanged(args: IDependencyPropertyChangedEventArgs) {
+
+        private OnTabStripPlacementPropertyChanged (args: IDependencyPropertyChangedEventArgs) {
             this.UpdateTabPanelLayout(<Dock> args.OldValue, <Dock> args.NewValue);
             var enumerator = this.Items.getEnumerator();
             var ti: TabItem;
@@ -133,7 +140,7 @@ module Fayde.Controls {
             }
         }
 
-        OnItemsChanged(e: Collections.CollectionChangedEventArgs) {
+        OnItemsChanged (e: Collections.CollectionChangedEventArgs) {
             super.OnItemsChanged(e);
             switch (e.Action) {
                 case Collections.CollectionChangedAction.Add:
@@ -209,7 +216,7 @@ module Fayde.Controls {
             }
         }
 
-        OnKeyDown(e: Input.KeyEventArgs) {
+        OnKeyDown (e: Input.KeyEventArgs) {
             super.OnKeyDown(e);
             if (e.Handled)
                 return;
@@ -231,7 +238,8 @@ module Fayde.Controls {
             this.SelectedItem = nextTabItem;
             nextTabItem.Focus();
         }
-        private _FindEndTabItem(): TabItem {
+
+        private _FindEndTabItem (): TabItem {
             var items = this.Items;
             var len = items.Count;
             var tabItem: TabItem = null;
@@ -242,7 +250,8 @@ module Fayde.Controls {
             }
             return null;
         }
-        private _FindHomeTabItem(): TabItem {
+
+        private _FindHomeTabItem (): TabItem {
             var items = this.Items;
             var len = items.Count;
             var tabItem: TabItem = null;
@@ -254,7 +263,7 @@ module Fayde.Controls {
             return null;
         }
 
-        private SelectItem(oldItem: TabItem, newItem: TabItem) {
+        private SelectItem (oldItem: TabItem, newItem: TabItem) {
             if (newItem == null) {
                 var contentHost = this._GetContentHost(this.TabStripPlacement);
                 if (contentHost != null)
@@ -286,9 +295,11 @@ module Fayde.Controls {
             this.OnSelectionChanged(e);
             this.SelectionChanged.Raise(this, e);
         }
-        OnSelectionChanged(e: Controls.Primitives.SelectionChangedEventArgs) { }
 
-        private UpdateTabPanelLayout(oldValue: Dock, newValue: Dock) {
+        OnSelectionChanged (e: Controls.Primitives.SelectionChangedEventArgs) {
+        }
+
+        private UpdateTabPanelLayout (oldValue: Dock, newValue: Dock) {
             var template1 = this._GetTemplate(oldValue);
             var template2 = this._GetTemplate(newValue);
             var tabPanel1 = this._GetTabPanel(oldValue);
@@ -319,7 +330,8 @@ module Fayde.Controls {
                 return;
             template2.Visibility = Visibility.Visible;
         }
-        private UpdateSelectedContent(content: any) {
+
+        private UpdateSelectedContent (content: any) {
             var tabItem = <TabItem>this.SelectedItem;
             if (!(tabItem instanceof TabItem))
                 return;
@@ -332,7 +344,7 @@ module Fayde.Controls {
             contentHost.Content = content;
         }
 
-        private EnsureLanguageBinding(tabItem: TabItem) {
+        private EnsureLanguageBinding (tabItem: TabItem) {
             if (tabItem == null)
                 return;
             var frameworkElement = <FrameworkElement>tabItem.Content;
@@ -342,7 +354,8 @@ module Fayde.Controls {
             binding.Source = this;
             frameworkElement.SetBinding(FrameworkElement.LanguageProperty, binding);
         }
-        private ClearLanguageBinding(tabItem: TabItem) {
+
+        private ClearLanguageBinding (tabItem: TabItem) {
             if (tabItem == null)
                 return;
             var frameworkElement = <FrameworkElement>tabItem.Content;
@@ -351,26 +364,29 @@ module Fayde.Controls {
             frameworkElement.ClearValue(FrameworkElement.LanguageProperty);
         }
 
-        private _AddToTabPanel(ti: TabItem) {
+        private _AddToTabPanel (ti: TabItem) {
             var tabPanel = this._GetTabPanel(this.TabStripPlacement);
             if (!tabPanel || tabPanel.Children.Contains(ti))
                 return;
             tabPanel.Children.Add(ti);
             this.EnsureLanguageBinding(ti);
         }
-        private _InsertIntoTabPanel(index: number, ti: TabItem) {
+
+        private _InsertIntoTabPanel (index: number, ti: TabItem) {
             var tabPanel = this._GetTabPanel(this.TabStripPlacement);
             if (!tabPanel || tabPanel.Children.Contains(ti))
                 return;
             tabPanel.Children.Insert(index, ti);
         }
-        private _RemoveFromTabPanel(ti: TabItem) {
+
+        private _RemoveFromTabPanel (ti: TabItem) {
             var tabPanel = this._GetTabPanel(this.TabStripPlacement);
             if (!tabPanel || !tabPanel.Children.Contains(ti))
                 return;
             tabPanel.Children.Remove(ti);
         }
-        private _ClearTabPanel() {
+
+        private _ClearTabPanel () {
             var tabPanel = this._GetTabPanel(this.TabStripPlacement);
             if (!tabPanel)
                 return;
@@ -383,7 +399,7 @@ module Fayde.Controls {
             tabPanel.Children.Clear();
         }
 
-        private _GetTabPanel(tabPlacement: Dock): TabPanel {
+        private _GetTabPanel (tabPlacement: Dock): TabPanel {
             switch (tabPlacement) {
                 case Dock.Left:
                     return this._ElementTabPanelLeft;
@@ -397,7 +413,8 @@ module Fayde.Controls {
                     return null;
             }
         }
-        private _GetTemplate(tabPlacement: Dock): FrameworkElement {
+
+        private _GetTemplate (tabPlacement: Dock): FrameworkElement {
             switch (tabPlacement) {
                 case Dock.Left:
                     return this._ElementTemplateLeft;
@@ -411,7 +428,8 @@ module Fayde.Controls {
                     return null;
             }
         }
-        private _GetContentHost(tabPlacement: Dock): ContentPresenter {
+
+        private _GetContentHost (tabPlacement: Dock): ContentPresenter {
             switch (tabPlacement) {
                 case Dock.Left:
                     return this._ElementContentLeft;
@@ -426,7 +444,7 @@ module Fayde.Controls {
             }
         }
 
-        private _GetItemAtIndex(index: number): TabItem {
+        private _GetItemAtIndex (index: number): TabItem {
             if (index < 0 || index >= this.Items.Count)
                 return null;
             var item = <TabItem>this.Items.GetValueAt(index);
@@ -434,26 +452,29 @@ module Fayde.Controls {
                 return item;
         }
 
-        private _ThrowInvalidTabItem(obj: any) {
+        private _ThrowInvalidTabItem (obj: any) {
             var type: string = "object";
-            try { type = obj.constructor._TypeName; } catch (err) { }
+            try {
+                type = obj.constructor._TypeName;
+            } catch (err) {
+            }
             throw new ArgumentException("Unable to cast object of type '" + type + "' to type 'System.Windows.Controls.TabItem'.");
         }
     }
     TemplateVisualStates(TabControl,
-        { GroupName: "CommonStates", Name: "Normal" },
-        { GroupName: "CommonStates", Name: "Disabled" });
+        {GroupName: "CommonStates", Name: "Normal"},
+        {GroupName: "CommonStates", Name: "Disabled"});
     TemplateParts(TabControl,
-        { Name: "TemplateLeft", Type: FrameworkElement },
-        { Name: "ContentLeft", Type: ContentPresenter },
-        { Name: "TabPanelLeft", Type: TabPanel },
-        { Name: "TemplateTop", Type: FrameworkElement },
-        { Name: "ContentTop", Type: ContentPresenter },
-        { Name: "TabPanelTop", Type: TabPanel },
-        { Name: "TemplateRight", Type: FrameworkElement },
-        { Name: "ContentRight", Type: ContentPresenter },
-        { Name: "TabPanelRight", Type: TabPanel },
-        { Name: "TemplateBottom", Type: FrameworkElement },
-        { Name: "ContentBottom", Type: ContentPresenter },
-        { Name: "TabPanelBottom", Type: TabPanel });
+        {Name: "TemplateLeft", Type: FrameworkElement},
+        {Name: "ContentLeft", Type: ContentPresenter},
+        {Name: "TabPanelLeft", Type: TabPanel},
+        {Name: "TemplateTop", Type: FrameworkElement},
+        {Name: "ContentTop", Type: ContentPresenter},
+        {Name: "TabPanelTop", Type: TabPanel},
+        {Name: "TemplateRight", Type: FrameworkElement},
+        {Name: "ContentRight", Type: ContentPresenter},
+        {Name: "TabPanelRight", Type: TabPanel},
+        {Name: "TemplateBottom", Type: FrameworkElement},
+        {Name: "ContentBottom", Type: ContentPresenter},
+        {Name: "TabPanelBottom", Type: TabPanel});
 }
