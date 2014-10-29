@@ -1,5 +1,7 @@
 module Fayde.Controls.tabpanel {
     import Size = minerva.Size;
+    import Visibility = minerva.Visibility;
+    import PanelUpdaterTree = minerva.controls.panel.PanelUpdaterTree;
 
     export module helpers {
         export function getDesiredSizeWithoutMargin (upd: minerva.core.Updater): Size {
@@ -30,7 +32,7 @@ module Fayde.Controls.tabpanel {
             return Math.abs(fe.Margin.left + fe.Margin.right);
         }
 
-        export function getHeadersSize (tree: minerva.controls.panel.PanelUpdaterTree): number[] {
+        export function getHeadersSize (tree: PanelUpdaterTree): number[] {
             var arr = [];
             for (var walker = tree.walk(); walker.step();) {
                 var child = walker.current;
@@ -57,7 +59,7 @@ module Fayde.Controls.tabpanel {
             return ti.IsSelected === true;
         }
 
-        export function getActiveRow (tree: minerva.controls.panel.PanelUpdaterTree, solution: number[], isDockTop: boolean): number {
+        export function getActiveRow (tree: PanelUpdaterTree, solution: number[], isDockTop: boolean): number {
             var index = 0;
             var num = 0;
             if (solution.length > 0) {
@@ -75,7 +77,7 @@ module Fayde.Controls.tabpanel {
             return index;
         }
 
-        export function calculateHeaderDistribution (tree: minerva.controls.panel.PanelUpdaterTree, rowWidthLimit: number, headerWidth: number[]): number[] {
+        export function calculateHeaderDistribution (tree: PanelUpdaterTree, rowWidthLimit: number, headerWidth: number[]): number[] {
             var num1 = 0.0;
             var length1 = headerWidth.length;
             var length2 = this._NumberOfRows - 1;

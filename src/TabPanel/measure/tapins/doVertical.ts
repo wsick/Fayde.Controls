@@ -1,4 +1,4 @@
-export module Fayde.Controls.tabpanel.measure.tapins {
+module Fayde.Controls.tabpanel.measure.tapins {
     export function doVertical (input: IInput, state: IState, output: IOutput, tree: minerva.core.IUpdaterTree, availableSize: minerva.Size): boolean {
         if (input.tabAlignment !== Dock.Left && input.tabAlignment !== Dock.Right)
             return true;
@@ -11,7 +11,7 @@ export module Fayde.Controls.tabpanel.measure.tapins {
 
         for (var walker = tree.walk(); walker.step();) {
             var child = walker.current;
-            if (child.assets.visibility === Visibility.Collapsed)
+            if (child.assets.visibility === minerva.Visibility.Collapsed)
                 break;
             output.numHeaders++;
             child.measure(state.availableSize);

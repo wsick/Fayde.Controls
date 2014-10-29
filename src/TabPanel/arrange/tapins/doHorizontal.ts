@@ -1,4 +1,4 @@
-export module Fayde.Controls.tabpanel.arrange.tapins {
+module Fayde.Controls.tabpanel.arrange.tapins {
     import Size = minerva.Size;
     import Rect = minerva.Rect;
     import Point = minerva.Point;
@@ -31,7 +31,7 @@ export module Fayde.Controls.tabpanel.arrange.tapins {
         var separatorIndex = 0;
         for (var walker = tree.walk(); walker.step();) {
             var child = walker.current;
-            if (child.assets.visibility === Visibility.Collapsed)
+            if (child.assets.visibility === minerva.Visibility.Collapsed)
                 continue;
 
             cr.width = headersSize[childIndex];
