@@ -119,8 +119,8 @@ module Fayde.Controls {
         private UpdateContextMenuPlacement() {
             if (!this._RootVisual || !this._Overlay)
                 return;
-            var x = this._PopupAlignmentPoint.X;
-            var y = this._PopupAlignmentPoint.Y;
+            var x = this._PopupAlignmentPoint.x;
+            var y = this._PopupAlignmentPoint.y;
             var val1_1 = x + this.HorizontalOffset;
             var val1_2 = y + this.VerticalOffset;
             var val1_3 = Math.min(val1_1, this._RootVisual.ActualWidth - this.ActualWidth);
@@ -197,7 +197,8 @@ module Fayde.Controls {
         private FocusNextItem(down: boolean) {
             var count = this.Items.Count;
             var num = down ? -1 : count;
-            var menuItem1 = <MenuItem>this.XamlNode.GetFocusedElement();
+
+            var menuItem1 = <MenuItem>Fayde.Surface.GetFocusedElement(this);
             if (menuItem1 instanceof MenuItem && this === menuItem1.ParentMenuBase)
                 num = this.ItemContainersManager.IndexFromContainer(menuItem1);
             var index = num;
