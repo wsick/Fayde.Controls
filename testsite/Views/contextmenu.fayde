@@ -1,0 +1,19 @@
+<Page xmlns="http://schemas.wsick.com/fayde"
+      xmlns:x="http://schemas.wsick.com/fayde/x"
+      xmlns:controls="lib:Fayde.Controls"
+      Title="Home">
+    <StackPanel Margin="5">
+        <Border Background="Black">
+            <TextBlock Foreground="White" Text="Right click me!">
+                <controls:ContextMenuService.ContextMenu>
+                    <controls:ContextMenu>
+                        <controls:MenuItem Header="Test 1"/>
+                        <controls:MenuItem Header="Test 2"/>
+                        <controls:Separator/>
+                        <controls:MenuItem Header="Test 3"/>
+                    </controls:ContextMenu>
+                </controls:ContextMenuService.ContextMenu>
+            </TextBlock>
+        </Border>
+    </StackPanel>
+</Page>
