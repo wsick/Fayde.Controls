@@ -71,14 +71,12 @@ var Fayde;
                 this.Opened = new Fayde.RoutedEvent();
                 this.Closed = new Fayde.RoutedEvent();
                 this._Owner = null;
-                this._MousePosition = new Point();
                 this._PopupAlignmentPoint = new Point();
                 this._SettingIsOpen = false;
-                this._RootVisual = null;
                 this._Popup = null;
                 this._Overlay = null;
                 this.DefaultStyleKey = this.constructor;
-                this.LayoutUpdated.Subscribe(this._HandleLayoutUpdated, this);
+                this.$RootVisualTracker = new Controls.contextmenu.RootVisualTracker(this);
             }
             ContextMenu.prototype.OnHorizontalOffsetChanged = function (args) {
                 this.UpdateContextMenuPlacement();
@@ -92,7 +90,7 @@ var Fayde;
                 if (this._SettingIsOpen)
                     return;
                 if (args.NewValue === true)
-                    this.OpenPopup(this._MousePosition);
+                    this.OpenPopup(this.$RootVisualTracker.mousePosition);
                 else
                     this.ClosePopup();
             };
@@ -114,10 +112,12 @@ var Fayde;
                 }
                 _super.prototype.OnKeyDown.call(this, e);
             };
+
             ContextMenu.prototype.OnMouseLeftButtonDown = function (e) {
                 e.Handled = true;
                 _super.prototype.OnMouseLeftButtonDown.call(this, e);
             };
+
             ContextMenu.prototype.OnMouseRightButtonDown = function (e) {
                 e.Handled = true;
                 _super.prototype.OnMouseRightButtonDown.call(this, e);
@@ -144,23 +144,17 @@ var Fayde;
                 configurable: true
             });
 
-            ContextMenu.prototype._HandleLayoutUpdated = function (sender, e) {
-                if (!Fayde.Application.Current.RootVisual)
-                    return;
-                this.InitializeRootVisual();
-                this.LayoutUpdated.Unsubscribe(this._HandleLayoutUpdated, this);
-            };
+
             ContextMenu.prototype._HandleOwnerMouseRightButtonDown = function (sender, e) {
                 this.OpenPopup(e.GetPosition(null));
                 e.Handled = true;
             };
-            ContextMenu.prototype._HandleRootVisualMouseMove = function (sender, e) {
-                this._MousePosition = e.GetPosition(null);
-            };
+
             ContextMenu.prototype._HandleOverlayMouseButtonDown = function (sender, e) {
                 this.ClosePopup();
                 e.Handled = true;
             };
+
             ContextMenu.prototype._HandleContextMenuSizeChanged = function (sender, e) {
                 this.UpdateContextMenuPlacement();
             };
@@ -169,72 +163,65 @@ var Fayde;
                 this.ClosePopup();
             };
 
-            ContextMenu.prototype.InitializeRootVisual = function () {
-                if (this._RootVisual)
+            ContextMenu.prototype.UpdateContextMenuPlacement = function () {
+                var pap = this._PopupAlignmentPoint;
+                var full = this.$RootVisualTracker.getAvailableSize();
+
+                var x = Math.max(0, Math.min(pap.x + this.HorizontalOffset, full.width - this.ActualWidth));
+                var y = Math.max(0, Math.min(pap.y + this.VerticalOffset, full.height - this.ActualHeight));
+                Controls.Canvas.SetLeft(this, x);
+                Controls.Canvas.SetTop(this, y);
+
+                var overlay = this._Overlay;
+                if (!overlay)
                     return;
-                var rv = Fayde.Application.Current.RootVisual;
-                this._RootVisual = rv instanceof Fayde.FrameworkElement ? rv : null;
-                if (this._RootVisual)
-                    this._RootVisual.MouseMove.Subscribe(this._HandleRootVisualMouseMove, this);
+                overlay.Width = full.width;
+                overlay.Height = full.height;
             };
 
-            ContextMenu.prototype.UpdateContextMenuPlacement = function () {
-                if (!this._RootVisual || !this._Overlay)
-                    return;
-                var x = this._PopupAlignmentPoint.x;
-                var y = this._PopupAlignmentPoint.y;
-                var val1_1 = x + this.HorizontalOffset;
-                var val1_2 = y + this.VerticalOffset;
-                var val1_3 = Math.min(val1_1, this._RootVisual.ActualWidth - this.ActualWidth);
-                var val1_4 = Math.min(val1_2, this._RootVisual.ActualHeight - this.ActualHeight);
-                var length1 = Math.max(val1_3, 0.0);
-                var length2 = Math.max(val1_4, 0.0);
-                Controls.Canvas.SetLeft(this, length1);
-                Controls.Canvas.SetTop(this, length2);
-                this._Overlay.Width = this._RootVisual.ActualWidth;
-                this._Overlay.Height = this._RootVisual.ActualHeight;
-            };
             ContextMenu.prototype.OpenPopup = function (position) {
+                var _this = this;
                 this._PopupAlignmentPoint = position;
-                this.InitializeRootVisual();
-                var contextMenu1 = this;
+
                 var canvas1 = new Controls.Canvas();
                 canvas1.Background = new Fayde.Media.SolidColorBrush(Color.KnownColors.Transparent);
-                var canvas2 = canvas1;
-                contextMenu1._Overlay = canvas2;
+                this._Overlay = canvas1;
                 this._Overlay.MouseLeftButtonDown.Subscribe(this._HandleOverlayMouseButtonDown, this);
                 this._Overlay.MouseRightButtonDown.Subscribe(this._HandleOverlayMouseButtonDown, this);
                 this._Overlay.Children.Add(this);
-                var contextMenu2 = this;
-                var popup1 = new Controls.Primitives.Popup();
-                popup1.Child = this._Overlay;
-                var popup2 = popup1;
-                contextMenu2._Popup = popup2;
+
+                var popup = this._Popup = new Controls.Primitives.Popup();
+                var initiator = this._Owner;
+                while (initiator && !(initiator instanceof Fayde.UIElement))
+                    initiator = initiator.Parent;
+                if (initiator) {
+                    popup.XamlNode.RegisterInitiator(initiator);
+                    this.$RootVisualTracker.tryInit(initiator);
+                }
+                popup.Child = this._Overlay;
+
                 this.SizeChanged.Subscribe(this._HandleContextMenuSizeChanged, this);
-                if (this._RootVisual)
-                    this._RootVisual.SizeChanged.Subscribe(this._HandleContextMenuSizeChanged, this);
+                this.$RootVisualTracker.setOnSizeChanged(function (newSize) {
+                    return _this.UpdateContextMenuPlacement();
+                });
                 this.UpdateContextMenuPlacement();
                 if (this.ReadLocalValue(Fayde.DependencyObject.DataContextProperty) === DependencyProperty.UnsetValue) {
-                    var dependencyObject = this.Owner;
-                    if (!dependencyObject)
-                        dependencyObject = this._RootVisual;
-                    var contextMenu3 = this;
-                    var dp = Fayde.FrameworkElement.DataContextProperty;
                     var binding1 = new Fayde.Data.Binding("DataContext");
-                    binding1.Source = dependencyObject;
-                    var binding2 = binding1;
-                    contextMenu3.SetBinding(dp, binding2);
+                    binding1.Source = this.Owner || this.$RootVisualTracker.rootVisual;
+                    this.SetBinding(Fayde.DependencyObject.DataContextProperty, binding1);
                 }
-                this._Popup.IsOpen = true;
+                popup.IsOpen = true;
                 this.Focus();
                 this._SettingIsOpen = true;
                 this.IsOpen = true;
                 this._SettingIsOpen = false;
                 this.OnOpened(new Fayde.RoutedEventArgs());
             };
+
             ContextMenu.prototype.OnOpened = function (e) {
                 this.Opened.Raise(this, e);
             };
+
             ContextMenu.prototype.ClosePopup = function () {
                 if (this._Popup) {
                     this._Popup.IsOpen = false;
@@ -246,13 +233,13 @@ var Fayde;
                     this._Overlay = null;
                 }
                 this.SizeChanged.Unsubscribe(this._HandleContextMenuSizeChanged, this);
-                if (this._RootVisual)
-                    this._RootVisual.SizeChanged.Unsubscribe(this._HandleContextMenuSizeChanged, this);
+                this.$RootVisualTracker.setOnSizeChanged();
                 this._SettingIsOpen = true;
                 this.IsOpen = false;
                 this._SettingIsOpen = false;
                 this.OnClosed(new Fayde.RoutedEventArgs());
             };
+
             ContextMenu.prototype.OnClosed = function (e) {
                 this.Closed.Raise(this, e);
             };
@@ -276,11 +263,9 @@ var Fayde;
             ContextMenu.HorizontalOffsetProperty = DependencyProperty.Register("HorizontalOffset", function () {
                 return Number;
             }, ContextMenu, 0.0);
-
             ContextMenu.VerticalOffsetProperty = DependencyProperty.Register("VerticalOffset", function () {
                 return Number;
             }, ContextMenu, 0.0);
-
             ContextMenu.IsOpenProperty = DependencyProperty.Register("IsOpen", function () {
                 return Boolean;
             }, ContextMenu, false);
@@ -3794,6 +3779,78 @@ var Fayde;
             return UpDownParsingEventArgs;
         })(Fayde.RoutedEventArgs);
         Controls.UpDownParsingEventArgs = UpDownParsingEventArgs;
+    })(Fayde.Controls || (Fayde.Controls = {}));
+    var Controls = Fayde.Controls;
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    (function (Controls) {
+        (function (contextmenu) {
+            var RootVisualTracker = (function () {
+                function RootVisualTracker(owner) {
+                    this.mousePosition = new Point();
+                    this.$$rootVisual = null;
+                    owner.LayoutUpdated.Subscribe(this._HandleLayoutUpdated, this);
+                }
+                Object.defineProperty(RootVisualTracker.prototype, "rootVisual", {
+                    get: function () {
+                        return this.$$rootVisual;
+                    },
+                    set: function (value) {
+                        if (this.$$rootVisual) {
+                            this.$$rootVisual.MouseMove.Unsubscribe(this._HandleRootVisualMouseMove, this);
+                            this.$$rootVisual.SizeChanged.Unsubscribe(this._HandleSizeChanged, this);
+                        }
+                        this.$$rootVisual = value;
+                        if (value) {
+                            value.MouseMove.Subscribe(this._HandleRootVisualMouseMove, this);
+                            value.SizeChanged.Subscribe(this._HandleSizeChanged, this);
+                        }
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+
+
+                RootVisualTracker.prototype.tryInit = function (visual) {
+                    if (!visual)
+                        return;
+                    var surface = visual.XamlNode.LayoutUpdater.tree.surface;
+                    if (!surface)
+                        return;
+                    this.rootVisual = surface.App.RootVisual;
+                };
+
+                RootVisualTracker.prototype.setOnSizeChanged = function (onSizeChanged) {
+                    this.$$onSizeChanged = onSizeChanged;
+                };
+
+                RootVisualTracker.prototype.getAvailableSize = function () {
+                    return new minerva.Size(this.rootVisual.ActualWidth, this.rootVisual.ActualHeight);
+                };
+
+                RootVisualTracker.prototype._HandleLayoutUpdated = function (sender, e) {
+                    if (!this.rootVisual) {
+                        var surface = sender.XamlNode.LayoutUpdater.tree.surface;
+                        if (surface)
+                            this.rootVisual = surface.App.RootVisual;
+                    }
+                    if (this.rootVisual)
+                        sender.LayoutUpdated.Unsubscribe(this._HandleLayoutUpdated, this);
+                };
+
+                RootVisualTracker.prototype._HandleRootVisualMouseMove = function (sender, e) {
+                    this.mousePosition = e.GetPosition(null);
+                };
+
+                RootVisualTracker.prototype._HandleSizeChanged = function (sender, e) {
+                    this.$$onSizeChanged && this.$$onSizeChanged(e.NewSize);
+                };
+                return RootVisualTracker;
+            })();
+            contextmenu.RootVisualTracker = RootVisualTracker;
+        })(Controls.contextmenu || (Controls.contextmenu = {}));
+        var contextmenu = Controls.contextmenu;
     })(Fayde.Controls || (Fayde.Controls = {}));
     var Controls = Fayde.Controls;
 })(Fayde || (Fayde = {}));

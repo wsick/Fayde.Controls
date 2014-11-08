@@ -14,35 +14,31 @@ declare module Fayde.Controls.Primitives {
 declare module Fayde.Controls {
     class ContextMenu extends Primitives.MenuBase {
         static HorizontalOffsetProperty: DependencyProperty;
-        public HorizontalOffset: number;
-        private OnHorizontalOffsetChanged(args);
         static VerticalOffsetProperty: DependencyProperty;
-        public VerticalOffset: number;
-        private OnVerticalOffsetChanged(args);
         static IsOpenProperty: DependencyProperty;
+        public HorizontalOffset: number;
+        public VerticalOffset: number;
         public IsOpen: boolean;
+        private OnHorizontalOffsetChanged(args);
+        private OnVerticalOffsetChanged(args);
         private OnIsOpenChanged(args);
         public Opened: RoutedEvent<RoutedEventArgs>;
         public Closed: RoutedEvent<RoutedEventArgs>;
+        private $RootVisualTracker;
         constructor();
         public OnKeyDown(e: Input.KeyEventArgs): void;
         public OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
         public OnMouseRightButtonDown(e: Input.MouseButtonEventArgs): void;
         private _Owner;
         public Owner : DependencyObject;
-        private _MousePosition;
         private _PopupAlignmentPoint;
         private _SettingIsOpen;
-        private _RootVisual;
         private _Popup;
         private _Overlay;
-        private _HandleLayoutUpdated(sender, e);
         private _HandleOwnerMouseRightButtonDown(sender, e);
-        private _HandleRootVisualMouseMove(sender, e);
         private _HandleOverlayMouseButtonDown(sender, e);
         private _HandleContextMenuSizeChanged(sender, e);
         public ChildMenuItemClicked(): void;
-        private InitializeRootVisual();
         private UpdateContextMenuPlacement();
         private OpenPopup(position);
         public OnOpened(e: RoutedEventArgs): void;
@@ -640,6 +636,21 @@ declare module Fayde.Controls {
         public Value: T;
         public Handled: boolean;
         constructor(text: string);
+    }
+}
+declare module Fayde.Controls.contextmenu {
+    class RootVisualTracker {
+        public mousePosition: Point;
+        private $$rootVisual;
+        private $$onSizeChanged;
+        public rootVisual : FrameworkElement;
+        constructor(owner: FrameworkElement);
+        public tryInit(visual: UIElement): void;
+        public setOnSizeChanged(onSizeChanged?: (newSize: minerva.Size) => any): void;
+        public getAvailableSize(): minerva.Size;
+        private _HandleLayoutUpdated(sender, e);
+        private _HandleRootVisualMouseMove(sender, e);
+        private _HandleSizeChanged(sender, e);
     }
 }
 declare module Fayde.Controls.Internal {
