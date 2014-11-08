@@ -1,5 +1,7 @@
 var version = require('./build/version'),
-    setup = require('./build/setup');
+    setup = require('./build/setup'),
+    path = require('path'),
+    connect_livereload = require('connect-livereload');
 
 module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-typescript');
@@ -23,6 +25,7 @@ module.exports = function (grunt) {
     var dirs = {
         test: {
             root: 'test',
+            build: 'test/.build',
             lib: 'test/lib'
         },
         testsite: {
@@ -31,6 +34,10 @@ module.exports = function (grunt) {
             lib: 'testsite/lib'
         }
     };
+
+    function mount(connect, dir) {
+        return connect.static(path.resolve(dir));
+    }
 
     grunt.initConfig({
         ports: ports,
@@ -110,14 +117,14 @@ module.exports = function (grunt) {
                 src: [
                     'typings/*.d.ts',
                     '<%= dirs.test.root %>/**/*.ts',
-                    '!<%= dirs.test.root %>/lib/**/*.ts',
+                    '!<%= dirs.test.lib %>/**/*.ts',
                     'lib/minerva/minerva.d.ts',
                     'lib/fayde/fayde.d.ts'
                 ],
-                dest: './test/.build',
+                dest: '<%= dirs.test.build %>',
                 options: {
                     target: 'es5',
-                    basePath: './test/tests',
+                    basePath: '<%= dirs.test.root %>/tests',
                     module: 'amd',
                     sourceMap: true
                 }
@@ -126,7 +133,7 @@ module.exports = function (grunt) {
                 src: [
                     'typings/*.d.ts',
                     '<%= dirs.testsite.root %>/**/*.ts',
-                    '!<%= dirs.testsite.root %>/lib/**/*.ts',
+                    '!<%= dirs.testsite.lib %>/**/*.ts',
                     'lib/minerva/minerva.d.ts',
                     'lib/fayde/fayde.d.ts'
                 ],
@@ -138,13 +145,20 @@ module.exports = function (grunt) {
             }
         },
         qunit: {
-            all: ['test/**/*.html']
+            all: ['<%= dirs.test.root %>/**/*.html']
         },
         connect: {
             server: {
                 options: {
                     port: ports.server,
-                    base: '<%= dirs.testsite.root %>'
+                    base: dirs.testsite.root,
+                    middleware: function (connect) {
+                        return [
+                            connect_livereload({ port: ports.livereload }),
+                            mount(connect, dirs.testsite.build),
+                            mount(connect, dirs.testsite.root)
+                        ];
+                    }
                 }
             }
         },
