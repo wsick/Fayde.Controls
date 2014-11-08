@@ -20,14 +20,27 @@ module.exports = function (grunt) {
         name: 'Fayde.Controls'
     };
 
+    var dirs = {
+        test: {
+            root: 'test',
+            lib: 'test/lib'
+        },
+        testsite: {
+            root: 'testsite',
+            build: 'testsite/.build',
+            lib: 'testsite/lib'
+        }
+    };
+
     grunt.initConfig({
         ports: ports,
         meta: meta,
+        dirs: dirs,
         pkg: grunt.file.readJSON('./package.json'),
         clean: {
             bower: ['./lib'],
-            testsite: ['./testsite/lib'],
-            test: ['./test/lib']
+            testsite: ['<%= dirs.testsite.lib %>'],
+            test: ['<%= dirs.test.lib %>']
         },
         setup: {
             base: {
@@ -40,30 +53,29 @@ module.exports = function (grunt) {
             },
             test: {
                 files: [
-                    { src: './lib/fayde', dest: './test/lib/fayde' },
-                    { src: './lib/minerva', dest: './test/lib/minerva' },
-                    { src: './lib/qunit', dest: './test/lib/qunit' },
-                    { src: './lib/requirejs', dest: './test/lib/requirejs' },
-                    { src: './lib/requirejs-text', dest: './test/lib/requirejs-text' },
-                    { src: './themes', dest: './test/lib/fayde.controls/themes' },
-                    { src: './fayde.controls.js', dest: './test/lib/fayde.controls/fayde.controls.js' },
-                    { src: './fayde.controls.d.ts', dest: './test/lib/fayde.controls/fayde.controls.d.ts' },
-                    { src: './fayde.controls.js.map', dest: './test/lib/fayde.controls/fayde.controls.js.map' },
-                    { src: './src', dest: './test/lib/fayde.controls/src' }
+                    { src: './lib/minerva', dest: '<%= dirs.test.lib %>/minerva' },
+                    { src: './lib/fayde', dest: '<%= dirs.test.lib %>/fayde' },
+                    { src: './lib/qunit', dest: '<%= dirs.test.lib %>/qunit' },
+                    { src: './lib/requirejs', dest: '<%= dirs.test.lib %>/requirejs' },
+                    { src: './lib/requirejs-text', dest: '<%= dirs.test.lib %>/requirejs-text' },
+                    { src: './themes', dest: '<%= dirs.test.lib %>/<%= meta.name %>/themes' },
+                    { src: './<%= meta.name %>.js', dest: '<%= dirs.test.lib %>/<%= meta.name %>/<%= meta.name %>.js' },
+                    { src: './<%= meta.name %>.d.ts', dest: '<%= dirs.test.lib %>/<%= meta.name %>/<%= meta.name %>.d.ts' },
+                    { src: './<%= meta.name %>.js.map', dest: '<%= dirs.test.lib %>/<%= meta.name %>/<%= meta.name %>.js.map' },
+                    { src: './src', dest: '<%= dirs.test.lib %>/<%= meta.name %>/src' }
                 ]
             },
             testsite: {
                 files: [
-                    { src: './lib/fayde', dest: './testsite/lib/fayde' },
-                    { src: './lib/minerva', dest: './testsite/lib/minerva' },
-                    { src: './lib/qunit', dest: './testsite/lib/qunit' },
-                    { src: './lib/requirejs', dest: './testsite/lib/requirejs' },
-                    { src: './lib/requirejs-text', dest: './testsite/lib/requirejs-text' },
-                    { src: './themes', dest: './testsite/lib/fayde.controls/themes' },
-                    { src: './fayde.controls.js', dest: './testsite/lib/fayde.controls/fayde.controls.js' },
-                    { src: './fayde.controls.d.ts', dest: './testsite/lib/fayde.controls/fayde.controls.d.ts' },
-                    { src: './fayde.controls.js.map', dest: './testsite/lib/fayde.controls/fayde.controls.js.map' },
-                    { src: './src', dest: './testsite/lib/fayde.controls/src' }
+                    { src: './lib/minerva', dest: '<%= dirs.testsite.lib %>/minerva' },
+                    { src: './lib/fayde', dest: '<%= dirs.testsite.lib %>/fayde' },
+                    { src: './lib/requirejs', dest: '<%= dirs.testsite.lib %>/requirejs' },
+                    { src: './lib/requirejs-text', dest: '<%= dirs.testsite.lib %>/requirejs-text' },
+                    { src: './themes', dest: '<%= dirs.testsite.lib %>/<%= meta.name %>/themes' },
+                    { src: './<%= meta.name %>.js', dest: '<%= dirs.testsite.lib %>/<%= meta.name %>/<%= meta.name %>.js' },
+                    { src: './<%= meta.name %>.d.ts', dest: '<%= dirs.testsite.lib %>/<%= meta.name %>/<%= meta.name %>.d.ts' },
+                    { src: './<%= meta.name %>.js.map', dest: '<%= dirs.testsite.lib %>/<%= meta.name %>/<%= meta.name %>.js.map' },
+                    { src: './src', dest: '<%= dirs.testsite.lib %>/<%= meta.name %>/src' }
                 ]
             },
             localminerva: {
@@ -79,7 +91,14 @@ module.exports = function (grunt) {
         },
         typescript: {
             build: {
-                src: ['./lib/minerva/minerva.d.ts', './lib/fayde/fayde.d.ts', './src/_Version.ts', './src/*.ts', './src/**/*.ts'],
+                src: [
+                    'typings/*.d.ts',
+                    'lib/minerva/minerva.d.ts',
+                    'lib/fayde/fayde.d.ts',
+                    './src/_Version.ts',
+                    './src/*.ts',
+                    './src/**/*.ts'
+                ],
                 dest: '<%= meta.name %>.js',
                 options: {
                     target: 'es5',
@@ -88,7 +107,13 @@ module.exports = function (grunt) {
                 }
             },
             test: {
-                src: ['./lib/minerva/minerva.d.ts', './lib/fayde/fayde.d.ts', './test/**/*.ts', '!./test/lib/**/*.ts'],
+                src: [
+                    'typings/*.d.ts',
+                    '<%= dirs.test.root %>/**/*.ts',
+                    '!<%= dirs.test.root %>/lib/**/*.ts',
+                    'lib/minerva/minerva.d.ts',
+                    'lib/fayde/fayde.d.ts'
+                ],
                 dest: './test/.build',
                 options: {
                     target: 'es5',
@@ -98,7 +123,13 @@ module.exports = function (grunt) {
                 }
             },
             testsite: {
-                src: ['./lib/minerva/minerva.d.ts', './lib/fayde/fayde.d.ts', './testsite/**/*.ts', '!./testsite/lib/**/*.ts'],
+                src: [
+                    'typings/*.d.ts',
+                    '<%= dirs.testsite.root %>/**/*.ts',
+                    '!<%= dirs.testsite.root %>/lib/**/*.ts',
+                    'lib/minerva/minerva.d.ts',
+                    'lib/fayde/fayde.d.ts'
+                ],
                 options: {
                     target: 'es5',
                     module: 'amd',
@@ -113,7 +144,7 @@ module.exports = function (grunt) {
             server: {
                 options: {
                     port: ports.server,
-                    base: './testsite/'
+                    base: '<%= dirs.testsite.root %>'
                 }
             }
         },
@@ -123,17 +154,17 @@ module.exports = function (grunt) {
                 tasks: ['typescript:build']
             },
             testsitets: {
-                files: ['testsite/**/*.ts'],
+                files: ['<%= dirs.testsite.root %>/**/*.ts'],
                 tasks: ['typescript:testsite']
             },
             testsitejs: {
-                files: ['testsite/**/*.js'],
+                files: ['<%= dirs.testsite.root %>/**/*.js'],
                 options: {
                     livereload: ports.livereload
                 }
             },
             testsitefay: {
-                files: ['testsite/**/*.fap', 'testsite/**/*.fayde'],
+                files: ['<%= dirs.testsite.root %>/**/*.fap', '<%= dirs.testsite.root %>/**/*.fayde'],
                 options: {
                     livereload: ports.livereload
                 }
@@ -178,4 +209,7 @@ module.exports = function (grunt) {
     grunt.registerTask('lib:reset', ['clean', 'setup', 'symlink:test', 'symlink:testsite']);
     grunt.registerTask('link:minerva', ['symlink:localminerva']);
     grunt.registerTask('link:fayde', ['symlink:localfayde']);
+    grunt.registerTask('dist:upbuild', ['version:bump', 'version:apply', 'typescript:build']);
+    grunt.registerTask('dist:upminor', ['version:bump:minor', 'version:apply', 'typescript:build']);
+    grunt.registerTask('dist:upmajor', ['version:bump:major', 'version:apply', 'typescript:build']);
 };
