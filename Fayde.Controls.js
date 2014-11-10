@@ -1,7 +1,7 @@
 ﻿var Fayde;
 (function (Fayde) {
     (function (Controls) {
-        Controls.Version = '0.13.0';
+        Controls.Version = '0.13.1';
     })(Fayde.Controls || (Fayde.Controls = {}));
     var Controls = Fayde.Controls;
 })(Fayde || (Fayde = {}));
@@ -5178,7 +5178,7 @@ var Fayde;
                         return 0;
 
                     var fe = panel.Children.GetValueAt(0);
-                    if (!(fe instanceof Fayde.FrameworkElement))
+                    if (!(fe instanceof Fayde.FrameworkElement) || !fe.Margin)
                         return 0;
 
                     return Math.abs(fe.Margin.left + fe.Margin.right);

@@ -26,7 +26,7 @@ module Fayde.Controls.tabpanel {
                 return 0;
 
             var fe = <FrameworkElement>panel.Children.GetValueAt(0);
-            if (!(fe instanceof FrameworkElement))
+            if (!(fe instanceof FrameworkElement) || !fe.Margin)
                 return 0;
 
             return Math.abs(fe.Margin.left + fe.Margin.right);
