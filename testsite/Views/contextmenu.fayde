@@ -1,7 +1,7 @@
 <Page xmlns="http://schemas.wsick.com/fayde"
       xmlns:x="http://schemas.wsick.com/fayde/x"
       xmlns:controls="lib:Fayde.Controls"
-      Title="Home">
+      Title="ContextMenu Demo">
     <Grid Margin="5">
         <Border Background="Black" Padding="5" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Foreground="White" Text="Right click me!">

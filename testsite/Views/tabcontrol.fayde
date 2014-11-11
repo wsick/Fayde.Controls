@@ -1,0 +1,31 @@
+﻿<Page xmlns="http://schemas.wsick.com/fayde"
+      xmlns:x="http://schemas.wsick.com/fayde/x"
+      xmlns:controls="lib:Fayde.Controls"
+      xmlns:viewmodels="ViewModels"
+      Title="TabControl Demo">
+    <Page.Resources>
+    </Page.Resources>
+
+    <Page.DataContext>
+        <viewmodels:MainViewModel/>
+    </Page.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <controls:TabControl>
+            <controls:TabItem Header="Tab Item 1">
+                <TextBlock Text="Tab Content 1" />
+            </controls:TabItem>
+            <controls:TabItem Header="Tab Item 2">
+                <TextBlock Text="Tab Content 2" />
+            </controls:TabItem>
+            <controls:TabItem Header="Tab Item 3">
+                <TextBlock Text="Tab Content 3" />
+            </controls:TabItem>
+        </controls:TabControl>
+    </Grid>
+</Page>

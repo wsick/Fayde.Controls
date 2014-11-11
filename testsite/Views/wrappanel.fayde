@@ -2,7 +2,7 @@
       xmlns:x="http://schemas.wsick.com/fayde/x"
       xmlns:controls="lib:Fayde.Controls"
       xmlns:viewmodels="ViewModels"
-      Title="TreeView Demo">
+      Title="WrapPanel Demo">
     <Page.Resources>
         <ItemsPanelTemplate x:Key="VerticalWrapPanel">
             <controls:WrapPanel Orientation="Vertical" ItemWidth="100" ItemHeight="100"/>
