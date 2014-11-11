@@ -13,7 +13,9 @@ module Fayde.Controls.tabpanel.arrange {
     export class TabPanelArrangePipeDef extends minerva.controls.panel.arrange.PanelArrangePipeDef {
         constructor () {
             super();
-
+            this.addTapinAfter('doOverride', 'doVertical', tapins.doVertical)
+                .addTapinAfter('doVertical', 'doHorizontal', tapins.doHorizontal)
+                .removeTapin('doOverride');
         }
     }
 }

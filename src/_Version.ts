@@ -1,3 +1,3 @@
 module Fayde.Controls {
-    export var Version = '0.13.3';
+    export var Version = '0.13.4';
 }

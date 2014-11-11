@@ -1,7 +1,7 @@
 ﻿var Fayde;
 (function (Fayde) {
     (function (Controls) {
-        Controls.Version = '0.13.3';
+        Controls.Version = '0.13.4';
     })(Fayde.Controls || (Fayde.Controls = {}));
     var Controls = Fayde.Controls;
 })(Fayde || (Fayde = {}));
@@ -5029,6 +5029,7 @@ var Fayde;
                     __extends(TabPanelArrangePipeDef, _super);
                     function TabPanelArrangePipeDef() {
                         _super.call(this);
+                        this.addTapinAfter('doOverride', 'doVertical', arrange.tapins.doVertical).addTapinAfter('doVertical', 'doHorizontal', arrange.tapins.doHorizontal).removeTapin('doOverride');
                     }
                     return TabPanelArrangePipeDef;
                 })(minerva.controls.panel.arrange.PanelArrangePipeDef);
@@ -5395,8 +5396,8 @@ var Fayde;
                         output.numHeaders = 0;
                         output.rowHeight = 0.0;
 
-                        var num1 = 0;
-                        var num2 = 0.0;
+                        var count = 0;
+                        var totalWidth = 0.0;
                         var num3 = 0.0;
                         for (var walker = tree.walk(); walker.step();) {
                             var child = walker.current;
@@ -5408,20 +5409,20 @@ var Fayde;
                             var sizeWithoutMargin = tabpanel.helpers.getDesiredSizeWithoutMargin(child);
                             if (output.rowHeight < sizeWithoutMargin.height)
                                 output.rowHeight = sizeWithoutMargin.height;
-                            if (num2 + sizeWithoutMargin.width > availableSize.width && num1 > 0) {
-                                if (num3 < num2)
-                                    num3 = num2;
-                                num2 = sizeWithoutMargin.width;
-                                num1 = 1;
+                            if (totalWidth + sizeWithoutMargin.width > availableSize.width && count > 0) {
+                                if (num3 < totalWidth)
+                                    num3 = totalWidth;
+                                totalWidth = sizeWithoutMargin.width;
+                                count = 1;
                                 output.numRows++;
                             } else {
-                                num2 += sizeWithoutMargin.width;
-                                num1++;
+                                totalWidth += sizeWithoutMargin.width;
+                                count++;
                             }
                         }
 
-                        if (num3 < num2)
-                            num3 = num2;
+                        if (num3 < totalWidth)
+                            num3 = totalWidth;
                         ds.height = output.rowHeight * output.numRows;
                         ds.width = !isFinite(ds.width) || isNaN(ds.width) || num3 < availableSize.width ? num3 : availableSize.width;
 
