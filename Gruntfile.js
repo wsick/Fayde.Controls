@@ -121,10 +121,8 @@ module.exports = function (grunt) {
                     'lib/minerva/minerva.d.ts',
                     'lib/fayde/fayde.d.ts'
                 ],
-                dest: '<%= dirs.test.build %>',
                 options: {
                     target: 'es5',
-                    basePath: '<%= dirs.test.root %>/tests',
                     module: 'amd',
                     sourceMap: true
                 }
@@ -137,10 +135,10 @@ module.exports = function (grunt) {
                     'lib/minerva/minerva.d.ts',
                     'lib/fayde/fayde.d.ts'
                 ],
-                dest: '<%= dirs.testsite.build %>',
+                dest: dirs.testsite.build,
                 options: {
                     target: 'es5',
-                    basePath: '<%= dirs.testsite.root %>',
+                    basePath: dirs.testsite.root,
                     module: 'amd',
                     sourceMap: true
                 }
