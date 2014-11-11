@@ -137,8 +137,10 @@ module.exports = function (grunt) {
                     'lib/minerva/minerva.d.ts',
                     'lib/fayde/fayde.d.ts'
                 ],
+                dest: '<%= dirs.testsite.build %>',
                 options: {
                     target: 'es5',
+                    basePath: '<%= dirs.testsite.root %>',
                     module: 'amd',
                     sourceMap: true
                 }
@@ -213,9 +215,9 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('default', ['version:apply', 'typescript:build']);
-    grunt.registerTask('test', ['version:apply', 'typescript:build', 'typescript:test', 'qunit']);
-    grunt.registerTask('testsite', ['version:apply', 'typescript:build', 'typescript:testsite', 'connect', 'open', 'watch']);
+    grunt.registerTask('default', ['typescript:build']);
+    grunt.registerTask('test', ['typescript:build', 'typescript:test', 'qunit']);
+    grunt.registerTask('testsite', ['typescript:build', 'typescript:testsite', 'connect', 'open', 'watch']);
     setup(grunt);
     version(grunt);
     grunt.registerTask('package', ['nugetpack:dist']);
