@@ -28,7 +28,6 @@
             <controls:GridSplitter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch"/>
             <controls:GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" VerticalAlignment="Stretch"/>
         </Grid>
-        <!--
         <Grid Grid.Row="1" Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100"/>
@@ -45,6 +44,5 @@
             <controls:GridSplitter Grid.Row="1" HorizontalAlignment="Stretch"/>
             <controls:GridSplitter Grid.Row="3" HorizontalAlignment="Stretch"/>
         </Grid>
-        -->
     </Grid>
 </Page>
