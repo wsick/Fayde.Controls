@@ -42,7 +42,7 @@ module Fayde.Controls {
 
         constructor() {
             super();
-            this.DefaultStyleKey = (<any>this).constructor;
+            this.DefaultStyleKey = NumericUpDown;
             this._Coercer = new Internal.FormattedRangeCoercer(this,
                 (val) => this.SetCurrentValue(NumericUpDown.MaximumProperty, val),
                 (val) => this.SetCurrentValue(NumericUpDown.ValueProperty, val),

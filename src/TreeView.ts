@@ -53,7 +53,7 @@ module Fayde.Controls {
 
         constructor() {
             super();
-            this.DefaultStyleKey = (<any>this).constructor;
+            this.DefaultStyleKey = TreeView;
             this.ItemsControlHelper = new Internal.ItemsControlHelper(this);
         }
 

@@ -51,11 +51,6 @@ module Fayde.Controls {
         Parsing = new RoutedEvent<UpDownParsingEventArgs<T>>();
         ParseError = new RoutedEvent<UpDownParseErrorEventArgs>();
 
-        constructor() {
-            super();
-            this.DefaultStyleKey = (<any>this).constructor;
-        }
-
         OnApplyTemplate() {
             super.OnApplyTemplate();
             this.SetTextBox(this.GetTemplateChild("Text"));

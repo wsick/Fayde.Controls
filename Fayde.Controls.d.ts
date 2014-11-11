@@ -131,7 +131,6 @@ declare module Fayde.Controls {
         public ValueChanged: RoutedPropertyChangedEvent<T>;
         public Parsing: RoutedEvent<UpDownParsingEventArgs<T>>;
         public ParseError: RoutedEvent<UpDownParseErrorEventArgs>;
-        constructor();
         public OnApplyTemplate(): void;
         private SetTextBox(d);
         private SetSpinner(d);

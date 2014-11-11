@@ -12,7 +12,7 @@ module Fayde.Controls {
 
         constructor() {
             super();
-            this.DefaultStyleKey = (<any>this).constructor;
+            this.DefaultStyleKey = GridSplitter;
             this._Helper = new Internal.GridSplitterResizer(this);
             this.LayoutUpdated.Subscribe(this._OnLayoutUpdated, this);
         }

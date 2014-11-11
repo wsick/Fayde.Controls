@@ -1,6 +1,6 @@
 {
   "name": "fayde.controls",
-  "version": "0.13.2",
+  "version": "0.13.3",
   "description": "Extended control library for Fayde",
   "main": "Fayde.Controls.js",
   "scripts": {

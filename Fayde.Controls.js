@@ -1,7 +1,7 @@
 ﻿var Fayde;
 (function (Fayde) {
     (function (Controls) {
-        Controls.Version = '0.13.2';
+        Controls.Version = '0.13.3';
     })(Fayde.Controls || (Fayde.Controls = {}));
     var Controls = Fayde.Controls;
 })(Fayde || (Fayde = {}));
@@ -75,7 +75,7 @@ var Fayde;
                 this._SettingIsOpen = false;
                 this._Popup = null;
                 this._Overlay = null;
-                this.DefaultStyleKey = this.constructor;
+                this.DefaultStyleKey = ContextMenu;
                 this.$RootVisualTracker = new Controls.contextmenu.RootVisualTracker(this);
             }
             ContextMenu.prototype.OnHorizontalOffsetChanged = function (args) {
@@ -321,7 +321,7 @@ var Fayde;
                 this._DayGesture = new Controls.Internal.EventGesture();
                 this._YearGesture = new Controls.Internal.EventGesture();
                 this._SelectionHandler = null;
-                this.DefaultStyleKey = this.constructor;
+                this.DefaultStyleKey = DatePicker;
             }
             DatePicker.prototype.OnSelectedMonthChanged = function (args) {
                 this.CoerceMonth(args.NewValue);
@@ -465,7 +465,7 @@ var Fayde;
                 this.Spin = new Fayde.RoutedEvent();
                 this._IncreaseButton = null;
                 this._DecreaseButton = null;
-                this.DefaultStyleKey = this.constructor;
+                this.DefaultStyleKey = Spinner;
             }
             Spinner.prototype.OnValidSpinDirectionChanged = function (args) {
                 this.UpdateVisualState(true);
@@ -574,7 +574,7 @@ var Fayde;
         var UpDownBase = (function (_super) {
             __extends(UpDownBase, _super);
             function UpDownBase() {
-                _super.call(this);
+                _super.apply(this, arguments);
                 this._IgnoreValueChange = false;
                 this._TextBox = null;
                 this._Spinner = null;
@@ -583,7 +583,6 @@ var Fayde;
                 this.ValueChanged = new Fayde.RoutedPropertyChangedEvent();
                 this.Parsing = new Fayde.RoutedEvent();
                 this.ParseError = new Fayde.RoutedEvent();
-                this.DefaultStyleKey = this.constructor;
             }
             UpDownBase.prototype.OnSpinnerStyleChanged = function (oldStyle, newStyle) {
             };
@@ -811,7 +810,7 @@ var Fayde;
                 this.ParseError = new Fayde.RoutedEvent();
                 this._ValueBindingEvaluator = null;
                 this._CanEditByFocus = false;
-                this.DefaultStyleKey = this.constructor;
+                this.DefaultStyleKey = DomainUpDown;
 
                 Object.defineProperty(this, "Items", { value: new Controls.Internal.ObservableObjectCollection(), writable: false });
                 this.Items.CollectionChanged.Subscribe(this._OnItemsChanged, this);
@@ -1231,7 +1230,7 @@ var Fayde;
                 this._VerticalTemplate = null;
                 this._DragStart = null;
                 this._IsDragging = false;
-                this.DefaultStyleKey = this.constructor;
+                this.DefaultStyleKey = GridSplitter;
                 this._Helper = new Controls.Internal.GridSplitterResizer(this);
                 this.LayoutUpdated.Subscribe(this._OnLayoutUpdated, this);
             }
@@ -1368,6 +1367,7 @@ var Fayde;
             function HeaderedItemsControl() {
                 _super.call(this);
                 this._HeaderIsItem = false;
+                this.DefaultStyleKey = HeaderedItemsControl;
                 this._ItemsControlHelper = new Controls.Internal.ItemsControlHelper(this);
             }
             HeaderedItemsControl.prototype.OnHeaderChanged = function (oldHeader, newHeader) {
@@ -1478,7 +1478,7 @@ var Fayde;
             function MenuItem() {
                 _super.call(this);
                 this.Click = new Fayde.RoutedEvent();
-                this.DefaultStyleKey = this.constructor;
+                this.DefaultStyleKey = MenuItem;
                 this.UpdateIsEnabled();
             }
             MenuItem.prototype.OnCommandChanged = function (args) {
@@ -1597,7 +1597,7 @@ var Fayde;
                 _super.call(this);
                 this.Parsing = new Fayde.RoutedEvent();
                 this.ParseError = new Fayde.RoutedEvent();
-                this.DefaultStyleKey = this.constructor;
+                this.DefaultStyleKey = NumericUpDown;
                 this._Coercer = new Controls.Internal.FormattedRangeCoercer(this, function (val) {
                     return _this.SetCurrentValue(NumericUpDown.MaximumProperty, val);
                 }, function (val) {
@@ -1727,7 +1727,7 @@ var Fayde;
             __extends(Separator, _super);
             function Separator() {
                 _super.call(this);
-                this.DefaultStyleKey = this.constructor;
+                this.DefaultStyleKey = Separator;
             }
             return Separator;
         })(Controls.Control);
@@ -1773,7 +1773,7 @@ var Fayde;
                 this.SelectionChanged = new Fayde.RoutedEvent();
                 this._UpdateIndex = true;
                 this._DesiredIndex = 0;
-                this.DefaultStyleKey = this.constructor;
+                this.DefaultStyleKey = TabControl;
             }
             TabControl.prototype.OnApplyTemplate = function () {
                 _super.prototype.OnApplyTemplate.call(this);
@@ -2228,7 +2228,7 @@ var Fayde;
                 this._UnselectedElements = new Elements();
                 this._PreviousTemplate = null;
                 this._PreviousHeader = null;
-                this.DefaultStyleKey = this.constructor;
+                this.DefaultStyleKey = TabItem;
             }
             Object.defineProperty(TabItem.prototype, "TabStripPlacement", {
                 get: function () {
@@ -2476,7 +2476,7 @@ var Fayde;
                 this._SecondGesture = new Controls.Internal.EventGesture();
                 this._SuffixGesture = new Controls.Internal.EventGesture();
                 this._SelectionHandler = null;
-                this.DefaultStyleKey = this.constructor;
+                this.DefaultStyleKey = TimePicker;
                 this.CoerceTime();
             }
             TimePicker.prototype.OnSelectedHourChanged = function (args) {
@@ -2679,7 +2679,7 @@ var Fayde;
             function TreeView() {
                 _super.call(this);
                 this.SelectedItemChanged = new Fayde.RoutedPropertyChangedEvent();
-                this.DefaultStyleKey = this.constructor;
+                this.DefaultStyleKey = TreeView;
                 this.ItemsControlHelper = new Controls.Internal.ItemsControlHelper(this);
             }
             TreeView.prototype.OnSelectedItemChanged = function (e) {
@@ -3108,7 +3108,7 @@ var Fayde;
                 this._AllowWrite = false;
                 this._MultiClick = new Controls.Internal.MultiClickHelper();
                 this._IsPressed = false;
-                this.DefaultStyleKey = this.constructor;
+                this.DefaultStyleKey = TreeViewItem;
             }
             TreeViewItem.prototype.$SetHasItems = function (value) {
                 try  {

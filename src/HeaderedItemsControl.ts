@@ -19,6 +19,7 @@ module Fayde.Controls {
 
         constructor() {
             super();
+            this.DefaultStyleKey = HeaderedItemsControl;
             this._ItemsControlHelper = new Internal.ItemsControlHelper(this);
         }
 

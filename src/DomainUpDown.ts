@@ -149,7 +149,7 @@ module Fayde.Controls {
 
         constructor() {
             super();
-            this.DefaultStyleKey = (<any>this).constructor;
+            this.DefaultStyleKey = DomainUpDown;
 
             Object.defineProperty(this, "Items", { value: new Internal.ObservableObjectCollection(), writable: false });
             this.Items.CollectionChanged.Subscribe(this._OnItemsChanged, this);
