@@ -107,7 +107,7 @@ module Fayde.Controls {
                 return;
             var pos = this._GetTransformedPos(e);
             if (pos)
-                this._HandleMove(pos.X - this._DragStart.x, pos.y - this._DragStart.y, false);
+                this._HandleMove(pos.x - this._DragStart.x, pos.y - this._DragStart.y, false);
         }
 
         private InitHelper() {

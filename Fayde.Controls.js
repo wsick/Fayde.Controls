@@ -1,7 +1,7 @@
 ﻿var Fayde;
 (function (Fayde) {
     (function (Controls) {
-        Controls.Version = '0.13.1';
+        Controls.Version = '0.13.2';
     })(Fayde.Controls || (Fayde.Controls = {}));
     var Controls = Fayde.Controls;
 })(Fayde || (Fayde = {}));
@@ -1325,7 +1325,7 @@ var Fayde;
                     return;
                 var pos = this._GetTransformedPos(e);
                 if (pos)
-                    this._HandleMove(pos.X - this._DragStart.x, pos.y - this._DragStart.y, false);
+                    this._HandleMove(pos.x - this._DragStart.x, pos.y - this._DragStart.y, false);
             };
 
             GridSplitter.prototype.InitHelper = function () {

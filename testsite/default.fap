@@ -15,6 +15,7 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <StackPanel>
+            <HyperlinkButton TargetName="ContentFrame" NavigateUri="/gridsplitter" Content="Grid Splitter" />
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/numericupdown" Content="Numeric Up Down" />
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/domainupdown" Content="Domain Up Down" />
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/treeview" Content="TreeView" />
@@ -26,7 +27,7 @@
         <Frame x:Name="ContentFrame" Grid.Column="1">
             <Frame.UriMapper>
                 <UriMapper>
-                    <UriMapping Uri="" MappedUri="Views/numericupdown.fayde" />
+                    <UriMapping Uri="" MappedUri="Views/gridsplitter.fayde" />
                     <UriMapping Uri="/{pageName}" MappedUri="Views/{pageName}.fayde" />
                 </UriMapper>
             </Frame.UriMapper>
