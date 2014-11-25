@@ -58,11 +58,13 @@ module Fayde.Controls {
                 control.SetValue(HeaderedItemsControl.HeaderTemplateProperty, itemTemplate);
             if (parentItemContainerStyle != null && control.Style == null)
                 control.SetValue(FrameworkElement.StyleProperty, parentItemContainerStyle);
-            var hierarchicalDataTemplate = <HierarchicalDataTemplate>itemTemplate;
-            if (!(hierarchicalDataTemplate instanceof HierarchicalDataTemplate))
+            var hdt = <HierarchicalDataTemplate>itemTemplate;
+            if (!(hdt instanceof HierarchicalDataTemplate))
                 return;
-            if (hierarchicalDataTemplate.ItemsSource != null && HeaderedItemsControl.HasDefaultValue(control, ItemsControl.ItemsSourceProperty)) {
-                var itemssourcebinding = hierarchicalDataTemplate.ItemsSource;
+            //TODO: ItemsSource will no longer be a binding
+            //      Need to GetBindingExpression, then clone ParentBinding
+            if (hdt.ItemsSource != null && HeaderedItemsControl.HasDefaultValue(control, ItemsControl.ItemsSourceProperty)) {
+                var itemssourcebinding = hdt.ItemsSource;
                 var headeredItemsControl = control;
                 var dp = ItemsControl.ItemsSourceProperty;
                 var binding1 = new Fayde.Data.Binding();
@@ -76,17 +78,17 @@ module Fayde.Controls {
                 binding1.ValidatesOnExceptions = itemssourcebinding.ValidatesOnExceptions;
                 headeredItemsControl.SetBinding(dp, binding1);
             }
-            if (hierarchicalDataTemplate.IsItemTemplateSet && control.ItemTemplate === itemTemplate) {
+            if (hdt.IsItemTemplateSet && control.ItemTemplate === itemTemplate) {
                 control.ClearValue(ItemsControl.ItemTemplateProperty);
-                if (hierarchicalDataTemplate.ItemTemplate != null)
-                    control.ItemTemplate = hierarchicalDataTemplate.ItemTemplate;
+                if (hdt.ItemTemplate != null)
+                    control.ItemTemplate = hdt.ItemTemplate;
             }
-            if (!hierarchicalDataTemplate.IsItemContainerStyleSet || control.ItemContainerStyle !== parentItemContainerStyle)
+            if (!hdt.IsItemContainerStyleSet || control.ItemContainerStyle !== parentItemContainerStyle)
                 return;
             control.ClearValue(HeaderedItemsControl.ItemContainerStyleProperty);
-            if (hierarchicalDataTemplate.ItemContainerStyle == null)
+            if (hdt.ItemContainerStyle == null)
                 return;
-            control.ItemContainerStyle = hierarchicalDataTemplate.ItemContainerStyle;
+            control.ItemContainerStyle = hdt.ItemContainerStyle;
         }
         private static HasDefaultValue(control: Control, propd: DependencyProperty): boolean {
             return control.ReadLocalValue(propd) === DependencyProperty.UnsetValue;
