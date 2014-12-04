@@ -89,9 +89,12 @@ declare module Fayde.Controls {
     }
 }
 declare module Fayde.Controls {
-    class Spinner extends ContentControl {
+    class Spinner extends Control {
+        static ContentProperty: DependencyProperty;
         static ValidSpinDirectionProperty: DependencyProperty;
+        public Content: any;
         public ValidSpinDirection: ValidSpinDirections;
+        public OnContentChanged(oldContent: any, newContent: any): void;
         public OnValidSpinDirectionChanged(args: IDependencyPropertyChangedEventArgs): void;
         public Spin: RoutedEvent<SpinEventArgs>;
         public OnSpin(e: SpinEventArgs): void;

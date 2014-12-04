@@ -474,6 +474,9 @@ var Fayde;
                 this._DecreaseButton = null;
                 this.DefaultStyleKey = Spinner;
             }
+            Spinner.prototype.OnContentChanged = function (oldContent, newContent) {
+            };
+
             Spinner.prototype.OnValidSpinDirectionChanged = function (args) {
                 this.UpdateVisualState(true);
                 this.EnableButtons();
@@ -508,9 +511,11 @@ var Fayde;
             Spinner.prototype.OnIncreaseClick = function (sender, e) {
                 this.OnSpin(new Controls.SpinEventArgs(0 /* Increase */));
             };
+
             Spinner.prototype.OnDecreaseClick = function (sender, e) {
                 this.OnSpin(new Controls.SpinEventArgs(1 /* Decrease */));
             };
+
             Spinner.prototype.EnableButtons = function () {
                 if (this._IncreaseButton)
                     this._IncreaseButton.IsEnabled = (this.ValidSpinDirection & 1 /* Increase */) === 1 /* Increase */;
@@ -523,6 +528,7 @@ var Fayde;
                 this.GoToStateIncrease(gotoFunc);
                 this.GoToStateDecrease(gotoFunc);
             };
+
             Spinner.prototype.GoToStateCommon = function (gotoFunc) {
                 if (!this.IsEnabled)
                     return gotoFunc("Disabled");
@@ -530,9 +536,11 @@ var Fayde;
                     return gotoFunc("MouseOver");
                 return gotoFunc("Normal");
             };
+
             Spinner.prototype.GoToStateIncrease = function (gotoFunc) {
                 return gotoFunc(((this.ValidSpinDirection & 1 /* Increase */) === 1 /* Increase */) ? "IncreaseEnabled" : "IncreaseDisabled");
             };
+
             Spinner.prototype.GoToStateDecrease = function (gotoFunc) {
                 return gotoFunc(((this.ValidSpinDirection & 2 /* Decrease */) === 2 /* Decrease */) ? "DecreaseEnabled" : "DecreaseDisabled");
             };
@@ -541,33 +549,43 @@ var Fayde;
                 _super.prototype.OnMouseEnter.call(this, e);
                 this.UpdateVisualState();
             };
+
             Spinner.prototype.OnMouseLeave = function (e) {
                 _super.prototype.OnMouseLeave.call(this, e);
                 this.UpdateVisualState();
             };
+
             Spinner.prototype.OnMouseLeftButtonDown = function (e) {
                 this.UpdateVisualState();
                 _super.prototype.OnMouseLeftButtonDown.call(this, e);
             };
+
             Spinner.prototype.OnMouseLeftButtonUp = function (e) {
                 _super.prototype.OnMouseLeftButtonUp.call(this, e);
                 this.UpdateVisualState();
             };
+
             Spinner.prototype.OnGotFocus = function (e) {
                 _super.prototype.OnGotFocus.call(this, e);
                 this.UpdateVisualState();
             };
+
             Spinner.prototype.OnLostFocus = function (e) {
                 _super.prototype.OnLostFocus.call(this, e);
                 this.UpdateVisualState();
             };
+            Spinner.ContentProperty = DependencyProperty.Register("Content", function () {
+                return Object;
+            }, Spinner, undefined, function (d, args) {
+                return d.OnContentChanged(args.OldValue, args.NewValue);
+            });
             Spinner.ValidSpinDirectionProperty = DependencyProperty.Register("ValidSpinDirection", function () {
                 return new Fayde.Enum(Controls.ValidSpinDirections);
             }, Spinner, 1 /* Increase */, function (d, args) {
                 return d.OnValidSpinDirectionChanged(args);
             });
             return Spinner;
-        })(Controls.ContentControl);
+        })(Controls.Control);
         Controls.Spinner = Spinner;
         Fayde.Markup.Content(Spinner, Spinner.ContentProperty);
         Controls.TemplateVisualStates(Spinner, { GroupName: "CommonStates", Name: "Normal" }, { GroupName: "CommonStates", Name: "MouseOver" }, { GroupName: "CommonStates", Name: "Disabled" }, { GroupName: "FocusStates", Name: "Unfocused" }, { GroupName: "FocusStates", Name: "Focused" }, { GroupName: "IncreaseStates", Name: "IncreaseEnabled" }, { GroupName: "IncreaseStates", Name: "IncreaseDisabled" }, { GroupName: "DecreaseStates", Name: "DecreaseEnabled" }, { GroupName: "DecreaseStates", Name: "DecreaseDisabled" });
