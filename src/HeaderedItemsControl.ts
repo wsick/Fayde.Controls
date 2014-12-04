@@ -64,7 +64,7 @@ module Fayde.Controls {
             var hdt = <HierarchicalDataTemplate>itemTemplate;
             if (!(hdt instanceof HierarchicalDataTemplate))
                 return;
-            var isexpr = hdt.GetBindingExpression(ItemsControl.ItemsSourceProperty);
+            var isexpr = hdt.GetBindingExpression(HierarchicalDataTemplate.ItemsSourceProperty);
             if (isexpr) {
                 var binding = new Data.Binding(isexpr.ParentBinding);
                 binding.Source = control.Header;

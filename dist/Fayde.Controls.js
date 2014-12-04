@@ -1423,7 +1423,7 @@ var Fayde;
                 var hdt = itemTemplate;
                 if (!(hdt instanceof Fayde.HierarchicalDataTemplate))
                     return;
-                var isexpr = hdt.GetBindingExpression(Controls.ItemsControl.ItemsSourceProperty);
+                var isexpr = hdt.GetBindingExpression(Fayde.HierarchicalDataTemplate.ItemsSourceProperty);
                 if (isexpr) {
                     var binding = new Fayde.Data.Binding(isexpr.ParentBinding);
                     binding.Source = control.Header;
