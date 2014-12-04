@@ -3,7 +3,7 @@ module Fayde.Controls.contextmenu {
         mousePosition = new Point();
 
         private $$rootVisual: FrameworkElement = null;
-        private $$onSizeChanged: (newSize: minerva.Size) => any
+        private $$onSizeChanged: (newSize: minerva.Size) => any;
 
         get rootVisual () {
             return this.$$rootVisual;
