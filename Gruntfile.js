@@ -127,8 +127,10 @@ module.exports = function (grunt) {
                     'lib/fayde/dist/fayde.d.ts',
                     'dist/<%= meta.name %>.d.ts'
                 ],
+                dest: dirs.test.build,
                 options: {
                     target: 'es5',
+                    basePath: dirs.test.root,
                     module: 'amd',
                     sourceMap: true
                 }

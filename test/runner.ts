@@ -1,6 +1,6 @@
 module runner {
     var testModules = [
-        "tests/test1"
+        ".build/tests/test1"
     ];
 
     Fayde.LoadConfigJson((config, err) => {
