@@ -22,7 +22,7 @@ module Fayde.Controls {
         private $SetIsSelectionActive(value: boolean) {
             try {
                 this._AllowWrite = true;
-                this.SetValueInternal(TreeViewItem.IsSelectionActiveProperty, value === true);
+                this.SetCurrentValue(TreeViewItem.IsSelectionActiveProperty, value === true);
             } finally {
                 this._AllowWrite = false;
             }
@@ -218,7 +218,7 @@ module Fayde.Controls {
         GoToStateSelection(gotoFunc: (state: string) => boolean): boolean {
             if (!this.IsSelected)
                 return gotoFunc("Unselected");
-            if (this.IsSelectionActive)
+            if (!this.IsSelectionActive)
                 return gotoFunc("SelectedInactive");
             return gotoFunc("Selected");
         }

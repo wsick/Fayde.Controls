@@ -178,17 +178,25 @@ module.exports = function (grunt) {
                 tasks: ['typescript:build']
             },
             testsitets: {
-                files: ['<%= dirs.testsite.root %>/**/*.ts'],
+                files: [
+                    '<%= dirs.testsite.root %>/**/*.ts',
+                    '!<%= dirs.testsite.lib %>/**/*.ts'
+                ],
                 tasks: ['typescript:testsite']
             },
             testsitejs: {
-                files: ['<%= dirs.testsite.root %>/**/*.js'],
+                files: [
+                    '<%= dirs.testsite.build %>/**/*.js'
+                ],
                 options: {
                     livereload: ports.livereload
                 }
             },
             testsitefay: {
-                files: ['<%= dirs.testsite.root %>/**/*.fap', '<%= dirs.testsite.root %>/**/*.fayde'],
+                files: [
+                    '<%= dirs.testsite.root %>/**/*.fap',
+                    '<%= dirs.testsite.root %>/**/*.fayde'
+                ],
                 options: {
                     livereload: ports.livereload
                 }

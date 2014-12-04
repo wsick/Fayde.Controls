@@ -12,7 +12,7 @@ module Fayde.Controls {
         SelectedValuePath: string;
         ItemContainerStyle: Style;
 
-        private OnSelectedItemChanged(e: DependencyPropertyChangedEventArgs) {
+        private OnSelectedItemChanged (e: DependencyPropertyChangedEventArgs) {
             if (this._IgnorePropertyChange)
                 this._IgnorePropertyChange = false;
             else if (!this._AllowWrite) {
@@ -23,7 +23,8 @@ module Fayde.Controls {
             else
                 this.UpdateSelectedValue(e.NewValue);
         }
-        private OnSelectedValueChanged(e: DependencyPropertyChangedEventArgs) {
+
+        private OnSelectedValueChanged (e: DependencyPropertyChangedEventArgs) {
             if (this._IgnorePropertyChange) {
                 this._IgnorePropertyChange = false;
             } else {
@@ -34,10 +35,12 @@ module Fayde.Controls {
                 throw new InvalidOperationException("Cannot set read-only property SelectedValue.");
             }
         }
-        private OnSelectedValuePathChanged(e: DependencyPropertyChangedEventArgs) {
+
+        private OnSelectedValuePathChanged (e: DependencyPropertyChangedEventArgs) {
             this.UpdateSelectedValue(this.SelectedItem);
         }
-        private OnItemContainerStyleChanged(e: DependencyPropertyChangedEventArgs) {
+
+        private OnItemContainerStyleChanged (e: DependencyPropertyChangedEventArgs) {
             this.ItemsControlHelper.UpdateItemContainerStyle(<Style>e.NewValue);
         }
 
@@ -51,25 +54,27 @@ module Fayde.Controls {
 
         private SelectedItemChanged = new RoutedPropertyChangedEvent<any>();
 
-        constructor() {
+        constructor () {
             super();
             this.DefaultStyleKey = TreeView;
             this.ItemsControlHelper = new Internal.ItemsControlHelper(this);
         }
 
-        OnApplyTemplate() {
+        OnApplyTemplate () {
             super.OnApplyTemplate();
             this.ItemsControlHelper.OnApplyTemplate();
             this.UpdateVisualState(false);
         }
 
-        GetContainerForItem(): UIElement {
+        GetContainerForItem (): UIElement {
             return new TreeViewItem();
         }
-        IsItemItsOwnContainer(item: any): boolean {
+
+        IsItemItsOwnContainer (item: any): boolean {
             return item instanceof TreeViewItem;
         }
-        PrepareContainerForItem(element: UIElement, item: any) {
+
+        PrepareContainerForItem (element: UIElement, item: any) {
             var treeViewItem = <TreeViewItem>element;
             if (treeViewItem instanceof TreeViewItem)
                 treeViewItem.ParentItemsControl = this;
@@ -77,14 +82,15 @@ module Fayde.Controls {
             HeaderedItemsControl.PrepareHeaderedItemsControlContainer(treeViewItem, item, this, this.ItemContainerStyle);
             super.PrepareContainerForItem(element, item);
         }
-        ClearContainerForItem(element: UIElement, item: any) {
+
+        ClearContainerForItem (element: UIElement, item: any) {
             var treeViewItem = <TreeViewItem>element;
             if (treeViewItem instanceof TreeViewItem)
                 treeViewItem.ParentItemsControl = null;
             super.ClearContainerForItem(element, item);
         }
 
-        OnItemsChanged(e: Collections.CollectionChangedEventArgs) {
+        OnItemsChanged (e: Collections.CollectionChangedEventArgs) {
             if (!e)
                 throw new ArgumentException("e");
             super.OnItemsChanged(e);
@@ -114,7 +120,7 @@ module Fayde.Controls {
             }
         }
 
-        CheckForSelectedDescendents(item: TreeViewItem) {
+        CheckForSelectedDescendents (item: TreeViewItem) {
             var stack: TreeViewItem[] = [];
             stack.push(item);
             while (stack.length > 0) {
@@ -132,10 +138,11 @@ module Fayde.Controls {
             }
         }
 
-        PropagateKeyDown(e: Input.KeyEventArgs) {
+        PropagateKeyDown (e: Input.KeyEventArgs) {
             this.OnKeyDown(e);
         }
-        OnKeyDown(e: Input.KeyEventArgs) {
+
+        OnKeyDown (e: Input.KeyEventArgs) {
             super.OnKeyDown(e);
             if (e.Handled || !this.IsEnabled)
                 return;
@@ -188,12 +195,13 @@ module Fayde.Controls {
                 }
             }
         }
-        private HandleScrollByPage(up: boolean): boolean {
+
+        private HandleScrollByPage (up: boolean): boolean {
             var scrollHost = this.ItemsControlHelper.ScrollHost;
             if (scrollHost != null) {
                 var viewportHeight = scrollHost.ViewportHeight;
-                var top: IOutValue = { Value: 0 };
-                var bottom: IOutValue = { Value: 0 };
+                var top: IOutValue = {Value: 0};
+                var bottom: IOutValue = {Value: 0};
                 ScrollEx.GetTopAndBottom(this.SelectedContainer.HeaderElement || this.SelectedContainer, scrollHost, top, bottom);
                 var tvi1: TreeViewItem = null;
                 var tvi2 = this.SelectedContainer;
@@ -215,7 +223,7 @@ module Fayde.Controls {
                     var count = itemsControl.Items.Count;
                     while (itemsControl != null && tvi2 != null) {
                         if (tvi2.IsEnabled) {
-                            var currentDelta: IOutValue = { Value: 0 };
+                            var currentDelta: IOutValue = {Value: 0};
                             if (tvi2.HandleScrollByPage(up, scrollHost, viewportHeight, top.Value, bottom.Value, currentDelta))
                                 return true;
                             if (NumberEx.IsGreaterThanClose(currentDelta.Value, viewportHeight)) {
@@ -266,58 +274,65 @@ module Fayde.Controls {
             return false;
         }
 
-        OnMouseEnter(e: Input.MouseEventArgs) {
+        OnMouseEnter (e: Input.MouseEventArgs) {
             super.OnMouseEnter(e);
             this.UpdateVisualState();
         }
-        OnMouseLeave(e: Input.MouseEventArgs) {
+
+        OnMouseLeave (e: Input.MouseEventArgs) {
             super.OnMouseLeave(e);
             this.UpdateVisualState();
         }
-        OnMouseMove(e: Input.MouseEventArgs) {
+
+        OnMouseMove (e: Input.MouseEventArgs) {
             super.OnMouseMove(e);
             this.UpdateVisualState();
         }
-        OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs) {
+
+        OnMouseLeftButtonDown (e: Input.MouseButtonEventArgs) {
             super.OnMouseLeftButtonDown(e);
             if (!e.Handled && this.HandleMouseButtonDown())
                 e.Handled = true;
             this.UpdateVisualState();
         }
-        HandleMouseButtonDown(): boolean {
+
+        HandleMouseButtonDown (): boolean {
             if (!this.SelectedContainer)
                 return false;
             if (!this.SelectedContainer.IsFocused)
                 this.SelectedContainer.Focus();
             return true;
         }
-        OnMouseLeftButtonUp(e: Input.MouseButtonEventArgs) {
+
+        OnMouseLeftButtonUp (e: Input.MouseButtonEventArgs) {
             super.OnMouseLeftButtonUp(e);
             this.UpdateVisualState();
         }
-        OnGotFocus(e: RoutedEventArgs) {
+
+        OnGotFocus (e: RoutedEventArgs) {
             super.OnGotFocus(e);
             this.UpdateVisualState();
         }
-        OnLostFocus(e: RoutedEventArgs) {
+
+        OnLostFocus (e: RoutedEventArgs) {
             super.OnLostFocus(e);
             this.UpdateVisualState();
         }
 
-        ChangeSelection(itemOrContainer: any, container: TreeViewItem, selected: boolean) {
+        ChangeSelection (itemOrContainer: any, container: TreeViewItem, selected: boolean) {
             if (this.IsSelectionChangeActive)
                 return;
             var oldValue = null;
             var newValue = null;
             var flag = false;
-            var selectedContainer = this.SelectedContainer;
+            var selContainer = this.SelectedContainer;
             this.IsSelectionChangeActive = true;
             try {
-                if (selected && container != this.SelectedContainer) {
+                if (selected && container !== selContainer) {
                     oldValue = this.SelectedItem;
-                    if (this.SelectedContainer != null) {
-                        this.SelectedContainer.IsSelected = false;
-                        this.SelectedContainer.UpdateContainsSelection(false);
+                    if (selContainer != null) {
+                        selContainer.IsSelected = false;
+                        selContainer.UpdateContainsSelection(false);
                     }
                     newValue = itemOrContainer;
                     this.SelectedContainer = container;
@@ -326,8 +341,7 @@ module Fayde.Controls {
                     this.UpdateSelectedValue(itemOrContainer);
                     flag = true;
                     this.ItemsControlHelper.ScrollIntoView(container.HeaderElement || container);
-                }
-                else if (!selected && container == this.SelectedContainer) {
+                } else if (!selected && container === selContainer) {
                     this.SelectedContainer.UpdateContainsSelection(false);
                     this.SelectedContainer = null;
                     this.SelectedItem = null;
@@ -344,7 +358,7 @@ module Fayde.Controls {
             this.SelectedItemChanged.raise(this, new RoutedPropertyChangedEventArgs<any>(oldValue, newValue));
         }
 
-        private UpdateSelectedValue(item: any) {
+        private UpdateSelectedValue (item: any) {
             if (!item) {
                 this.ClearValue(TreeView.SelectedValueProperty);
                 return;
@@ -362,14 +376,16 @@ module Fayde.Controls {
                 contentControl.ClearValue(ContentControl.ContentProperty);
             }
         }
-        private SelectFirstItem() {
+
+        private SelectFirstItem () {
             var container = <TreeViewItem>this.ItemContainersManager.ContainerFromIndex(0);
             var selected = container instanceof TreeViewItem;
             if (!selected)
                 container = this.SelectedContainer;
             this.ChangeSelection(selected ? this.ItemContainersManager.ItemFromContainer(container) : this.SelectedItem, container, selected);
         }
-        private FocusFirstItem(): boolean {
+
+        private FocusFirstItem (): boolean {
             var tvi = <TreeViewItem>this.ItemContainersManager.ContainerFromIndex(0);
             if (!tvi)
                 return false;
@@ -377,7 +393,8 @@ module Fayde.Controls {
                 return tvi.FocusDown();
             return true;
         }
-        private FocusLastItem(): boolean {
+
+        private FocusLastItem (): boolean {
             for (var index = this.Items.Count - 1; index >= 0; --index) {
                 var tvi = <TreeViewItem>this.ItemContainersManager.ContainerFromIndex(index);
                 if (tvi instanceof TreeViewItem && tvi.IsEnabled)
@@ -387,17 +404,19 @@ module Fayde.Controls {
         }
     }
     TemplateVisualStates(TreeView,
-        { GroupName: "CommonStates", Name: "Normal" },
-        { GroupName: "CommonStates", Name: "MouseOver" },
-        { GroupName: "CommonStates", Name: "Disabled" },
-        { GroupName: "FocusStates", Name: "Unfocused" },
-        { GroupName: "FocusStates", Name: "Focused" },
-        { GroupName: "ValidationStates", Name: "Valid" },
-        { GroupName: "ValidationStates", Name: "InvalidUnfocused" },
-        { GroupName: "ValidationStates", Name: "InvalidFocused" });
+        {GroupName: "CommonStates", Name: "Normal"},
+        {GroupName: "CommonStates", Name: "MouseOver"},
+        {GroupName: "CommonStates", Name: "Disabled"},
+        {GroupName: "FocusStates", Name: "Unfocused"},
+        {GroupName: "FocusStates", Name: "Focused"},
+        {GroupName: "ValidationStates", Name: "Valid"},
+        {GroupName: "ValidationStates", Name: "InvalidUnfocused"},
+        {GroupName: "ValidationStates", Name: "InvalidFocused"});
 
     Object.defineProperty(TreeView.prototype, "SelectedValue", {
-        get: function () { return this.GetValue(TreeView.SelectedValueProperty); },
+        get: function () {
+            return this.GetValue(TreeView.SelectedValueProperty);
+        },
         set: function (value: any) {
             try {
                 this._AllowWrite = true;
@@ -407,9 +426,11 @@ module Fayde.Controls {
             }
         }
     });
-    
+
     Object.defineProperty(TreeView.prototype, "SelectedItem", {
-        get: function () { return this.GetValue(TreeView.SelectedItemProperty); },
+        get: function () {
+            return this.GetValue(TreeView.SelectedItemProperty);
+        },
         set: function (value: any) {
             try {
                 this._AllowWrite = true;

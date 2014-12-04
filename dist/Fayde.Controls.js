@@ -2709,6 +2709,7 @@ var Fayde;
                 } else
                     this.UpdateSelectedValue(e.NewValue);
             };
+
             TreeView.prototype.OnSelectedValueChanged = function (e) {
                 if (this._IgnorePropertyChange) {
                     this._IgnorePropertyChange = false;
@@ -2720,9 +2721,11 @@ var Fayde;
                     throw new InvalidOperationException("Cannot set read-only property SelectedValue.");
                 }
             };
+
             TreeView.prototype.OnSelectedValuePathChanged = function (e) {
                 this.UpdateSelectedValue(this.SelectedItem);
             };
+
             TreeView.prototype.OnItemContainerStyleChanged = function (e) {
                 this.ItemsControlHelper.UpdateItemContainerStyle(e.NewValue);
             };
@@ -2736,9 +2739,11 @@ var Fayde;
             TreeView.prototype.GetContainerForItem = function () {
                 return new Controls.TreeViewItem();
             };
+
             TreeView.prototype.IsItemItsOwnContainer = function (item) {
                 return item instanceof Controls.TreeViewItem;
             };
+
             TreeView.prototype.PrepareContainerForItem = function (element, item) {
                 var treeViewItem = element;
                 if (treeViewItem instanceof Controls.TreeViewItem)
@@ -2747,6 +2752,7 @@ var Fayde;
                 Controls.HeaderedItemsControl.PrepareHeaderedItemsControlContainer(treeViewItem, item, this, this.ItemContainerStyle);
                 _super.prototype.PrepareContainerForItem.call(this, element, item);
             };
+
             TreeView.prototype.ClearContainerForItem = function (element, item) {
                 var treeViewItem = element;
                 if (treeViewItem instanceof Controls.TreeViewItem)
@@ -2805,6 +2811,7 @@ var Fayde;
             TreeView.prototype.PropagateKeyDown = function (e) {
                 this.OnKeyDown(e);
             };
+
             TreeView.prototype.OnKeyDown = function (e) {
                 _super.prototype.OnKeyDown.call(this, e);
                 if (e.Handled || !this.IsEnabled)
@@ -2857,6 +2864,7 @@ var Fayde;
                     }
                 }
             };
+
             TreeView.prototype.HandleScrollByPage = function (up) {
                 var scrollHost = this.ItemsControlHelper.ScrollHost;
                 if (scrollHost != null) {
@@ -2940,20 +2948,24 @@ var Fayde;
                 _super.prototype.OnMouseEnter.call(this, e);
                 this.UpdateVisualState();
             };
+
             TreeView.prototype.OnMouseLeave = function (e) {
                 _super.prototype.OnMouseLeave.call(this, e);
                 this.UpdateVisualState();
             };
+
             TreeView.prototype.OnMouseMove = function (e) {
                 _super.prototype.OnMouseMove.call(this, e);
                 this.UpdateVisualState();
             };
+
             TreeView.prototype.OnMouseLeftButtonDown = function (e) {
                 _super.prototype.OnMouseLeftButtonDown.call(this, e);
                 if (!e.Handled && this.HandleMouseButtonDown())
                     e.Handled = true;
                 this.UpdateVisualState();
             };
+
             TreeView.prototype.HandleMouseButtonDown = function () {
                 if (!this.SelectedContainer)
                     return false;
@@ -2961,14 +2973,17 @@ var Fayde;
                     this.SelectedContainer.Focus();
                 return true;
             };
+
             TreeView.prototype.OnMouseLeftButtonUp = function (e) {
                 _super.prototype.OnMouseLeftButtonUp.call(this, e);
                 this.UpdateVisualState();
             };
+
             TreeView.prototype.OnGotFocus = function (e) {
                 _super.prototype.OnGotFocus.call(this, e);
                 this.UpdateVisualState();
             };
+
             TreeView.prototype.OnLostFocus = function (e) {
                 _super.prototype.OnLostFocus.call(this, e);
                 this.UpdateVisualState();
@@ -2980,14 +2995,14 @@ var Fayde;
                 var oldValue = null;
                 var newValue = null;
                 var flag = false;
-                var selectedContainer = this.SelectedContainer;
+                var selContainer = this.SelectedContainer;
                 this.IsSelectionChangeActive = true;
                 try  {
-                    if (selected && container != this.SelectedContainer) {
+                    if (selected && container !== selContainer) {
                         oldValue = this.SelectedItem;
-                        if (this.SelectedContainer != null) {
-                            this.SelectedContainer.IsSelected = false;
-                            this.SelectedContainer.UpdateContainsSelection(false);
+                        if (selContainer != null) {
+                            selContainer.IsSelected = false;
+                            selContainer.UpdateContainsSelection(false);
                         }
                         newValue = itemOrContainer;
                         this.SelectedContainer = container;
@@ -2996,7 +3011,7 @@ var Fayde;
                         this.UpdateSelectedValue(itemOrContainer);
                         flag = true;
                         this.ItemsControlHelper.ScrollIntoView(container.HeaderElement || container);
-                    } else if (!selected && container == this.SelectedContainer) {
+                    } else if (!selected && container === selContainer) {
                         this.SelectedContainer.UpdateContainsSelection(false);
                         this.SelectedContainer = null;
                         this.SelectedItem = null;
@@ -3031,6 +3046,7 @@ var Fayde;
                     contentControl.ClearValue(Controls.ContentControl.ContentProperty);
                 }
             };
+
             TreeView.prototype.SelectFirstItem = function () {
                 var container = this.ItemContainersManager.ContainerFromIndex(0);
                 var selected = container instanceof Controls.TreeViewItem;
@@ -3038,6 +3054,7 @@ var Fayde;
                     container = this.SelectedContainer;
                 this.ChangeSelection(selected ? this.ItemContainersManager.ItemFromContainer(container) : this.SelectedItem, container, selected);
             };
+
             TreeView.prototype.FocusFirstItem = function () {
                 var tvi = this.ItemContainersManager.ContainerFromIndex(0);
                 if (!tvi)
@@ -3046,6 +3063,7 @@ var Fayde;
                     return tvi.FocusDown();
                 return true;
             };
+
             TreeView.prototype.FocusLastItem = function () {
                 for (var index = this.Items.Count - 1; index >= 0; --index) {
                     var tvi = this.ItemContainersManager.ContainerFromIndex(index);
@@ -3139,7 +3157,7 @@ var Fayde;
             TreeViewItem.prototype.$SetIsSelectionActive = function (value) {
                 try  {
                     this._AllowWrite = true;
-                    this.SetValueInternal(TreeViewItem.IsSelectionActiveProperty, value === true);
+                    this.SetCurrentValue(TreeViewItem.IsSelectionActiveProperty, value === true);
                 } finally {
                     this._AllowWrite = false;
                 }
@@ -3356,7 +3374,7 @@ var Fayde;
             TreeViewItem.prototype.GoToStateSelection = function (gotoFunc) {
                 if (!this.IsSelected)
                     return gotoFunc("Unselected");
-                if (this.IsSelectionActive)
+                if (!this.IsSelectionActive)
                     return gotoFunc("SelectedInactive");
                 return gotoFunc("Selected");
             };

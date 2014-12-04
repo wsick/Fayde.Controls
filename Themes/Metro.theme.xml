@@ -1829,7 +1829,7 @@
                                 <SolidColorBrush x:Name="SelectionStroke" Color="#FF119EDA"/>
                             </Rectangle.Stroke>
                         </Rectangle>
-                        <Button x:Name="Header" FontWeight="Light" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Cursor="{TemplateBinding Cursor}" ClickMode="Hover" Grid.Column="1" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsTabStop="False" TabNavigation="Once" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" >
+                        <Button x:Name="Header" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Cursor="{TemplateBinding Cursor}" ClickMode="Hover" Grid.Column="1" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsTabStop="False" TabNavigation="Once" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" >
                             <Button.Foreground>
                                 <SolidColorBrush x:Name="HeaderWrapper" Color="Black" />
                             </Button.Foreground>
