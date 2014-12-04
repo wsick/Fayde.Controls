@@ -1,23 +1,22 @@
-
 module Fayde.Controls {
     export enum ValidSpinDirections {
         None = 0,
         Increase = 1,
         Decrease = 2
     }
-    Fayde.RegisterEnum(ValidSpinDirections, "ValidSpinDirections");
+    Library.addEnum(ValidSpinDirections, "ValidSpinDirections");
 
     export enum SpinDirection {
         Increase,
         Decrease
     }
-    Fayde.RegisterEnum(SpinDirection, "SpinDirection");
+    Library.addEnum(SpinDirection, "SpinDirection");
 
     export enum InvalidInputAction {
         UseFallbackItem,
         TextBoxCannotLoseFocus
     }
-    Fayde.RegisterEnum(InvalidInputAction, "InvalidInputAction");
+    Library.addEnum(InvalidInputAction, "InvalidInputAction");
     
     export enum Dock {
         Left,
@@ -25,17 +24,17 @@ module Fayde.Controls {
         Right,
         Bottom
     }
-    Fayde.RegisterEnum(Dock, "Dock");
+    Library.addEnum(Dock, "Dock");
 
     export enum DatePickerFormat {
         Long,
         Short,
     }
-    Fayde.RegisterEnum(DatePickerFormat, "DatePickerFormat");
+    Library.addEnum(DatePickerFormat, "DatePickerFormat");
 
     export enum TimeDisplayMode {
         Regular,
         Military
     }
-    Fayde.RegisterEnum(TimeDisplayMode, "TimeDisplayMode");
+    Library.addEnum(TimeDisplayMode, "TimeDisplayMode");
 }

@@ -74,14 +74,14 @@ module Fayde.Controls {
             if (this._Owner) {
                 var fe = this._Owner instanceof FrameworkElement ? <FrameworkElement>this._Owner : null;
                 if (fe)
-                    fe.MouseRightButtonDown.Unsubscribe(this._HandleOwnerMouseRightButtonDown, this);
+                    fe.MouseRightButtonDown.off(this._HandleOwnerMouseRightButtonDown, this);
             }
             this._Owner = value;
             if (!this._Owner)
                 return;
             fe = this._Owner instanceof FrameworkElement ? <FrameworkElement>this._Owner : null;
             if (fe)
-                fe.MouseRightButtonDown.Subscribe(this._HandleOwnerMouseRightButtonDown, this);
+                fe.MouseRightButtonDown.on(this._HandleOwnerMouseRightButtonDown, this);
         }
 
         private _PopupAlignmentPoint = new Point();
@@ -129,8 +129,8 @@ module Fayde.Controls {
             var canvas1 = new Canvas();
             canvas1.Background = new Fayde.Media.SolidColorBrush(Color.KnownColors.Transparent);
             this._Overlay = canvas1;
-            this._Overlay.MouseLeftButtonDown.Subscribe(this._HandleOverlayMouseButtonDown, this);
-            this._Overlay.MouseRightButtonDown.Subscribe(this._HandleOverlayMouseButtonDown, this);
+            this._Overlay.MouseLeftButtonDown.on(this._HandleOverlayMouseButtonDown, this);
+            this._Overlay.MouseRightButtonDown.on(this._HandleOverlayMouseButtonDown, this);
             this._Overlay.Children.Add(this);
 
             var popup = this._Popup = new Controls.Primitives.Popup();
@@ -143,7 +143,7 @@ module Fayde.Controls {
             }
             popup.Child = this._Overlay;
 
-            this.SizeChanged.Subscribe(this._HandleContextMenuSizeChanged, this);
+            this.SizeChanged.on(this._HandleContextMenuSizeChanged, this);
             this.$RootVisualTracker.setOnSizeChanged((newSize) => this.UpdateContextMenuPlacement());
             this.UpdateContextMenuPlacement();
             if (this.ReadLocalValue(DependencyObject.DataContextProperty) === DependencyProperty.UnsetValue) {
@@ -160,7 +160,7 @@ module Fayde.Controls {
         }
 
         OnOpened (e: RoutedEventArgs) {
-            this.Opened.Raise(this, e);
+            this.Opened.raise(this, e);
         }
 
         private ClosePopup () {
@@ -173,7 +173,7 @@ module Fayde.Controls {
                 this._Overlay.Children.Clear();
                 this._Overlay = null;
             }
-            this.SizeChanged.Unsubscribe(this._HandleContextMenuSizeChanged, this);
+            this.SizeChanged.off(this._HandleContextMenuSizeChanged, this);
             this.$RootVisualTracker.setOnSizeChanged();
             this._SettingIsOpen = true;
             this.IsOpen = false;
@@ -182,7 +182,7 @@ module Fayde.Controls {
         }
 
         OnClosed (e: RoutedEventArgs) {
-            this.Closed.Raise(this, e);
+            this.Closed.raise(this, e);
         }
 
         private FocusNextItem (down: boolean) {

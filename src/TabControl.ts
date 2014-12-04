@@ -13,10 +13,10 @@ module Fayde.Controls {
     var ElementContentRightName = "ContentRight";
 
     export class TabControl extends ItemsControl {
-        static SelectedItemProperty = DependencyProperty.Register("SelectedItem", () => Object, TabControl, null, (d, args) => (<TabControl>d).OnSelectedItemChanged(args));
-        static SelectedIndexProperty = DependencyProperty.Register("SelectedIndex", () => Number, TabControl, -1, (d, args) => (<TabControl>d).OnSelectedIndexChanged(args));
-        static SelectedContentProperty = DependencyProperty.Register("SelectedContent", () => Object, TabControl, null, (d, args) => (<TabControl>d).OnSelectedContentChanged(args));
-        static TabStripPlacementProperty = DependencyProperty.Register("TabStripPlacement", () => new Enum(Dock), TabControl, Dock.Top, (d, args) => (<TabControl>d).OnTabStripPlacementPropertyChanged(args));
+        static SelectedItemProperty = DependencyProperty.Register("SelectedItem", () => Object, TabControl, null, (d: TabControl, args) => d.OnSelectedItemChanged(args));
+        static SelectedIndexProperty = DependencyProperty.Register("SelectedIndex", () => Number, TabControl, -1, (d: TabControl, args) => d.OnSelectedIndexChanged(args));
+        static SelectedContentProperty = DependencyProperty.Register("SelectedContent", () => Object, TabControl, null, (d: TabControl, args) => d.OnSelectedContentChanged(args));
+        static TabStripPlacementProperty = DependencyProperty.Register("TabStripPlacement", () => new Enum(Dock), TabControl, Dock.Top, (d: TabControl, args) => d.OnTabStripPlacementPropertyChanged(args));
         SelectedItem: any;
         SelectedIndex: number;
         SelectedContent: any;
@@ -293,7 +293,7 @@ module Fayde.Controls {
                 newItems.push(newItem);
             var e = new Controls.Primitives.SelectionChangedEventArgs(oldItems, newItems)
             this.OnSelectionChanged(e);
-            this.SelectionChanged.Raise(this, e);
+            this.SelectionChanged.raise(this, e);
         }
 
         OnSelectionChanged (e: Controls.Primitives.SelectionChangedEventArgs) {

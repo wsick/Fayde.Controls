@@ -28,14 +28,14 @@
         DS1: IDefinitionSize;
         DS2: IDefinitionSize;
 
-        constructor(gs: GridSplitter) {
+        constructor (gs: GridSplitter) {
             this.UpdateResizeDirection(gs);
             this.Behavior = resizeBehaviors[this.Direction !== GridResizeDirection.Columns ? <number>gs.VerticalAlignment : gs.HorizontalAlignment]
             || GridResizeBehavior.PreviousAndNext;
             this.SplitterLength = Math.min(gs.ActualWidth, gs.ActualHeight);
         }
 
-        Setup(gs: GridSplitter, grid: Grid): boolean {
+        Setup (gs: GridSplitter, grid: Grid): boolean {
             var isColumns = this.Direction === GridResizeDirection.Columns;
             var span = isColumns ? Grid.GetColumnSpan(gs) : Grid.GetRowSpan(gs);
             if (span > 1)
@@ -52,11 +52,11 @@
             this.DS2 = createSize(defs.GetValueAt(indices[1]));
             this.DS2.Index = indices[1];
             this.SplitBehavior = (this.DS1.IsStar && this.DS2.IsStar) ? SplitBehavior.Split : (!this.DS1.IsStar ? SplitBehavior.ResizeDefinition1 : SplitBehavior.ResizeDefinition2);
-            
+
             return true;
         }
 
-        Move(grid: Grid, horiz: number, vert: number): boolean {
+        Move (grid: Grid, horiz: number, vert: number): boolean {
             var ds1 = this.DS1;
             var ds2 = this.DS2;
             if (!ds1 || !ds2)
@@ -72,7 +72,7 @@
             return true;
         }
 
-        UpdateResizeDirection(gs: GridSplitter): boolean {
+        UpdateResizeDirection (gs: GridSplitter): boolean {
             var old = this.Direction;
             if (gs.HorizontalAlignment !== HorizontalAlignment.Stretch)
                 this.Direction = GridResizeDirection.Columns;
@@ -83,7 +83,7 @@
             return old !== this.Direction;
         }
 
-        private SetLengths(grid: Grid, definition1Pixels: number, definition2Pixels: number) {
+        private SetLengths (grid: Grid, definition1Pixels: number, definition2Pixels: number) {
             var columnDefinitions;
             if (this.SplitBehavior !== SplitBehavior.Split) {
                 if (this.SplitBehavior === SplitBehavior.ResizeDefinition1)
@@ -93,7 +93,7 @@
                 return;
             }
 
-            var enumerator: IEnumerator<DependencyObject> = this.Direction === GridResizeDirection.Columns
+            var enumerator: nullstone.IEnumerator<DependencyObject> = this.Direction === GridResizeDirection.Columns
                 ? grid.ColumnDefinitions.getEnumerator() : grid.RowDefinitions.getEnumerator();
             var i = 0;
             while (enumerator.moveNext()) {
@@ -103,11 +103,12 @@
                 else if (this.DS2.Index === i)
                     ds.Size = new GridLength(definition2Pixels, GridUnitType.Star);
                 else if (ds.IsStar)
-                    ds.Size = new GridLength(ds.ActualSize, GridUnitType.Star)
+                    ds.Size = new GridLength(ds.ActualSize, GridUnitType.Star);
                 i++;
             }
         }
-        private GetConstraints(): number[] {
+
+        private GetConstraints (): number[] {
             var actualLength = this.DS1.ActualSize;
             var minSize = this.DS1.MinSize;
             var maxSize = this.DS1.MaxSize;
@@ -121,13 +122,13 @@
             } else if (this.SplitterIndex === this.DS2.Index) {
                 minSize1 = Math.max(minSize1, this.SplitterLength);
             }
-            
+
             if (this.SplitBehavior === SplitBehavior.Split) {
                 return [
                     -Math.min(actualLength - minSize, maxSize1 - actualLength1),
                     Math.min(maxSize - actualLength, actualLength1 - minSize1)
                 ];
-            } 
+            }
             if (this.SplitBehavior !== SplitBehavior.ResizeDefinition1) {
                 return [
                     actualLength1 - maxSize1,
@@ -139,7 +140,8 @@
                 maxSize - actualLength
             ];
         }
-        private GetBehaviorIndices(index: number): number[] {
+
+        private GetBehaviorIndices (index: number): number[] {
             switch (this.Behavior) {
                 case GridResizeBehavior.CurrentAndNext:
                     return [index, index + 1];
@@ -156,7 +158,7 @@
     resizeBehaviors[VerticalAlignment.Bottom] = GridResizeBehavior.CurrentAndNext;
     resizeBehaviors[HorizontalAlignment.Left] = GridResizeBehavior.PreviousAndCurrent;
     resizeBehaviors[HorizontalAlignment.Right] = GridResizeBehavior.CurrentAndNext;
-    
+
 
     import RowDefinition = Fayde.Controls.RowDefinition;
     import ColumnDefinition = Fayde.Controls.ColumnDefinition;
@@ -169,19 +171,37 @@
         Index: number;
         OrigActualSize: number;
     }
-    function createSize(definition: Fayde.DependencyObject): IDefinitionSize {
+    function createSize (definition: Fayde.DependencyObject): IDefinitionSize {
         if (definition instanceof RowDefinition) {
             var rd = <RowDefinition>definition;
             var ds = {};
-            Object.defineProperty(ds, "ActualSize", { get: function (): number { return rd.ActualHeight; } });
-            Object.defineProperty(ds, "MaxSize", { get: function (): number { return rd.MaxHeight || 0; } });
-            Object.defineProperty(ds, "MinSize", { get: function (): number { return rd.MinHeight || 0; } });
+            Object.defineProperty(ds, "ActualSize", {
+                get: function (): number {
+                    return rd.ActualHeight;
+                }
+            });
+            Object.defineProperty(ds, "MaxSize", {
+                get: function (): number {
+                    return rd.MaxHeight || 0;
+                }
+            });
+            Object.defineProperty(ds, "MinSize", {
+                get: function (): number {
+                    return rd.MinHeight || 0;
+                }
+            });
             Object.defineProperty(ds, "Size", {
-                get: function (): GridLength { return rd.Height; },
-                set: function (value: GridLength) { rd.Height = value; }
+                get: function (): GridLength {
+                    return rd.Height;
+                },
+                set: function (value: GridLength) {
+                    rd.Height = value;
+                }
             });
             Object.defineProperty(ds, "IsStar", {
-                get: function (): boolean { return !!rd.Height && rd.Height.Type === GridUnitType.Star; }
+                get: function (): boolean {
+                    return !!rd.Height && rd.Height.Type === GridUnitType.Star;
+                }
             });
             (<any>ds).Index = 0;
             (<any>ds).OrigActualSize = rd.ActualHeight;
@@ -191,15 +211,33 @@
             var cd = <ColumnDefinition>definition;
 
             var ds = {};
-            Object.defineProperty(ds, "ActualSize", { get: function (): number { return cd.ActualWidth; } });
-            Object.defineProperty(ds, "MaxSize", { get: function (): number { return cd.MaxWidth || 0; } });
-            Object.defineProperty(ds, "MinSize", { get: function (): number { return cd.MinWidth || 0; } });
+            Object.defineProperty(ds, "ActualSize", {
+                get: function (): number {
+                    return cd.ActualWidth;
+                }
+            });
+            Object.defineProperty(ds, "MaxSize", {
+                get: function (): number {
+                    return cd.MaxWidth || 0;
+                }
+            });
+            Object.defineProperty(ds, "MinSize", {
+                get: function (): number {
+                    return cd.MinWidth || 0;
+                }
+            });
             Object.defineProperty(ds, "Size", {
-                get: function (): GridLength { return cd.Width; },
-                set: function (value: GridLength) { cd.Width = value; }
+                get: function (): GridLength {
+                    return cd.Width;
+                },
+                set: function (value: GridLength) {
+                    cd.Width = value;
+                }
             });
             Object.defineProperty(ds, "IsStar", {
-                get: function (): boolean { return !!cd.Width && cd.Width.Type === GridUnitType.Star; }
+                get: function (): boolean {
+                    return !!cd.Width && cd.Width.Type === GridUnitType.Star;
+                }
             });
             (<any>ds).Index = 0;
             (<any>ds).OrigActualSize = cd.ActualWidth;

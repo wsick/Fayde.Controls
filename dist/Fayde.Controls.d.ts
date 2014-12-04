@@ -1,6 +1,9 @@
 declare module Fayde.Controls {
     var Version: string;
 }
+declare module Fayde.Controls {
+    var Library: nullstone.ILibrary;
+}
 declare module Fayde.Controls.Primitives {
     class MenuBase extends ItemsControl {
         static ItemContainerStyleProperty: DependencyProperty;
@@ -155,6 +158,9 @@ declare module Fayde.Controls {
     }
 }
 declare module Fayde.Controls {
+    interface IOutValue {
+        Value: any;
+    }
     class DomainUpDown extends Control {
         static ValueProperty: DependencyProperty;
         static IsEditableProperty: DependencyProperty;
@@ -172,7 +178,7 @@ declare module Fayde.Controls {
         public IsCyclic: boolean;
         public InvalidInputAction: InvalidInputAction;
         public FallbackItem: any;
-        public ItemsSource: IEnumerable<any>;
+        public ItemsSource: nullstone.IEnumerable<any>;
         public ItemTemplate: DataTemplate;
         public Items: Internal.ObservableObjectCollection;
         public OnValueChanged(oldItem: any, newItem: any): void;
@@ -267,19 +273,18 @@ declare module Fayde.Controls {
         private _HeaderIsItem;
         private _ItemsControlHelper;
         static HeaderProperty: DependencyProperty;
-        public Header: any;
-        public OnHeaderChanged(oldHeader: any, newHeader: any): void;
         static HeaderTemplateProperty: DependencyProperty;
-        public HeaderTemplate: DataTemplate;
-        public OnHeaderTemplateChanged(oldHeaderTemplate: DataTemplate, newHeaderTemplate: DataTemplate): void;
         static ItemContainerStyleProperty: DependencyProperty;
+        public Header: any;
+        public HeaderTemplate: DataTemplate;
         public ItemContainerStyle: Style;
+        public OnHeaderChanged(oldHeader: any, newHeader: any): void;
+        public OnHeaderTemplateChanged(oldHeaderTemplate: DataTemplate, newHeaderTemplate: DataTemplate): void;
         private OnItemContainerStyleChanged(args);
         constructor();
         public OnApplyTemplate(): void;
         public PrepareContainerForItem(element: UIElement, item: any): void;
         static PrepareHeaderedItemsControlContainer(control: HeaderedItemsControl, item: any, parentItemsControl: ItemsControl, parentItemContainerStyle: Style): void;
-        private static HasDefaultValue(control, propd);
     }
 }
 declare module Fayde.Controls {
@@ -287,14 +292,14 @@ declare module Fayde.Controls {
         public ParentMenuBase: Primitives.MenuBase;
         public Click: RoutedEvent<RoutedEventArgs>;
         static CommandProperty: DependencyProperty;
+        static CommandParameterProperty: DependencyProperty;
+        static IconProperty: DependencyProperty;
         public Command: Input.ICommand;
+        public CommandParameter: any;
+        public Icon: any;
         private OnCommandChanged(args);
         private _CanExecuteChanged(sender, e);
-        static CommandParameterProperty: DependencyProperty;
-        public CommandParameter: any;
         private OnCommandParameterChanged(args);
-        static IconProperty: DependencyProperty;
-        public Icon: any;
         constructor();
         public OnApplyTemplate(): void;
         private UpdateIsEnabled();
@@ -723,7 +728,7 @@ declare module Fayde.Controls.Internal {
     class EventGesture<T extends UIElement> {
         public Target: UIElement;
         private _Callback;
-        public Attach(event: MulticastEvent<EventArgs>, callback: (t: T, e: EventArgs) => void): void;
+        public Attach(event: nullstone.Event<nullstone.IEventArgs>, callback: (t: T, e: nullstone.IEventArgs) => void): void;
         public Detach(): void;
         private _OnEvent(sender, e);
     }
@@ -812,7 +817,7 @@ declare module Fayde.Controls.Internal {
 declare module Fayde.Controls.Internal {
     class ObservableObjectCollection extends Collections.ObservableCollection<any> {
         public IsReadOnly: boolean;
-        constructor(collection?: IEnumerable<any>);
+        constructor(collection?: nullstone.IEnumerable<any>);
         public Add(value: any): void;
         public AddRange(values: any[]): void;
         public Insert(item: any, index: number): void;

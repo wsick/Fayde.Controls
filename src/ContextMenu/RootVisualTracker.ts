@@ -11,18 +11,18 @@ module Fayde.Controls.contextmenu {
 
         set rootVisual (value: FrameworkElement) {
             if (this.$$rootVisual) {
-                this.$$rootVisual.MouseMove.Unsubscribe(this._HandleRootVisualMouseMove, this);
-                this.$$rootVisual.SizeChanged.Unsubscribe(this._HandleSizeChanged, this);
+                this.$$rootVisual.MouseMove.off(this._HandleRootVisualMouseMove, this);
+                this.$$rootVisual.SizeChanged.off(this._HandleSizeChanged, this);
             }
             this.$$rootVisual = value;
             if (value) {
-                value.MouseMove.Subscribe(this._HandleRootVisualMouseMove, this);
-                value.SizeChanged.Subscribe(this._HandleSizeChanged, this);
+                value.MouseMove.on(this._HandleRootVisualMouseMove, this);
+                value.SizeChanged.on(this._HandleSizeChanged, this);
             }
         }
 
         constructor (owner: FrameworkElement) {
-            owner.LayoutUpdated.Subscribe(this._HandleLayoutUpdated, this);
+            owner.LayoutUpdated.on(this._HandleLayoutUpdated, this);
         }
 
         tryInit (visual: UIElement) {
@@ -45,14 +45,14 @@ module Fayde.Controls.contextmenu {
             );
         }
 
-        private _HandleLayoutUpdated (sender: FrameworkElement, e: EventArgs) {
+        private _HandleLayoutUpdated (sender: FrameworkElement, e: any) {
             if (!this.rootVisual) {
                 var surface = <Surface>sender.XamlNode.LayoutUpdater.tree.surface;
                 if (surface)
                     this.rootVisual = <FrameworkElement>surface.App.RootVisual;
             }
             if (this.rootVisual)
-                sender.LayoutUpdated.Unsubscribe(this._HandleLayoutUpdated, this);
+                sender.LayoutUpdated.off(this._HandleLayoutUpdated, this);
         }
 
         private _HandleRootVisualMouseMove (sender: any, e: Fayde.Input.MouseEventArgs) {

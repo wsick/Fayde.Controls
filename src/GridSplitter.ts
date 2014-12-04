@@ -14,7 +14,7 @@ module Fayde.Controls {
             super();
             this.DefaultStyleKey = GridSplitter;
             this._Helper = new Internal.GridSplitterResizer(this);
-            this.LayoutUpdated.Subscribe(this._OnLayoutUpdated, this);
+            this.LayoutUpdated.on(this._OnLayoutUpdated, this);
         }
 
         OnApplyTemplate() {
@@ -25,7 +25,7 @@ module Fayde.Controls {
             this._OnResizeDirectionChanged();
             this.UpdateVisualState();
         }
-        private _OnLayoutUpdated(sender: any, e: EventArgs) {
+        private _OnLayoutUpdated(sender: any, e: any) {
             if (this._Helper.UpdateResizeDirection(this))
                 this._OnResizeDirectionChanged();
         }

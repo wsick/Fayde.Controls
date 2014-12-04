@@ -96,14 +96,14 @@ module Fayde.Controls {
         private get ExpanderButton(): Primitives.ToggleButton { return this._expanderButton; }
         private set ExpanderButton(value: Primitives.ToggleButton) {
             if (this._expanderButton) {
-                this._expanderButton.Click.Unsubscribe(this.OnExpanderClick, this);
-                this._expanderButton.GotFocus.Unsubscribe(this.OnExpanderGotFocus, this);
+                this._expanderButton.Click.off(this.OnExpanderClick, this);
+                this._expanderButton.GotFocus.off(this.OnExpanderGotFocus, this);
             }
             this._expanderButton = value;
             if (this._expanderButton) {
                 this._expanderButton.IsChecked = this.IsExpanded;
-                this._expanderButton.Click.Subscribe(this.OnExpanderClick, this);
-                this._expanderButton.GotFocus.Subscribe(this.OnExpanderGotFocus, this);
+                this._expanderButton.Click.on(this.OnExpanderClick, this);
+                this._expanderButton.GotFocus.on(this.OnExpanderGotFocus, this);
             }
         }
 
@@ -111,20 +111,20 @@ module Fayde.Controls {
         get HeaderElement(): FrameworkElement { return this._headerElement; }
         set HeaderElement(value: FrameworkElement) {
             if (this._headerElement)
-                this._headerElement.MouseLeftButtonDown.Unsubscribe(this.OnHeaderMouseLeftButtonDown, this);
+                this._headerElement.MouseLeftButtonDown.off(this.OnHeaderMouseLeftButtonDown, this);
             this._headerElement = value;
             if (this._headerElement)
-                this._headerElement.MouseLeftButtonDown.Subscribe(this.OnHeaderMouseLeftButtonDown, this);
+                this._headerElement.MouseLeftButtonDown.on(this.OnHeaderMouseLeftButtonDown, this);
         }
 
         private _expansionStateGroup: Media.VSM.VisualStateGroup;
         private get ExpansionStateGroup(): Media.VSM.VisualStateGroup { return this._expansionStateGroup; }
         private set ExpansionStateGroup(value: Media.VSM.VisualStateGroup) {
             if (this._expansionStateGroup)
-                this._expansionStateGroup.CurrentStateChanged.Unsubscribe(this.OnExpansionStateGroupStateChanged, this);
+                this._expansionStateGroup.CurrentStateChanged.off(this.OnExpansionStateGroupStateChanged, this);
             this._expansionStateGroup = value;
             if (this._expansionStateGroup)
-                this._expansionStateGroup.CurrentStateChanged.Subscribe(this.OnExpansionStateGroupStateChanged, this);
+                this._expansionStateGroup.CurrentStateChanged.on(this.OnExpansionStateGroupStateChanged, this);
         }
 
         private _parentItemsControl: ItemsControl;
@@ -266,7 +266,7 @@ module Fayde.Controls {
                         var parentTreeView = this.ParentTreeView;
                         if (parentTreeView != null) {
                             var selectedItem = parentTreeView.SelectedItem;
-                            if (selectedItem != null && (e.OldItems == null || Nullstone.Equals(selectedItem, e.OldItems[0])))
+                            if (selectedItem != null && (e.OldItems == null || nullstone.equals(selectedItem, e.OldItems[0])))
                                 parentTreeView.ChangeSelection(selectedItem, parentTreeView.SelectedContainer, false);
                         }
                     }
@@ -281,11 +281,11 @@ module Fayde.Controls {
 
         OnExpanded(e: RoutedEventArgs) {
             this.ToggleExpanded();
-            this.Expanded.Raise(this, e);
+            this.Expanded.raise(this, e);
         }
         OnCollapsed(e: RoutedEventArgs) {
             this.ToggleExpanded();
-            this.Collapsed.Raise(this, e);
+            this.Collapsed.raise(this, e);
         }
         private ToggleExpanded() {
             var expanderButton = this.ExpanderButton;
@@ -297,11 +297,11 @@ module Fayde.Controls {
 
         OnSelected(e: RoutedEventArgs) {
             this.UpdateVisualState();
-            this.Selected.Raise(this, e);
+            this.Selected.raise(this, e);
         }
         OnUnselected(e: RoutedEventArgs) {
             this.UpdateVisualState();
-            this.Unselected.Raise(this, e);
+            this.Unselected.raise(this, e);
         }
 
         OnGotFocus(e: RoutedEventArgs) {

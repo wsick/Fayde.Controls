@@ -102,7 +102,7 @@ module Fayde.Controls {
                     break;
                 case Collections.CollectionChangedAction.Replace:
                     var selectedItem = this.SelectedItem;
-                    if (selectedItem != null && (e.OldItems == null || Nullstone.Equals(selectedItem, e.OldItems[0])))
+                    if (selectedItem != null && (e.OldItems == null || nullstone.equals(selectedItem, e.OldItems[0])))
                         this.ChangeSelection(selectedItem, this.SelectedContainer, false);
                     break;
             }
@@ -341,7 +341,7 @@ module Fayde.Controls {
             }
             if (!flag)
                 return;
-            this.SelectedItemChanged.Raise(this, new RoutedPropertyChangedEventArgs<any>(oldValue, newValue));
+            this.SelectedItemChanged.raise(this, new RoutedPropertyChangedEventArgs<any>(oldValue, newValue));
         }
 
         private UpdateSelectedValue(item: any) {

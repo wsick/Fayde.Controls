@@ -32,10 +32,10 @@ module Fayde.Controls {
             }
         }
         OnValueChanging(e: RoutedPropertyChangingEventArgs<T>) {
-            this.ValueChanging.Raise(this, e);
+            this.ValueChanging.raise(this, e);
         }
         OnValueChanged(e: RoutedPropertyChangedEventArgs<T>) {
-            (<RoutedEvent<RoutedPropertyChangedEventArgs<T>>>this.ValueChanged).Raise(this, e); //WTF: compiler choking without cast for some odd reason
+            (<RoutedEvent<RoutedPropertyChangedEventArgs<T>>>this.ValueChanged).raise(this, e); //WTF: compiler choking without cast for some odd reason
             this.SetTextBoxText();
         }
 
@@ -62,26 +62,26 @@ module Fayde.Controls {
         }
         private SetTextBox(d: DependencyObject) {
             if (this._TextBox) {
-                this._TextBox.GotFocus.Unsubscribe(this.TextBox_GotFocus, this);
-                this._TextBox.LostFocus.Unsubscribe(this.TextBox_LostFocus, this);
+                this._TextBox.GotFocus.off(this.TextBox_GotFocus, this);
+                this._TextBox.LostFocus.off(this.TextBox_LostFocus, this);
             }
             if (d instanceof TextBox)
                 this._TextBox = <TextBox>d;
             else
                 this._TextBox = null;
-            this._TextBox.GotFocus.Subscribe(this.TextBox_GotFocus, this);
-            this._TextBox.LostFocus.Subscribe(this.TextBox_LostFocus, this);
+            this._TextBox.GotFocus.on(this.TextBox_GotFocus, this);
+            this._TextBox.LostFocus.on(this.TextBox_LostFocus, this);
             this._Text = this._TextBox.Text;
         }
         private SetSpinner(d: DependencyObject) {
             if (this._Spinner)
-                this._Spinner.Spin.Unsubscribe(this.Spinner_Spin, this);
+                this._Spinner.Spin.off(this.Spinner_Spin, this);
             if (d instanceof Spinner)
                 this._Spinner = <Spinner>d;
             else
                 this._Spinner = null;
             if (this._Spinner)
-                this._Spinner.Spin.Subscribe(this.Spinner_Spin, this);
+                this._Spinner.Spin.on(this.Spinner_Spin, this);
         }
 
         OnKeyDown(e: Fayde.Input.KeyEventArgs) {
@@ -146,10 +146,10 @@ module Fayde.Controls {
             }
         }
         OnParseError(e: UpDownParseErrorEventArgs) {
-            this.ParseError.Raise(this, e);
+            this.ParseError.raise(this, e);
         }
         OnParsing(e: UpDownParsingEventArgs<T>) {
-            this.Parsing.Raise(this, e);
+            this.Parsing.raise(this, e);
         }
         ParseValue(text: string): T { return; }
         FormatValue(): string { return ""; }

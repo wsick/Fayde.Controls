@@ -11,11 +11,11 @@ module Fayde.Controls.Internal {
     export class SpinFlow implements ISpinFlow {
         constructor(public Owner: ISpinOwner, public Spinner: Spinner) {
             if (this.Owner) {
-                this.Owner.KeyDown.Subscribe(this.OnKeyDown, this);
-                this.Owner.MouseWheel.Subscribe(this.OnMouseWheel, this);
+                this.Owner.KeyDown.on(this.OnKeyDown, this);
+                this.Owner.MouseWheel.on(this.OnMouseWheel, this);
             }
             if (this.Spinner)
-                this.Spinner.Spin.Subscribe(this.Spinner_Spin, this);
+                this.Spinner.Spin.on(this.Spinner_Spin, this);
         }
 
         UpdateValid(increase: boolean, decrease: boolean) {
@@ -29,11 +29,11 @@ module Fayde.Controls.Internal {
         }
         Dispose() {
             if (this.Owner) {
-                this.Owner.KeyDown.Unsubscribe(this.OnKeyDown, this);
-                this.Owner.MouseWheel.Unsubscribe(this.OnMouseWheel, this);
+                this.Owner.KeyDown.off(this.OnKeyDown, this);
+                this.Owner.MouseWheel.off(this.OnMouseWheel, this);
             }
             if (this.Spinner)
-                this.Spinner.Spin.Subscribe(this.Spinner_Spin, this);
+                this.Spinner.Spin.on(this.Spinner_Spin, this);
         }
         
         private OnKeyDown(sender, e: Fayde.Input.KeyEventArgs) {

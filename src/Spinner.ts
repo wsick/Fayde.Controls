@@ -14,7 +14,7 @@ module Fayde.Controls {
             var valid = e.Direction === SpinDirection.Increase ? ValidSpinDirections.Increase : ValidSpinDirections.Decrease;
             if ((this.ValidSpinDirection & valid) !== valid)
                 throw new InvalidOperationException("Invalid Spin Direction");
-            this.Spin.Raise(this, e);
+            this.Spin.raise(this, e);
         }
 
         private _IncreaseButton: ButtonBase = null;
@@ -29,16 +29,16 @@ module Fayde.Controls {
             super.OnApplyTemplate();
 
             if (this._IncreaseButton)
-                this._IncreaseButton.Click.Unsubscribe(this.OnIncreaseClick, this);
+                this._IncreaseButton.Click.off(this.OnIncreaseClick, this);
             this._IncreaseButton = <ButtonBase>this.GetTemplateChild("IncreaseButton", ButtonBase);
             if (this._IncreaseButton)
-                this._IncreaseButton.Click.Subscribe(this.OnIncreaseClick, this);
+                this._IncreaseButton.Click.on(this.OnIncreaseClick, this);
             
             if (this._DecreaseButton)
-                this._DecreaseButton.Click.Unsubscribe(this.OnDecreaseClick, this);
+                this._DecreaseButton.Click.off(this.OnDecreaseClick, this);
             this._DecreaseButton = <ButtonBase>this.GetTemplateChild("DecreaseButton", ButtonBase);
             if (this._DecreaseButton)
-                this._DecreaseButton.Click.Subscribe(this.OnDecreaseClick, this);
+                this._DecreaseButton.Click.on(this.OnDecreaseClick, this);
 
             this.UpdateVisualState(false);
             this.EnableButtons();
@@ -101,7 +101,7 @@ module Fayde.Controls {
             this.UpdateVisualState();
         }
     }
-    Xaml.Content(Spinner, Spinner.ContentProperty);
+    Markup.Content(Spinner, Spinner.ContentProperty);
     TemplateVisualStates(Spinner,
         { GroupName: "CommonStates", Name: "Normal" },
         { GroupName: "CommonStates", Name: "MouseOver" },

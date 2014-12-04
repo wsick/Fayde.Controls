@@ -9,18 +9,18 @@
         constructor(textBoxes: TextBox[]) {
             this._TextBoxes = textBoxes = textBoxes.filter(tb => !!tb);
             textBoxes.forEach(tb => {
-                tb.MouseLeftButtonDown.Subscribe(this._MouseDown, this);
-                tb.MouseLeftButtonUp.Subscribe(this._MouseUp, this);
-                tb.GotFocus.Subscribe(this._GotFocus, this);
-                tb.LostFocus.Subscribe(this._LostFocus, this);
+                tb.MouseLeftButtonDown.on(this._MouseDown, this);
+                tb.MouseLeftButtonUp.on(this._MouseUp, this);
+                tb.GotFocus.on(this._GotFocus, this);
+                tb.LostFocus.on(this._LostFocus, this);
             });
         }
         Dispose() {
             this._TextBoxes.forEach(tb => {
-                tb.MouseLeftButtonDown.Unsubscribe(this._MouseDown, this);
-                tb.MouseLeftButtonUp.Unsubscribe(this._MouseUp, this);
-                tb.GotFocus.Unsubscribe(this._GotFocus, this);
-                tb.LostFocus.Unsubscribe(this._LostFocus, this);
+                tb.MouseLeftButtonDown.off(this._MouseDown, this);
+                tb.MouseLeftButtonUp.off(this._MouseUp, this);
+                tb.GotFocus.off(this._GotFocus, this);
+                tb.LostFocus.off(this._LostFocus, this);
             });
         }
 

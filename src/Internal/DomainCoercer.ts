@@ -32,14 +32,18 @@ module Fayde.Controls.Internal {
         IsCoercing = false;
 
         private _IsEditing = false;
-        get IsEditing(): boolean { return this._IsEditing; }
-        set IsEditing(value: boolean) {
+        get IsEditing (): boolean {
+            return this._IsEditing;
+        }
+
+        set IsEditing (value: boolean) {
             if (value === this._IsEditing)
                 return;
             this._IsEditing = value;
             this.OnIsEditingChanged(value);
         }
-        private OnIsEditingChanged(isEditing: boolean) {
+
+        private OnIsEditingChanged (isEditing: boolean) {
             this.Owner.OnIsEditingChanged(isEditing);
             if (!this.TextBox)
                 return;
@@ -54,36 +58,40 @@ module Fayde.Controls.Internal {
         }
 
         private _IsInvalidInput = false;
-        get IsInvalidInput(): boolean { return this._IsInvalidInput; }
-        set IsInvalidInput(value: boolean) {
+        get IsInvalidInput (): boolean {
+            return this._IsInvalidInput;
+        }
+
+        set IsInvalidInput (value: boolean) {
             if (value === this._IsInvalidInput)
                 return;
             this._IsInvalidInput = value;
             this.Owner.OnIsInvalidInputChanged(value);
         }
 
-        constructor(public Owner: IDomainOwner, public OnCoerceValue: (val: any) => void, public OnCoerceCurrentIndex: (val: number) => void) {
-            this.Owner.KeyDown.Subscribe(this.OnKeyDown, this);
+        constructor (public Owner: IDomainOwner, public OnCoerceValue: (val: any) => void, public OnCoerceCurrentIndex: (val: number) => void) {
+            this.Owner.KeyDown.on(this.OnKeyDown, this);
         }
 
-        Attach(textBox: TextBox) {
+        Attach (textBox: TextBox) {
             this.TextBox = textBox;
             if (textBox) {
-                textBox.GotFocus.Subscribe(this.TextBox_GotFocus, this);
-                textBox.LostFocus.Subscribe(this.TextBox_LostFocus, this);
+                textBox.GotFocus.on(this.TextBox_GotFocus, this);
+                textBox.LostFocus.on(this.TextBox_LostFocus, this);
             }
             this.UpdateTextBoxText();
             this.UpdateIsEditable();
         }
-        Detach() {
+
+        Detach () {
             if (this.TextBox) {
-                this.TextBox.GotFocus.Unsubscribe(this.TextBox_GotFocus, this);
-                this.TextBox.LostFocus.Unsubscribe(this.TextBox_LostFocus, this);
+                this.TextBox.GotFocus.off(this.TextBox_GotFocus, this);
+                this.TextBox.LostFocus.off(this.TextBox_LostFocus, this);
             }
             this.TextBox = null;
         }
-        
-        private OnKeyDown(sender, e: Fayde.Input.KeyEventArgs) {
+
+        private OnKeyDown (sender, e: Fayde.Input.KeyEventArgs) {
             if (e != null && ((e.Key === Fayde.Input.Key.Enter || e.Key === Fayde.Input.Key.Space) && !this.IsEditing && this.Owner.IsEditable)) {
                 this.IsEditing = true;
                 e.Handled = true;
@@ -99,14 +107,14 @@ module Fayde.Controls.Internal {
             }
         }
 
-        EscapeFocus() {
+        EscapeFocus () {
             if (!this.IsInvalidInput)
                 this.IsEditing = false;
             else if (this.Owner.InvalidInputAction === InvalidInputAction.TextBoxCannotLoseFocus && this.TextBox.IsFocused)
                 window.setTimeout(() => this.TextBox.Focus(), 1);
         }
 
-        OnValueChanged(oldValue: any, newValue: any) {
+        OnValueChanged (oldValue: any, newValue: any) {
             if (!this.IsCoercing) {
                 var index = this.Owner.Items.IndexOf(newValue);
                 if (index > -1) {
@@ -118,7 +126,8 @@ module Fayde.Controls.Internal {
             this.UpdateTextBoxText();
             this.Owner.OnValueChanged(oldValue, newValue);
         }
-        OnCurrentIndexChanged(oldIndex: number, newIndex: number) {
+
+        OnCurrentIndexChanged (oldIndex: number, newIndex: number) {
             if (!this.IsCoercing) {
                 if (newIndex >= 0 && newIndex < this.Owner.Items.Count) {
                     this.IsCoercing = true;
@@ -129,30 +138,34 @@ module Fayde.Controls.Internal {
             this.IsEditing = false;
             this.Owner.OnCurrentIndexChanged(oldIndex, newIndex);
         }
-        
-        private TextBox_LostFocus(sender: any, e: RoutedEventArgs) {
+
+        private TextBox_LostFocus (sender: any, e: RoutedEventArgs) {
             this.ProcessUserInput();
         }
-        private TextBox_GotFocus(sender: any, e: RoutedEventArgs) {
+
+        private TextBox_GotFocus (sender: any, e: RoutedEventArgs) {
             this.SelectAllText();
         }
-        SelectAllText() {
+
+        SelectAllText () {
             if (this.TextBox)
                 this.TextBox.SelectAll();
         }
-        UpdateTextBoxText() {
+
+        UpdateTextBoxText () {
             if (!this.TextBox)
                 return;
             this.Text = this.Owner.FormatValue() || "";
             this.TextBox.Text = this.Text;
             this.TextBox.SelectionStart = this.Text.length;
         }
-        UpdateIsEditable() {
+
+        UpdateIsEditable () {
             if (this.TextBox)
                 this.TextBox.IsReadOnly = !this.Owner.IsEditable;
         }
-        
-        ProcessUserInput() {
+
+        ProcessUserInput () {
             if (!this.TextBox || this.Text === this.TextBox.Text)
                 return;
             var selectionStart = this.TextBox.SelectionStart;
@@ -161,15 +174,17 @@ module Fayde.Controls.Internal {
             if (selectionStart < this.TextBox.Text.length)
                 this.TextBox.SelectionStart = selectionStart;
         }
-        OnParseError(e: UpDownParseErrorEventArgs) {
-            this.Owner.ParseError.Raise(this, e);
+
+        OnParseError (e: UpDownParseErrorEventArgs) {
+            this.Owner.ParseError.raise(this, e);
         }
-        private ApplyValue(text: string) {
+
+        private ApplyValue (text: string) {
             if (!this.Owner.IsEditable)
                 return;
             this.IsEditing = true;
             try {
-                var val: IOutValue = { Value: null };
+                var val: IOutValue = {Value: null};
                 this.IsInvalidInput = !this.Owner.TryParseValue(text, val);
                 this.OnCoerceValue(val.Value);
             } catch (err) {

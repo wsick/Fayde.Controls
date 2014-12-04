@@ -19,8 +19,8 @@ module Fayde.Controls.Internal {
 
         constructor(public Control: IFormattedControl<T>, public TextBox: TextBox, public OnCoerceValue: (val: any) => void) {
             if (this.TextBox) {
-                this.TextBox.GotFocus.Subscribe(this.TextBox_GotFocus, this);
-                this.TextBox.LostFocus.Subscribe(this.TextBox_LostFocus, this);
+                this.TextBox.GotFocus.on(this.TextBox_GotFocus, this);
+                this.TextBox.LostFocus.on(this.TextBox_LostFocus, this);
             }
             this.UpdateTextBoxText();
             this.UpdateIsEditable();
@@ -37,8 +37,8 @@ module Fayde.Controls.Internal {
         }
         Dispose() {
             if (this.TextBox) {
-                this.TextBox.GotFocus.Unsubscribe(this.TextBox_GotFocus, this);
-                this.TextBox.LostFocus.Unsubscribe(this.TextBox_LostFocus, this);
+                this.TextBox.GotFocus.off(this.TextBox_GotFocus, this);
+                this.TextBox.LostFocus.off(this.TextBox_LostFocus, this);
             }
         }
         
@@ -81,10 +81,10 @@ module Fayde.Controls.Internal {
             }
         }
         OnParseError(e: UpDownParseErrorEventArgs) {
-            this.Control.ParseError.Raise(this, e);
+            this.Control.ParseError.raise(this, e);
         }
         OnParsing(e: UpDownParsingEventArgs<T>) {
-            this.Control.Parsing.Raise(this, e);
+            this.Control.Parsing.raise(this, e);
         }
         SelectAllText() {
             if (this.TextBox)
