@@ -20,7 +20,7 @@ class MainViewModel extends Fayde.MVVM.ViewModelBase {
         ]
     }];
 
-    private _list: Fayde.Collections.ObservableCollection<string> = new Fayde.Collections.ObservableCollection<string>();
+    private _list = new Fayde.Collections.ObservableCollection<string>();
     get List() {
         return this._list;
     }
