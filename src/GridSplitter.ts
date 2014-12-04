@@ -26,7 +26,7 @@ module Fayde.Controls {
             this.UpdateVisualState();
         }
         private _OnLayoutUpdated(sender: any, e: any) {
-            if (this._Helper.UpdateResizeDirection(this))
+            if (this._Helper && this._Helper.UpdateResizeDirection(this))
                 this._OnResizeDirectionChanged();
         }
         private _OnResizeDirectionChanged() {

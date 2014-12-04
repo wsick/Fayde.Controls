@@ -1265,7 +1265,7 @@ var Fayde;
                 this.UpdateVisualState();
             };
             GridSplitter.prototype._OnLayoutUpdated = function (sender, e) {
-                if (this._Helper.UpdateResizeDirection(this))
+                if (this._Helper && this._Helper.UpdateResizeDirection(this))
                     this._OnResizeDirectionChanged();
             };
             GridSplitter.prototype._OnResizeDirectionChanged = function () {
@@ -3341,7 +3341,7 @@ var Fayde;
             TreeViewItem.prototype.GoToStateCommon = function (gotoFunc) {
                 if (!this.IsEnabled)
                     return gotoFunc("Disabled");
-                if (!this._IsPressed)
+                if (this._IsPressed)
                     return gotoFunc("Pressed");
                 if (this.IsMouseOver)
                     return gotoFunc("MouseOver");
@@ -3500,7 +3500,7 @@ var Fayde;
                 var parentTreeView;
                 if (!e.Handled && (parentTreeView = this.ParentTreeView) != null && parentTreeView.HandleMouseButtonDown())
                     e.Handled = true;
-                this._IsPressed = false;
+                this._IsPressed = true;
                 this.UpdateVisualState();
             };
             TreeViewItem.prototype.OnMouseLeftButtonUp = function (e) {

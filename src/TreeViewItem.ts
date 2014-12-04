@@ -203,7 +203,7 @@ module Fayde.Controls {
         GoToStateCommon(gotoFunc: (state: string) => boolean): boolean {
             if (!this.IsEnabled)
                 return gotoFunc("Disabled");
-            if (!this._IsPressed)
+            if (this._IsPressed)
                 return gotoFunc("Pressed");
             if (this.IsMouseOver)
                 return gotoFunc("MouseOver");
@@ -362,7 +362,7 @@ module Fayde.Controls {
             var parentTreeView: TreeView;
             if (!e.Handled && (parentTreeView = this.ParentTreeView) != null && parentTreeView.HandleMouseButtonDown())
                 e.Handled = true;
-            this._IsPressed = false;
+            this._IsPressed = true;
             this.UpdateVisualState();
         }
         OnMouseLeftButtonUp(e: Input.MouseButtonEventArgs) {
