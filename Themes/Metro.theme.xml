@@ -3,10 +3,10 @@
     xmlns="http://schemas.wsick.com/fayde"
     xmlns:x="http://schemas.wsick.com/fayde/x"
     xmlns:vsm="http://schemas.wsick.com/fayde"
-    xmlns:controls="lib:Fayde.Controls">
+    xmlns:controls="lib://Fayde.Controls">
 
     <FontFamily x:Key="ContentFontFamily">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
-    <Double x:Key="ContentFontSize">14</Double>
+    <x:Double x:Key="ContentFontSize">14</x:Double>
 
     <!--ValidationToolTipTemplate Style-->
     <ControlTemplate x:Key="ValidationToolTipTemplate" TargetType="ToolTip">
