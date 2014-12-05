@@ -3,5 +3,9 @@
     "Fayde.Controls": {
       "exports": "Fayde.Controls"
     }
+  },
+  "themes": {
+    "Fayde.Controls": {
+    }
   }
 }
