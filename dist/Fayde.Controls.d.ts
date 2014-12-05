@@ -7,10 +7,10 @@ declare module Fayde.Controls {
 declare module Fayde.Controls.Primitives {
     class MenuBase extends ItemsControl {
         static ItemContainerStyleProperty: DependencyProperty;
-        public ItemContainerStyle: Style;
-        public IsItemItsOwnContainer(item: any): boolean;
-        public GetContainerForItem(): UIElement;
-        public PrepareContainerForItem(element: UIElement, item: any): void;
+        ItemContainerStyle: Style;
+        IsItemItsOwnContainer(item: any): boolean;
+        GetContainerForItem(): UIElement;
+        PrepareContainerForItem(element: UIElement, item: any): void;
         private static HasDefaultValue(control, propd);
     }
 }
@@ -19,21 +19,21 @@ declare module Fayde.Controls {
         static HorizontalOffsetProperty: DependencyProperty;
         static VerticalOffsetProperty: DependencyProperty;
         static IsOpenProperty: DependencyProperty;
-        public HorizontalOffset: number;
-        public VerticalOffset: number;
-        public IsOpen: boolean;
+        HorizontalOffset: number;
+        VerticalOffset: number;
+        IsOpen: boolean;
         private OnHorizontalOffsetChanged(args);
         private OnVerticalOffsetChanged(args);
         private OnIsOpenChanged(args);
-        public Opened: RoutedEvent<RoutedEventArgs>;
-        public Closed: RoutedEvent<RoutedEventArgs>;
+        Opened: RoutedEvent<RoutedEventArgs>;
+        Closed: RoutedEvent<RoutedEventArgs>;
         private $RootVisualTracker;
         constructor();
-        public OnKeyDown(e: Input.KeyEventArgs): void;
-        public OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
-        public OnMouseRightButtonDown(e: Input.MouseButtonEventArgs): void;
+        OnKeyDown(e: Input.KeyEventArgs): void;
+        OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
+        OnMouseRightButtonDown(e: Input.MouseButtonEventArgs): void;
         private _Owner;
-        public Owner : DependencyObject;
+        Owner: DependencyObject;
         private _PopupAlignmentPoint;
         private _SettingIsOpen;
         private _Popup;
@@ -41,12 +41,12 @@ declare module Fayde.Controls {
         private _HandleOwnerMouseRightButtonDown(sender, e);
         private _HandleOverlayMouseButtonDown(sender, e);
         private _HandleContextMenuSizeChanged(sender, e);
-        public ChildMenuItemClicked(): void;
+        ChildMenuItemClicked(): void;
         private UpdateContextMenuPlacement();
         private OpenPopup(position);
-        public OnOpened(e: RoutedEventArgs): void;
+        OnOpened(e: RoutedEventArgs): void;
         private ClosePopup();
-        public OnClosed(e: RoutedEventArgs): void;
+        OnClosed(e: RoutedEventArgs): void;
         private FocusNextItem(down);
     }
 }
@@ -64,10 +64,10 @@ declare module Fayde.Controls {
         static SelectedDayProperty: DependencyProperty;
         static SelectedYearProperty: DependencyProperty;
         static SelectedDateProperty: DependencyProperty;
-        public SelectedMonth: number;
-        public SelectedDay: number;
-        public SelectedYear: number;
-        public SelectedDate: DateTime;
+        SelectedMonth: number;
+        SelectedDay: number;
+        SelectedYear: number;
+        SelectedDate: DateTime;
         private OnSelectedMonthChanged(args);
         private OnSelectedDayChanged(args);
         private OnSelectedYearChanged(args);
@@ -80,7 +80,7 @@ declare module Fayde.Controls {
         private _YearGesture;
         private _SelectionHandler;
         constructor();
-        public OnApplyTemplate(): void;
+        OnApplyTemplate(): void;
         private CoerceMonth(month);
         private CoerceDay(day);
         private CoerceYear(year);
@@ -92,72 +92,72 @@ declare module Fayde.Controls {
     class Spinner extends Control {
         static ContentProperty: DependencyProperty;
         static ValidSpinDirectionProperty: DependencyProperty;
-        public Content: any;
-        public ValidSpinDirection: ValidSpinDirections;
-        public OnContentChanged(oldContent: any, newContent: any): void;
-        public OnValidSpinDirectionChanged(args: IDependencyPropertyChangedEventArgs): void;
-        public Spin: RoutedEvent<SpinEventArgs>;
-        public OnSpin(e: SpinEventArgs): void;
+        Content: any;
+        ValidSpinDirection: ValidSpinDirections;
+        OnContentChanged(oldContent: any, newContent: any): void;
+        OnValidSpinDirectionChanged(args: IDependencyPropertyChangedEventArgs): void;
+        Spin: RoutedEvent<SpinEventArgs>;
+        OnSpin(e: SpinEventArgs): void;
         private _IncreaseButton;
         private _DecreaseButton;
         constructor();
-        public OnApplyTemplate(): void;
+        OnApplyTemplate(): void;
         private OnIncreaseClick(sender, e);
         private OnDecreaseClick(sender, e);
         private EnableButtons();
-        public GoToStates(gotoFunc: (state: string) => boolean): void;
-        public GoToStateCommon(gotoFunc: (state: string) => boolean): boolean;
-        public GoToStateIncrease(gotoFunc: (state: string) => boolean): boolean;
-        public GoToStateDecrease(gotoFunc: (state: string) => boolean): boolean;
-        public OnMouseEnter(e: Input.MouseEventArgs): void;
-        public OnMouseLeave(e: Input.MouseEventArgs): void;
-        public OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
-        public OnMouseLeftButtonUp(e: Input.MouseButtonEventArgs): void;
-        public OnGotFocus(e: RoutedEventArgs): void;
-        public OnLostFocus(e: RoutedEventArgs): void;
+        GoToStates(gotoFunc: (state: string) => boolean): void;
+        GoToStateCommon(gotoFunc: (state: string) => boolean): boolean;
+        GoToStateIncrease(gotoFunc: (state: string) => boolean): boolean;
+        GoToStateDecrease(gotoFunc: (state: string) => boolean): boolean;
+        OnMouseEnter(e: Input.MouseEventArgs): void;
+        OnMouseLeave(e: Input.MouseEventArgs): void;
+        OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
+        OnMouseLeftButtonUp(e: Input.MouseButtonEventArgs): void;
+        OnGotFocus(e: RoutedEventArgs): void;
+        OnLostFocus(e: RoutedEventArgs): void;
     }
 }
 declare module Fayde.Controls {
     class UpDownBase<T> extends Control {
         private _IgnoreValueChange;
-        public _TextBox: TextBox;
-        public _Spinner: Spinner;
+        _TextBox: TextBox;
+        _Spinner: Spinner;
         private _Text;
         static SpinnerStyleProperty: DependencyProperty;
-        public SpinnerStyle: Style;
+        SpinnerStyle: Style;
         private OnSpinnerStyleChanged(oldStyle, newStyle);
-        public Value: T;
-        public _OnValueChanged(args: IDependencyPropertyChangedEventArgs): void;
-        public OnValueChanging(e: RoutedPropertyChangingEventArgs<T>): void;
-        public OnValueChanged(e: RoutedPropertyChangedEventArgs<T>): void;
+        Value: T;
+        _OnValueChanged(args: IDependencyPropertyChangedEventArgs): void;
+        OnValueChanging(e: RoutedPropertyChangingEventArgs<T>): void;
+        OnValueChanged(e: RoutedPropertyChangedEventArgs<T>): void;
         static IsEditableProperty: DependencyProperty;
-        public IsEditable: boolean;
+        IsEditable: boolean;
         private OnIsEditableChanged(args);
-        public ValueChanging: RoutedPropertyChangingEvent<T>;
-        public ValueChanged: RoutedPropertyChangedEvent<T>;
-        public Parsing: RoutedEvent<UpDownParsingEventArgs<T>>;
-        public ParseError: RoutedEvent<UpDownParseErrorEventArgs>;
-        public OnApplyTemplate(): void;
+        ValueChanging: RoutedPropertyChangingEvent<T>;
+        ValueChanged: RoutedPropertyChangedEvent<T>;
+        Parsing: RoutedEvent<UpDownParsingEventArgs<T>>;
+        ParseError: RoutedEvent<UpDownParseErrorEventArgs>;
+        OnApplyTemplate(): void;
         private SetTextBox(d);
         private SetSpinner(d);
-        public OnKeyDown(e: Input.KeyEventArgs): void;
-        public OnMouseWheel(e: Input.MouseWheelEventArgs): void;
-        public ApplyValue(text: string): void;
-        public OnParseError(e: UpDownParseErrorEventArgs): void;
-        public OnParsing(e: UpDownParsingEventArgs<T>): void;
-        public ParseValue(text: string): T;
-        public FormatValue(): string;
-        public SelectAllText(): void;
-        public SetTextBoxText(): void;
+        OnKeyDown(e: Input.KeyEventArgs): void;
+        OnMouseWheel(e: Input.MouseWheelEventArgs): void;
+        ApplyValue(text: string): void;
+        OnParseError(e: UpDownParseErrorEventArgs): void;
+        OnParsing(e: UpDownParsingEventArgs<T>): void;
+        ParseValue(text: string): T;
+        FormatValue(): string;
+        SelectAllText(): void;
+        SetTextBoxText(): void;
         private TextBox_LostFocus(sender, e);
         private TextBox_GotFocus(sender, e);
         private Spinner_Spin(sender, e);
-        public OnSpin(e: SpinEventArgs): void;
+        OnSpin(e: SpinEventArgs): void;
         private ProcessUserInput();
         private DoDecrement();
-        public OnDecrement(): void;
+        OnDecrement(): void;
         private DoIncrement();
-        public OnIncrement(): void;
+        OnIncrement(): void;
     }
 }
 declare module Fayde.Controls {
@@ -174,50 +174,50 @@ declare module Fayde.Controls {
         static FallbackItemProperty: DependencyProperty;
         static ItemsSourceProperty: DependencyProperty;
         static ItemTemplateProperty: DependencyProperty;
-        public Value: any;
-        public IsEditable: boolean;
-        public SpinnerStyle: Style;
-        public CurrentIndex: number;
-        public IsCyclic: boolean;
-        public InvalidInputAction: InvalidInputAction;
-        public FallbackItem: any;
-        public ItemsSource: nullstone.IEnumerable<any>;
-        public ItemTemplate: DataTemplate;
-        public Items: Internal.ObservableObjectCollection;
-        public OnValueChanged(oldItem: any, newItem: any): void;
-        public OnCurrentIndexChanged(oldIndex: number, newIndex: number): void;
+        Value: any;
+        IsEditable: boolean;
+        SpinnerStyle: Style;
+        CurrentIndex: number;
+        IsCyclic: boolean;
+        InvalidInputAction: InvalidInputAction;
+        FallbackItem: any;
+        ItemsSource: nullstone.IEnumerable<any>;
+        ItemTemplate: DataTemplate;
+        Items: Internal.ObservableObjectCollection;
+        OnValueChanged(oldItem: any, newItem: any): void;
+        OnCurrentIndexChanged(oldIndex: number, newIndex: number): void;
         private _OnIsCyclicChanged(args);
         private _OnItemsSourceChanged(oldItemsSource, newItemsSource);
         private _ItemsSourceModified(sender, e);
         private _OnItemsChanged(sender, e);
-        public ValueChanging: RoutedPropertyChangingEvent<number>;
-        public ParseError: RoutedEvent<UpDownParseErrorEventArgs>;
-        public ValueMemberPath : string;
+        ValueChanging: RoutedPropertyChangingEvent<number>;
+        ParseError: RoutedEvent<UpDownParseErrorEventArgs>;
+        ValueMemberPath: string;
         private _ValueBindingEvaluator;
-        public ValueMemberBinding : Data.Binding;
+        ValueMemberBinding: Data.Binding;
         private _Coercer;
         private _SpinFlow;
         private _CanEditByFocus;
         constructor();
-        public OnApplyTemplate(): void;
-        public OnGotFocus(e: RoutedEventArgs): void;
-        public OnLostFocus(e: RoutedEventArgs): void;
-        public OnMouseEnter(e: Input.MouseEventArgs): void;
-        public OnMouseLeave(e: Input.MouseEventArgs): void;
-        public OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
-        public OnMouseLeftButtonUp(e: Input.MouseButtonEventArgs): void;
-        public GoToStates(gotoFunc: (state: string) => boolean): void;
-        public GoToStateEditing(gotoFunc: (state: string) => boolean): boolean;
-        public GoToStateValid(gotoFunc: (state: string) => boolean): boolean;
+        OnApplyTemplate(): void;
+        OnGotFocus(e: RoutedEventArgs): void;
+        OnLostFocus(e: RoutedEventArgs): void;
+        OnMouseEnter(e: Input.MouseEventArgs): void;
+        OnMouseLeave(e: Input.MouseEventArgs): void;
+        OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
+        OnMouseLeftButtonUp(e: Input.MouseButtonEventArgs): void;
+        GoToStates(gotoFunc: (state: string) => boolean): void;
+        GoToStateEditing(gotoFunc: (state: string) => boolean): boolean;
+        GoToStateValid(gotoFunc: (state: string) => boolean): boolean;
         private UpdateValidSpinDirection();
         private TryEnterEditMode();
-        public OnIsEditingChanged(isEditing: boolean): void;
-        public OnIsInvalidInputChanged(isInvalid: boolean): void;
-        public OnSpin(): void;
-        public OnIncrement(): void;
-        public OnDecrement(): void;
-        public TryParseValue(text: string, ov: IOutValue): boolean;
-        public FormatValue(): string;
+        OnIsEditingChanged(isEditing: boolean): void;
+        OnIsInvalidInputChanged(isInvalid: boolean): void;
+        OnSpin(): void;
+        OnIncrement(): void;
+        OnDecrement(): void;
+        TryParseValue(text: string, ov: IOutValue): boolean;
+        FormatValue(): string;
     }
 }
 declare module Fayde.Controls {
@@ -257,15 +257,15 @@ declare module Fayde.Controls {
         private _DragStart;
         private _IsDragging;
         constructor();
-        public OnApplyTemplate(): void;
+        OnApplyTemplate(): void;
         private _OnLayoutUpdated(sender, e);
         private _OnResizeDirectionChanged();
-        public OnGotFocus(e: RoutedEventArgs): void;
-        public OnLostFocus(e: RoutedEventArgs): void;
-        public OnKeyDown(e: Input.KeyEventArgs): void;
-        public OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
-        public OnMouseLeftButtonUp(e: Input.MouseButtonEventArgs): void;
-        public OnMouseMove(e: Input.MouseEventArgs): void;
+        OnGotFocus(e: RoutedEventArgs): void;
+        OnLostFocus(e: RoutedEventArgs): void;
+        OnKeyDown(e: Input.KeyEventArgs): void;
+        OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
+        OnMouseLeftButtonUp(e: Input.MouseButtonEventArgs): void;
+        OnMouseMove(e: Input.MouseEventArgs): void;
         private InitHelper();
         private _HandleMove(horiz, vert, isKeyboard);
         private _GetTransformedPos(e);
@@ -278,43 +278,43 @@ declare module Fayde.Controls {
         static HeaderProperty: DependencyProperty;
         static HeaderTemplateProperty: DependencyProperty;
         static ItemContainerStyleProperty: DependencyProperty;
-        public Header: any;
-        public HeaderTemplate: DataTemplate;
-        public ItemContainerStyle: Style;
-        public OnHeaderChanged(oldHeader: any, newHeader: any): void;
-        public OnHeaderTemplateChanged(oldHeaderTemplate: DataTemplate, newHeaderTemplate: DataTemplate): void;
+        Header: any;
+        HeaderTemplate: DataTemplate;
+        ItemContainerStyle: Style;
+        OnHeaderChanged(oldHeader: any, newHeader: any): void;
+        OnHeaderTemplateChanged(oldHeaderTemplate: DataTemplate, newHeaderTemplate: DataTemplate): void;
         private OnItemContainerStyleChanged(args);
         constructor();
-        public OnApplyTemplate(): void;
-        public PrepareContainerForItem(element: UIElement, item: any): void;
+        OnApplyTemplate(): void;
+        PrepareContainerForItem(element: UIElement, item: any): void;
         static PrepareHeaderedItemsControlContainer(control: HeaderedItemsControl, item: any, parentItemsControl: ItemsControl, parentItemContainerStyle: Style): void;
     }
 }
 declare module Fayde.Controls {
     class MenuItem extends HeaderedItemsControl {
-        public ParentMenuBase: Primitives.MenuBase;
-        public Click: RoutedEvent<RoutedEventArgs>;
+        ParentMenuBase: Primitives.MenuBase;
+        Click: RoutedEvent<RoutedEventArgs>;
         static CommandProperty: DependencyProperty;
         static CommandParameterProperty: DependencyProperty;
         static IconProperty: DependencyProperty;
-        public Command: Input.ICommand;
-        public CommandParameter: any;
-        public Icon: any;
+        Command: Input.ICommand;
+        CommandParameter: any;
+        Icon: any;
         private OnCommandChanged(args);
         private _CanExecuteChanged(sender, e);
         private OnCommandParameterChanged(args);
         constructor();
-        public OnApplyTemplate(): void;
+        OnApplyTemplate(): void;
         private UpdateIsEnabled();
-        public OnGotFocus(e: RoutedEventArgs): void;
-        public OnLostFocus(e: RoutedEventArgs): void;
-        public OnMouseEnter(e: Input.MouseEventArgs): void;
-        public OnMouseLeave(e: Input.MouseEventArgs): void;
-        public OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
-        public OnMouseRightButtonDown(e: Input.MouseButtonEventArgs): void;
-        public OnKeyDown(e: Input.KeyEventArgs): void;
+        OnGotFocus(e: RoutedEventArgs): void;
+        OnLostFocus(e: RoutedEventArgs): void;
+        OnMouseEnter(e: Input.MouseEventArgs): void;
+        OnMouseLeave(e: Input.MouseEventArgs): void;
+        OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
+        OnMouseRightButtonDown(e: Input.MouseButtonEventArgs): void;
+        OnKeyDown(e: Input.KeyEventArgs): void;
         private OnClick();
-        public GoToStateCommon(gotoFunc: (state: string) => boolean): boolean;
+        GoToStateCommon(gotoFunc: (state: string) => boolean): boolean;
     }
 }
 declare module Fayde.Controls {
@@ -326,31 +326,31 @@ declare module Fayde.Controls {
         static DecimalPlacesProperty: DependencyProperty;
         static SpinnerStyleProperty: DependencyProperty;
         static IsEditableProperty: DependencyProperty;
-        public Minimum: number;
-        public Maximum: number;
-        public Value: number;
-        public Increment: number;
-        public DecimalPlaces: number;
-        public SpinnerStyle: Style;
-        public IsEditable: boolean;
-        public OnMinimumChanged(oldMinimum: number, newMinimum: number): void;
-        public OnMaximumChanged(oldMaximum: number, newMaximum: number): void;
-        public OnValueChanged(oldValue: number, newValue: number): void;
-        public OnIncrementChanged(oldIncrement: number, newIncrement: number): void;
-        public OnDecimalPlacesChanged(oldDecimalPlaces: number, newDecimalPlaces: number): void;
-        public Parsing: RoutedEvent<UpDownParsingEventArgs<number>>;
-        public ParseError: RoutedEvent<UpDownParseErrorEventArgs>;
+        Minimum: number;
+        Maximum: number;
+        Value: number;
+        Increment: number;
+        DecimalPlaces: number;
+        SpinnerStyle: Style;
+        IsEditable: boolean;
+        OnMinimumChanged(oldMinimum: number, newMinimum: number): void;
+        OnMaximumChanged(oldMaximum: number, newMaximum: number): void;
+        OnValueChanged(oldValue: number, newValue: number): void;
+        OnIncrementChanged(oldIncrement: number, newIncrement: number): void;
+        OnDecimalPlacesChanged(oldDecimalPlaces: number, newDecimalPlaces: number): void;
+        Parsing: RoutedEvent<UpDownParsingEventArgs<number>>;
+        ParseError: RoutedEvent<UpDownParseErrorEventArgs>;
         private _Coercer;
         private _Formatter;
         private _SpinFlow;
         constructor();
-        public OnApplyTemplate(): void;
+        OnApplyTemplate(): void;
         private UpdateValidSpinDirection();
-        public ParseValue(text: string): number;
-        public FormatValue(val: number): string;
-        public OnSpin(): void;
-        public OnIncrement(): void;
-        public OnDecrement(): void;
+        ParseValue(text: string): number;
+        FormatValue(val: number): string;
+        OnSpin(): void;
+        OnIncrement(): void;
+        OnDecrement(): void;
     }
 }
 declare module Fayde.Controls {
@@ -360,7 +360,7 @@ declare module Fayde.Controls {
 }
 declare module Fayde.Controls {
     class SpinEventArgs extends RoutedEventArgs {
-        public Direction: SpinDirection;
+        Direction: SpinDirection;
         constructor(direction: SpinDirection);
     }
 }
@@ -370,11 +370,11 @@ declare module Fayde.Controls {
         static SelectedIndexProperty: DependencyProperty;
         static SelectedContentProperty: DependencyProperty;
         static TabStripPlacementProperty: DependencyProperty;
-        public SelectedItem: any;
-        public SelectedIndex: number;
-        public SelectedContent: any;
-        public TabStripPlacement: Dock;
-        public SelectionChanged: RoutedEvent<Primitives.SelectionChangedEventArgs>;
+        SelectedItem: any;
+        SelectedIndex: number;
+        SelectedContent: any;
+        TabStripPlacement: Dock;
+        SelectionChanged: RoutedEvent<Primitives.SelectionChangedEventArgs>;
         private _ElementTemplateTop;
         private _ElementTemplateBottom;
         private _ElementTemplateLeft;
@@ -390,17 +390,17 @@ declare module Fayde.Controls {
         private _UpdateIndex;
         private _DesiredIndex;
         constructor();
-        public OnApplyTemplate(): void;
+        OnApplyTemplate(): void;
         private OnSelectedItemChanged(args);
         private OnSelectedIndexChanged(args);
         private OnSelectedContentChanged(args);
         private OnTabStripPlacementPropertyChanged(args);
-        public OnItemsChanged(e: Collections.CollectionChangedEventArgs): void;
-        public OnKeyDown(e: Input.KeyEventArgs): void;
+        OnItemsChanged(e: Collections.CollectionChangedEventArgs): void;
+        OnKeyDown(e: Input.KeyEventArgs): void;
         private _FindEndTabItem();
         private _FindHomeTabItem();
         private SelectItem(oldItem, newItem);
-        public OnSelectionChanged(e: Primitives.SelectionChangedEventArgs): void;
+        OnSelectionChanged(e: Primitives.SelectionChangedEventArgs): void;
         private UpdateTabPanelLayout(oldValue, newValue);
         private UpdateSelectedContent(content);
         private EnsureLanguageBinding(tabItem);
@@ -423,35 +423,35 @@ declare module Fayde.Controls {
         static HeaderTemplateProperty: DependencyProperty;
         static IsFocusedProperty: DependencyProperty;
         static IsSelectedProperty: DependencyProperty;
-        public HasHeader: boolean;
-        public Header: any;
-        public HeaderTemplate: DataTemplate;
-        public IsFocused: boolean;
-        public IsSelected: boolean;
+        HasHeader: boolean;
+        Header: any;
+        HeaderTemplate: DataTemplate;
+        IsFocused: boolean;
+        IsSelected: boolean;
         private _SelectedElements;
         private _UnselectedElements;
         private _PreviousTemplate;
         private _PreviousHeader;
-        public TabStripPlacement : Dock;
+        TabStripPlacement: Dock;
         private TabControlParent;
         constructor();
-        public OnApplyTemplate(): void;
+        OnApplyTemplate(): void;
         private _OnHeaderChanged(args);
-        public OnHeaderChanged(oldValue: any, newValue: any): void;
-        public OnHeaderTemplateChanged(oldHeaderTemplate: DataTemplate, newHeaderTemplate: DataTemplate): void;
+        OnHeaderChanged(oldValue: any, newValue: any): void;
+        OnHeaderTemplateChanged(oldHeaderTemplate: DataTemplate, newHeaderTemplate: DataTemplate): void;
         private _OnIsSelectedChanged(args);
-        public OnSelected(e: RoutedEventArgs): void;
-        public OnUnselected(e: RoutedEventArgs): void;
-        public UpdateVisualState(useTransitions?: boolean): void;
+        OnSelected(e: RoutedEventArgs): void;
+        OnUnselected(e: RoutedEventArgs): void;
+        UpdateVisualState(useTransitions?: boolean): void;
         private _UpdateHeaderVisuals();
-        public OnMouseLeave(e: Input.MouseEventArgs): void;
-        public OnMouseEnter(e: Input.MouseEventArgs): void;
-        public OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
-        public OnGotFocus(e: RoutedEventArgs): void;
-        public OnLostFocus(e: RoutedEventArgs): void;
-        public OnContentChanged(oldContent: any, newContent: any): void;
-        public OnKeyDown(e: Input.KeyEventArgs): void;
-        public GetTemplate(isSelected: boolean, tabPlacement: Dock): FrameworkElement;
+        OnMouseLeave(e: Input.MouseEventArgs): void;
+        OnMouseEnter(e: Input.MouseEventArgs): void;
+        OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
+        OnGotFocus(e: RoutedEventArgs): void;
+        OnLostFocus(e: RoutedEventArgs): void;
+        OnContentChanged(oldContent: any, newContent: any): void;
+        OnKeyDown(e: Input.KeyEventArgs): void;
+        GetTemplate(isSelected: boolean, tabPlacement: Dock): FrameworkElement;
         private _GetContentControl(isSelected, tabPlacement);
         private _FindPreviousTabItem(startIndex);
         private _FindNextTabItem(startIndex);
@@ -465,12 +465,12 @@ declare module Fayde.Controls {
         static SelectedTimeProperty: DependencyProperty;
         static IsSecondsShownProperty: DependencyProperty;
         static DisplayModeProperty: DependencyProperty;
-        public SelectedHour: number;
-        public SelectedMinute: number;
-        public SelectedSecond: number;
-        public SelectedTime: TimeSpan;
-        public IsSecondsShown: boolean;
-        public DisplayMode: TimeDisplayMode;
+        SelectedHour: number;
+        SelectedMinute: number;
+        SelectedSecond: number;
+        SelectedTime: TimeSpan;
+        IsSecondsShown: boolean;
+        DisplayMode: TimeDisplayMode;
         private OnSelectedHourChanged(args);
         private OnSelectedMinuteChanged(args);
         private OnSelectedSecondChanged(args);
@@ -487,7 +487,7 @@ declare module Fayde.Controls {
         private _SuffixGesture;
         private _SelectionHandler;
         constructor();
-        public OnApplyTemplate(): void;
+        OnApplyTemplate(): void;
         private _GetHourInput();
         private CoerceHour(hour);
         private CoerceMinute(minute);
@@ -503,41 +503,41 @@ declare module Fayde.Controls {
         static SelectedValueProperty: DependencyProperty;
         static SelectedValuePathProperty: DependencyProperty;
         static ItemContainerStyleProperty: DependencyProperty;
-        public SelectedItem: any;
-        public SelectedValue: any;
-        public SelectedValuePath: string;
-        public ItemContainerStyle: Style;
+        SelectedItem: any;
+        SelectedValue: any;
+        SelectedValuePath: string;
+        ItemContainerStyle: Style;
         private OnSelectedItemChanged(e);
         private OnSelectedValueChanged(e);
         private OnSelectedValuePathChanged(e);
         private OnItemContainerStyleChanged(e);
         private _AllowWrite;
         private _IgnorePropertyChange;
-        public SelectedContainer: TreeViewItem;
-        public IsSelectedContainerHookedUp: boolean;
-        public IsSelectionChangeActive: boolean;
-        public ItemsControlHelper: Internal.ItemsControlHelper;
+        SelectedContainer: TreeViewItem;
+        IsSelectedContainerHookedUp: boolean;
+        IsSelectionChangeActive: boolean;
+        ItemsControlHelper: Internal.ItemsControlHelper;
         private SelectedItemChanged;
         constructor();
-        public OnApplyTemplate(): void;
-        public GetContainerForItem(): UIElement;
-        public IsItemItsOwnContainer(item: any): boolean;
-        public PrepareContainerForItem(element: UIElement, item: any): void;
-        public ClearContainerForItem(element: UIElement, item: any): void;
-        public OnItemsChanged(e: Collections.CollectionChangedEventArgs): void;
-        public CheckForSelectedDescendents(item: TreeViewItem): void;
-        public PropagateKeyDown(e: Input.KeyEventArgs): void;
-        public OnKeyDown(e: Input.KeyEventArgs): void;
+        OnApplyTemplate(): void;
+        GetContainerForItem(): UIElement;
+        IsItemItsOwnContainer(item: any): boolean;
+        PrepareContainerForItem(element: UIElement, item: any): void;
+        ClearContainerForItem(element: UIElement, item: any): void;
+        OnItemsChanged(e: Collections.CollectionChangedEventArgs): void;
+        CheckForSelectedDescendents(item: TreeViewItem): void;
+        PropagateKeyDown(e: Input.KeyEventArgs): void;
+        OnKeyDown(e: Input.KeyEventArgs): void;
         private HandleScrollByPage(up);
-        public OnMouseEnter(e: Input.MouseEventArgs): void;
-        public OnMouseLeave(e: Input.MouseEventArgs): void;
-        public OnMouseMove(e: Input.MouseEventArgs): void;
-        public OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
-        public HandleMouseButtonDown(): boolean;
-        public OnMouseLeftButtonUp(e: Input.MouseButtonEventArgs): void;
-        public OnGotFocus(e: RoutedEventArgs): void;
-        public OnLostFocus(e: RoutedEventArgs): void;
-        public ChangeSelection(itemOrContainer: any, container: TreeViewItem, selected: boolean): void;
+        OnMouseEnter(e: Input.MouseEventArgs): void;
+        OnMouseLeave(e: Input.MouseEventArgs): void;
+        OnMouseMove(e: Input.MouseEventArgs): void;
+        OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
+        HandleMouseButtonDown(): boolean;
+        OnMouseLeftButtonUp(e: Input.MouseButtonEventArgs): void;
+        OnGotFocus(e: RoutedEventArgs): void;
+        OnLostFocus(e: RoutedEventArgs): void;
+        ChangeSelection(itemOrContainer: any, container: TreeViewItem, selected: boolean): void;
         private UpdateSelectedValue(item);
         private SelectFirstItem();
         private FocusFirstItem();
@@ -550,34 +550,34 @@ declare module Fayde.Controls {
         static IsExpandedProperty: DependencyProperty;
         static IsSelectedProperty: DependencyProperty;
         static IsSelectionActiveProperty: DependencyProperty;
-        public HasItems: boolean;
+        HasItems: boolean;
         private $SetHasItems(value);
-        public IsExpanded: boolean;
-        public IsSelected: boolean;
-        public IsSelectionActive: boolean;
+        IsExpanded: boolean;
+        IsSelected: boolean;
+        IsSelectionActive: boolean;
         private $SetIsSelectionActive(value);
         private OnHasItemsChanged(e);
         private OnIsExpandedPropertyChanged(e);
         private OnIsSelectedChanged(e);
         private OnIsSelectionActiveChanged(e);
-        public Collapsed: RoutedEvent<RoutedEventArgs>;
-        public Expanded: RoutedEvent<RoutedEventArgs>;
-        public Selected: RoutedEvent<RoutedEventArgs>;
-        public Unselected: RoutedEvent<RoutedEventArgs>;
+        Collapsed: RoutedEvent<RoutedEventArgs>;
+        Expanded: RoutedEvent<RoutedEventArgs>;
+        Selected: RoutedEvent<RoutedEventArgs>;
+        Unselected: RoutedEvent<RoutedEventArgs>;
         private _AllowWrite;
-        public IgnorePropertyChange: boolean;
+        IgnorePropertyChange: boolean;
         private ContainsSelection;
         private CancelGotFocusBubble;
-        public RequiresContainsSelectionUpdate: boolean;
+        RequiresContainsSelectionUpdate: boolean;
         private UserInitiatedExpansion;
         private _expanderButton;
         private ExpanderButton;
         private _headerElement;
-        public HeaderElement : FrameworkElement;
+        HeaderElement: FrameworkElement;
         private _expansionStateGroup;
         private ExpansionStateGroup;
         private _parentItemsControl;
-        public ParentItemsControl : ItemsControl;
+        ParentItemsControl: ItemsControl;
         private ParentTreeViewItem;
         private ParentTreeView;
         private IsRoot;
@@ -585,45 +585,45 @@ declare module Fayde.Controls {
         private _MultiClick;
         private _IsPressed;
         constructor();
-        public OnApplyTemplate(): void;
+        OnApplyTemplate(): void;
         private OnExpansionStateGroupStateChanged(sender, e);
         private BringIntoView();
-        public GoToStates(gotoFunc: (state: string) => boolean): void;
-        public GoToStateCommon(gotoFunc: (state: string) => boolean): boolean;
-        public GoToStateExpansion(gotoFunc: (state: string) => boolean): boolean;
-        public GoToStateHasItems(gotoFunc: (state: string) => boolean): boolean;
-        public GoToStateSelection(gotoFunc: (state: string) => boolean): boolean;
-        public GetContainerForItem(): UIElement;
-        public IsItemItsOwnContainer(item: any): boolean;
-        public PrepareContainerForItem(element: UIElement, item: any): void;
-        public ClearContainerForItem(element: UIElement, item: any): void;
-        public OnItemsChanged(e: Collections.CollectionChangedEventArgs): void;
-        public OnExpanded(e: RoutedEventArgs): void;
-        public OnCollapsed(e: RoutedEventArgs): void;
+        GoToStates(gotoFunc: (state: string) => boolean): void;
+        GoToStateCommon(gotoFunc: (state: string) => boolean): boolean;
+        GoToStateExpansion(gotoFunc: (state: string) => boolean): boolean;
+        GoToStateHasItems(gotoFunc: (state: string) => boolean): boolean;
+        GoToStateSelection(gotoFunc: (state: string) => boolean): boolean;
+        GetContainerForItem(): UIElement;
+        IsItemItsOwnContainer(item: any): boolean;
+        PrepareContainerForItem(element: UIElement, item: any): void;
+        ClearContainerForItem(element: UIElement, item: any): void;
+        OnItemsChanged(e: Collections.CollectionChangedEventArgs): void;
+        OnExpanded(e: RoutedEventArgs): void;
+        OnCollapsed(e: RoutedEventArgs): void;
         private ToggleExpanded();
-        public OnSelected(e: RoutedEventArgs): void;
-        public OnUnselected(e: RoutedEventArgs): void;
-        public OnGotFocus(e: RoutedEventArgs): void;
-        public OnLostFocus(e: RoutedEventArgs): void;
+        OnSelected(e: RoutedEventArgs): void;
+        OnUnselected(e: RoutedEventArgs): void;
+        OnGotFocus(e: RoutedEventArgs): void;
+        OnLostFocus(e: RoutedEventArgs): void;
         private OnExpanderGotFocus(sender, e);
-        public OnMouseEnter(e: Input.MouseEventArgs): void;
-        public OnMouseLeave(e: Input.MouseEventArgs): void;
+        OnMouseEnter(e: Input.MouseEventArgs): void;
+        OnMouseLeave(e: Input.MouseEventArgs): void;
         private OnHeaderMouseLeftButtonDown(sender, e);
         private OnExpanderClick(sender, e);
-        public OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
-        public OnMouseLeftButtonUp(e: Input.MouseButtonEventArgs): void;
-        public OnIsEnabledChanged(e: IDependencyPropertyChangedEventArgs): void;
-        public OnKeyDown(e: Input.KeyEventArgs): void;
-        public HandleRightKey(): boolean;
-        public HandleLeftKey(): boolean;
-        public HandleDownKey(): boolean;
-        public HandleUpKey(): boolean;
-        public HandleScrollByPage(up: boolean, scrollHost: ScrollViewer, viewportHeight: number, top: number, bottom: number, currentDelta: IOutValue): boolean;
+        OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
+        OnMouseLeftButtonUp(e: Input.MouseButtonEventArgs): void;
+        OnIsEnabledChanged(e: IDependencyPropertyChangedEventArgs): void;
+        OnKeyDown(e: Input.KeyEventArgs): void;
+        HandleRightKey(): boolean;
+        HandleLeftKey(): boolean;
+        HandleDownKey(): boolean;
+        HandleUpKey(): boolean;
+        HandleScrollByPage(up: boolean, scrollHost: ScrollViewer, viewportHeight: number, top: number, bottom: number, currentDelta: IOutValue): boolean;
         private Select(selected);
-        public UpdateContainsSelection(selected: boolean): void;
+        UpdateContainsSelection(selected: boolean): void;
         private AllowKeyHandleEvent();
-        public FocusDown(): boolean;
-        public FocusInto(): boolean;
+        FocusDown(): boolean;
+        FocusInto(): boolean;
         private FindNextFocusableItem(recurse);
         private FindLastFocusableItem();
         private FindPreviousFocusableItem();
@@ -631,30 +631,30 @@ declare module Fayde.Controls {
 }
 declare module Fayde.Controls {
     class UpDownParseErrorEventArgs extends RoutedEventArgs {
-        public Text: string;
-        public Error: Error;
-        public Handled: boolean;
+        Text: string;
+        Error: Error;
+        Handled: boolean;
         constructor(text: string, error: Error);
     }
 }
 declare module Fayde.Controls {
     class UpDownParsingEventArgs<T> extends RoutedEventArgs {
-        public Text: string;
-        public Value: T;
-        public Handled: boolean;
+        Text: string;
+        Value: T;
+        Handled: boolean;
         constructor(text: string);
     }
 }
 declare module Fayde.Controls.contextmenu {
     class RootVisualTracker {
-        public mousePosition: Point;
+        mousePosition: Point;
         private $$rootVisual;
         private $$onSizeChanged;
-        public rootVisual : FrameworkElement;
+        rootVisual: FrameworkElement;
         constructor(owner: FrameworkElement);
-        public tryInit(visual: UIElement): void;
-        public setOnSizeChanged(onSizeChanged?: (newSize: minerva.Size) => any): void;
-        public getAvailableSize(): minerva.Size;
+        tryInit(visual: UIElement): void;
+        setOnSizeChanged(onSizeChanged?: (newSize: minerva.Size) => any): void;
+        getAvailableSize(): minerva.Size;
         private _HandleLayoutUpdated(sender, e);
         private _HandleRootVisualMouseMove(sender, e);
         private _HandleSizeChanged(sender, e);
@@ -663,11 +663,11 @@ declare module Fayde.Controls.contextmenu {
 declare module Fayde.Controls.Internal {
     class BindingSourceEvaluator<T> extends FrameworkElement {
         static ValueProperty: DependencyProperty;
-        public Value: T;
+        Value: T;
         private _ValueBinding;
-        public ValueBinding : Data.Binding;
+        ValueBinding: Data.Binding;
         constructor(binding: Data.Binding);
-        public GetDynamicValue(source: any): T;
+        GetDynamicValue(source: any): T;
     }
 }
 declare module Fayde.Controls.Internal {
@@ -699,40 +699,40 @@ declare module Fayde.Controls.Internal {
         EscapeFocus(): any;
     }
     class DomainCoercer implements IDomainCoercer {
-        public Owner: IDomainOwner;
-        public OnCoerceValue: (val: any) => void;
-        public OnCoerceCurrentIndex: (val: number) => void;
-        public TextBox: TextBox;
-        public Text: string;
-        public IsCoercing: boolean;
+        Owner: IDomainOwner;
+        OnCoerceValue: (val: any) => void;
+        OnCoerceCurrentIndex: (val: number) => void;
+        TextBox: TextBox;
+        Text: string;
+        IsCoercing: boolean;
         private _IsEditing;
-        public IsEditing : boolean;
+        IsEditing: boolean;
         private OnIsEditingChanged(isEditing);
         private _IsInvalidInput;
-        public IsInvalidInput : boolean;
+        IsInvalidInput: boolean;
         constructor(Owner: IDomainOwner, OnCoerceValue: (val: any) => void, OnCoerceCurrentIndex: (val: number) => void);
-        public Attach(textBox: TextBox): void;
-        public Detach(): void;
+        Attach(textBox: TextBox): void;
+        Detach(): void;
         private OnKeyDown(sender, e);
-        public EscapeFocus(): void;
-        public OnValueChanged(oldValue: any, newValue: any): void;
-        public OnCurrentIndexChanged(oldIndex: number, newIndex: number): void;
+        EscapeFocus(): void;
+        OnValueChanged(oldValue: any, newValue: any): void;
+        OnCurrentIndexChanged(oldIndex: number, newIndex: number): void;
         private TextBox_LostFocus(sender, e);
         private TextBox_GotFocus(sender, e);
-        public SelectAllText(): void;
-        public UpdateTextBoxText(): void;
-        public UpdateIsEditable(): void;
-        public ProcessUserInput(): void;
-        public OnParseError(e: UpDownParseErrorEventArgs): void;
+        SelectAllText(): void;
+        UpdateTextBoxText(): void;
+        UpdateIsEditable(): void;
+        ProcessUserInput(): void;
+        OnParseError(e: UpDownParseErrorEventArgs): void;
         private ApplyValue(text);
     }
 }
 declare module Fayde.Controls.Internal {
     class EventGesture<T extends UIElement> {
-        public Target: UIElement;
+        Target: UIElement;
         private _Callback;
-        public Attach(event: nullstone.Event<nullstone.IEventArgs>, callback: (t: T, e: nullstone.IEventArgs) => void): void;
-        public Detach(): void;
+        Attach(event: nullstone.Event<nullstone.IEventArgs>, callback: (t: T, e: nullstone.IEventArgs) => void): void;
+        Detach(): void;
         private _OnEvent(sender, e);
     }
 }
@@ -746,10 +746,10 @@ declare module Fayde.Controls.Internal {
         AddToValue(inc: number): any;
     }
     class FormattedRangeCoercer extends RangeCoercer implements IFormattedRangeCoercer {
-        public OnCoerceFormat: () => void;
+        OnCoerceFormat: () => void;
         constructor(range: IFormattedRange, onCoerceMaximum: (val: any) => void, onCoerceValue: (val: any) => void, OnCoerceFormat: () => void);
-        public OnDecimalPlacesChanged(oldDecPlaces: number, newDecPlaces: number): void;
-        public AddToValue(inc: number): void;
+        OnDecimalPlacesChanged(oldDecPlaces: number, newDecPlaces: number): void;
+        AddToValue(inc: number): void;
     }
 }
 declare module Fayde.Controls.Internal {
@@ -770,17 +770,17 @@ declare module Fayde.Controls.Internal {
         ResizeDefinition2 = 2,
     }
     class GridSplitterResizer {
-        public Direction: GridResizeDirection;
-        public Behavior: GridResizeBehavior;
-        public SplitBehavior: SplitBehavior;
-        public SplitterIndex: number;
-        public SplitterLength: number;
-        public DS1: IDefinitionSize;
-        public DS2: IDefinitionSize;
+        Direction: GridResizeDirection;
+        Behavior: GridResizeBehavior;
+        SplitBehavior: SplitBehavior;
+        SplitterIndex: number;
+        SplitterLength: number;
+        DS1: IDefinitionSize;
+        DS2: IDefinitionSize;
         constructor(gs: GridSplitter);
-        public Setup(gs: GridSplitter, grid: Grid): boolean;
-        public Move(grid: Grid, horiz: number, vert: number): boolean;
-        public UpdateResizeDirection(gs: GridSplitter): boolean;
+        Setup(gs: GridSplitter, grid: Grid): boolean;
+        Move(grid: Grid, horiz: number, vert: number): boolean;
+        UpdateResizeDirection(gs: GridSplitter): boolean;
         private SetLengths(grid, definition1Pixels, definition2Pixels);
         private GetConstraints();
         private GetBehaviorIndices(index);
@@ -799,34 +799,34 @@ declare module Fayde.Controls.Internal {
     class ItemsControlHelper {
         private _itemsHost;
         private _scrollHost;
-        public ItemsControl: ItemsControl;
-        public ItemsHost : Panel;
-        public ScrollHost : ScrollViewer;
+        ItemsControl: ItemsControl;
+        ItemsHost: Panel;
+        ScrollHost: ScrollViewer;
         constructor(control: ItemsControl);
-        public OnApplyTemplate(): void;
+        OnApplyTemplate(): void;
         static PrepareContainerForItemOverride(element: DependencyObject, parentItemContainerStyle: Style): void;
-        public UpdateItemContainerStyle(itemContainerStyle: Style): void;
-        public ScrollIntoView(element: FrameworkElement): void;
+        UpdateItemContainerStyle(itemContainerStyle: Style): void;
+        ScrollIntoView(element: FrameworkElement): void;
     }
 }
 declare module Fayde.Controls.Internal {
     class MultiClickHelper {
-        public ClickCount: number;
-        public LastClickTime: number;
-        public LastClickPosition: Point;
-        public OnMouseLeftButtonDown(control: Control, e: Input.MouseButtonEventArgs): void;
+        ClickCount: number;
+        LastClickTime: number;
+        LastClickPosition: Point;
+        OnMouseLeftButtonDown(control: Control, e: Input.MouseButtonEventArgs): void;
     }
 }
 declare module Fayde.Controls.Internal {
     class ObservableObjectCollection extends Collections.ObservableCollection<any> {
-        public IsReadOnly: boolean;
+        IsReadOnly: boolean;
         constructor(collection?: nullstone.IEnumerable<any>);
-        public Add(value: any): void;
-        public AddRange(values: any[]): void;
-        public Insert(item: any, index: number): void;
-        public RemoveAt(index: number): void;
-        public SetValueAt(index: number, item: any): void;
-        public Clear(): void;
+        Add(value: any): void;
+        AddRange(values: any[]): void;
+        Insert(item: any, index: number): void;
+        RemoveAt(index: number): void;
+        SetValueAt(index: number, item: any): void;
+        Clear(): void;
     }
 }
 declare module Fayde.Controls.Internal {
@@ -848,11 +848,11 @@ declare module Fayde.Controls.Internal {
 declare module Fayde.Controls.Internal {
     class SelectionHandler {
         private _ActiveBox;
-        public ActiveBox : TextBox;
+        ActiveBox: TextBox;
         private _IsMouseDown;
         private _TextBoxes;
         constructor(textBoxes: TextBox[]);
-        public Dispose(): void;
+        Dispose(): void;
         private _GotFocus(sender, e);
         private _MouseDown(sender, e);
         private _MouseUp(sender, e);
@@ -870,11 +870,11 @@ declare module Fayde.Controls.Internal {
         Dispose(): any;
     }
     class SpinFlow implements ISpinFlow {
-        public Owner: ISpinOwner;
-        public Spinner: Spinner;
+        Owner: ISpinOwner;
+        Spinner: Spinner;
         constructor(Owner: ISpinOwner, Spinner: Spinner);
-        public UpdateValid(increase: boolean, decrease: boolean): void;
-        public Dispose(): void;
+        UpdateValid(increase: boolean, decrease: boolean): void;
+        Dispose(): void;
         private OnKeyDown(sender, e);
         private OnMouseWheel(sender, e);
         private Spinner_Spin(sender, e);
@@ -898,27 +898,27 @@ declare module Fayde.Controls.Internal {
         UpdateIsEditable(): any;
     }
     class TextBoxFormatter<T> implements ITextBoxFormatter {
-        public Control: IFormattedControl<T>;
-        public TextBox: TextBox;
-        public OnCoerceValue: (val: any) => void;
-        public Value : T;
-        public Text: string;
+        Control: IFormattedControl<T>;
+        TextBox: TextBox;
+        OnCoerceValue: (val: any) => void;
+        Value: T;
+        Text: string;
         constructor(Control: IFormattedControl<T>, TextBox: TextBox, OnCoerceValue: (val: any) => void);
-        public ProcessUserInput(): void;
-        public Dispose(): void;
+        ProcessUserInput(): void;
+        Dispose(): void;
         private TextBox_LostFocus(sender, e);
         private TextBox_GotFocus(sender, e);
-        public ApplyValue(text: string): void;
-        public OnParseError(e: UpDownParseErrorEventArgs): void;
-        public OnParsing(e: UpDownParsingEventArgs<T>): void;
-        public SelectAllText(): void;
-        public UpdateTextBoxText(): void;
-        public UpdateIsEditable(): void;
+        ApplyValue(text: string): void;
+        OnParseError(e: UpDownParseErrorEventArgs): void;
+        OnParsing(e: UpDownParsingEventArgs<T>): void;
+        SelectAllText(): void;
+        UpdateTextBoxText(): void;
+        UpdateIsEditable(): void;
     }
 }
 declare module Fayde.Controls {
     class TabPanel extends Panel {
-        public CreateLayoutUpdater(): tabpanel.TabPanelUpdater;
+        CreateLayoutUpdater(): tabpanel.TabPanelUpdater;
         private TabAlignment;
         static setTabAlignment(tp: TabPanel, alignment: Dock): void;
     }
@@ -927,59 +927,64 @@ declare module Fayde.Controls.tabpanel {
     interface ITabPanelUpdaterAssets extends minerva.controls.panel.IPanelUpdaterAssets, measure.IInput, arrange.IInput {
     }
     class TabPanelUpdater extends minerva.controls.panel.PanelUpdater {
-        public assets: ITabPanelUpdaterAssets;
-        public init(): void;
+        assets: ITabPanelUpdaterAssets;
+        init(): void;
     }
 }
 declare module Fayde.Controls.tabpanel.arrange {
-    interface IInput extends minerva.controls.panel.arrange.IInput {
+    import panel = minerva.controls.panel;
+    interface IInput extends panel.arrange.IInput {
         tabAlignment: Dock;
         numRows: number;
         numHeaders: number;
         rowHeight: number;
     }
-    interface IState extends minerva.controls.panel.arrange.IState {
+    interface IState extends panel.arrange.IState {
     }
-    interface IOutput extends minerva.controls.panel.arrange.IOutput {
+    interface IOutput extends panel.arrange.IOutput {
     }
-    class TabPanelArrangePipeDef extends minerva.controls.panel.arrange.PanelArrangePipeDef {
+    class TabPanelArrangePipeDef extends panel.arrange.PanelArrangePipeDef {
         constructor();
     }
 }
 declare module Fayde.Controls.tabpanel.arrange.tapins {
-    function doHorizontal(input: IInput, state: IState, output: IOutput, tree: minerva.controls.panel.PanelUpdaterTree, finalRect: minerva.Rect): boolean;
+    import Rect = minerva.Rect;
+    function doHorizontal(input: IInput, state: IState, output: IOutput, tree: minerva.controls.panel.PanelUpdaterTree, finalRect: Rect): boolean;
 }
 declare module Fayde.Controls.tabpanel.arrange.tapins {
     function doVertical(input: IInput, state: IState, output: IOutput, tree: minerva.core.IUpdaterTree, finalRect: minerva.Rect): boolean;
 }
 declare module Fayde.Controls.tabpanel {
+    import Size = minerva.Size;
+    import PanelUpdaterTree = minerva.controls.panel.PanelUpdaterTree;
     module helpers {
-        function getDesiredSizeWithoutMargin(upd: minerva.core.Updater): minerva.Size;
-        function getHeadersSize(tree: minerva.controls.panel.PanelUpdaterTree): number[];
+        function getDesiredSizeWithoutMargin(upd: minerva.core.Updater): Size;
+        function getHeadersSize(tree: PanelUpdaterTree): number[];
         function setTabItemZ(upd: minerva.core.Updater): void;
-        function getActiveRow(tree: minerva.controls.panel.PanelUpdaterTree, solution: number[], isDockTop: boolean): number;
-        function calculateHeaderDistribution(tree: minerva.controls.panel.PanelUpdaterTree, rowWidthLimit: number, headerWidth: number[]): number[];
+        function getActiveRow(tree: PanelUpdaterTree, solution: number[], isDockTop: boolean): number;
+        function calculateHeaderDistribution(tree: PanelUpdaterTree, rowWidthLimit: number, headerWidth: number[]): number[];
     }
 }
 declare module Fayde.Controls.tabpanel.measure {
-    interface IInput extends minerva.controls.panel.measure.IInput {
+    import panel = minerva.controls.panel;
+    interface IInput extends panel.measure.IInput {
         tabAlignment: Dock;
         numRows: number;
         numHeaders: number;
         rowHeight: number;
     }
-    interface IState extends minerva.controls.panel.measure.IState {
+    interface IState extends panel.measure.IState {
     }
-    interface IOutput extends minerva.controls.panel.measure.IOutput {
+    interface IOutput extends panel.measure.IOutput {
         numRows: number;
         numHeaders: number;
         rowHeight: number;
     }
-    class TabPanelMeasurePipeDef extends minerva.controls.panel.measure.PanelMeasurePipeDef {
+    class TabPanelMeasurePipeDef extends panel.measure.PanelMeasurePipeDef {
         constructor();
-        public createOutput(): IOutput;
-        public prepare(input: IInput, state: IState, output: IOutput): void;
-        public flush(input: IInput, state: IState, output: IOutput): void;
+        createOutput(): IOutput;
+        prepare(input: IInput, state: IState, output: IOutput): void;
+        flush(input: IInput, state: IState, output: IOutput): void;
     }
 }
 declare module Fayde.Controls.tabpanel.measure.tapins {
@@ -990,42 +995,45 @@ declare module Fayde.Controls.tabpanel.measure.tapins {
 }
 declare module Fayde.Controls {
     class WrapPanel extends Panel {
-        public CreateLayoutUpdater(): wrappanel.WrapPanelUpdater;
+        CreateLayoutUpdater(): wrappanel.WrapPanelUpdater;
         static OrientationProperty: DependencyProperty;
         static ItemWidthProperty: DependencyProperty;
         static ItemHeightProperty: DependencyProperty;
-        public Orientation: Orientation;
-        public ItemWidth: number;
-        public ItemHeight: number;
+        Orientation: Orientation;
+        ItemWidth: number;
+        ItemHeight: number;
     }
 }
 declare module Fayde.Controls.wrappanel {
     interface IWrapPanelUpdaterAssets extends minerva.controls.panel.IPanelUpdaterAssets, measure.IInput, arrange.IInput {
     }
     class WrapPanelUpdater extends minerva.controls.panel.PanelUpdater {
-        public assets: IWrapPanelUpdaterAssets;
-        public init(): void;
+        assets: IWrapPanelUpdaterAssets;
+        init(): void;
     }
 }
 declare module Fayde.Controls.wrappanel.arrange {
-    interface IInput extends minerva.controls.panel.arrange.IInput {
+    import panel = minerva.controls.panel;
+    interface IInput extends panel.arrange.IInput {
         orientation: Orientation;
         itemWidth: number;
         itemHeight: number;
     }
-    interface IState extends minerva.controls.panel.arrange.IState {
+    interface IState extends panel.arrange.IState {
     }
-    interface IOutput extends minerva.controls.panel.arrange.IOutput {
+    interface IOutput extends panel.arrange.IOutput {
     }
-    class WrapPanelArrangePipeDef extends minerva.controls.panel.arrange.PanelArrangePipeDef {
+    class WrapPanelArrangePipeDef extends panel.arrange.PanelArrangePipeDef {
         constructor();
     }
 }
 declare module Fayde.Controls.wrappanel.arrange.tapins {
-    function doHorizontal(input: IInput, state: IState, output: IOutput, tree: minerva.core.IUpdaterTree, finalRect: minerva.Rect): boolean;
+    import Rect = minerva.Rect;
+    function doHorizontal(input: IInput, state: IState, output: IOutput, tree: minerva.core.IUpdaterTree, finalRect: Rect): boolean;
 }
 declare module Fayde.Controls.wrappanel.arrange.tapins {
-    function doVertical(input: IInput, state: IState, output: IOutput, tree: minerva.core.IUpdaterTree, finalRect: minerva.Rect): boolean;
+    import Rect = minerva.Rect;
+    function doVertical(input: IInput, state: IState, output: IOutput, tree: minerva.core.IUpdaterTree, finalRect: Rect): boolean;
 }
 declare module Fayde.Controls.wrappanel {
     module helpers {
@@ -1033,22 +1041,25 @@ declare module Fayde.Controls.wrappanel {
     }
 }
 declare module Fayde.Controls.wrappanel.measure {
-    interface IInput extends minerva.controls.panel.measure.IInput {
+    import panel = minerva.controls.panel;
+    interface IInput extends panel.measure.IInput {
         orientation: Orientation;
         itemWidth: number;
         itemHeight: number;
     }
-    interface IState extends minerva.controls.panel.measure.IState {
+    interface IState extends panel.measure.IState {
     }
-    interface IOutput extends minerva.controls.panel.measure.IOutput {
+    interface IOutput extends panel.measure.IOutput {
     }
-    class WrapPanelMeasurePipeDef extends minerva.controls.panel.measure.PanelMeasurePipeDef {
+    class WrapPanelMeasurePipeDef extends panel.measure.PanelMeasurePipeDef {
         constructor();
     }
 }
 declare module Fayde.Controls.wrappanel.measure.tapins {
-    function doHorizontal(input: IInput, state: IState, output: IOutput, tree: minerva.core.IUpdaterTree, availableSize: minerva.Size): boolean;
+    import Size = minerva.Size;
+    function doHorizontal(input: IInput, state: IState, output: IOutput, tree: minerva.core.IUpdaterTree, availableSize: Size): boolean;
 }
 declare module Fayde.Controls.wrappanel.measure.tapins {
-    function doVertical(input: IInput, state: IState, output: IOutput, tree: minerva.core.IUpdaterTree, availableSize: minerva.Size): boolean;
+    import Size = minerva.Size;
+    function doVertical(input: IInput, state: IState, output: IOutput, tree: minerva.core.IUpdaterTree, availableSize: Size): boolean;
 }

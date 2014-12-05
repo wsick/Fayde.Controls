@@ -7,7 +7,7 @@ module Fayde.Controls {
         _Spinner: Spinner = null;
         private _Text: string = "";
 
-        static SpinnerStyleProperty = DependencyProperty.Register("SpinnerStyle", () => Style, UpDownBase, undefined, (d, args) => (<UpDownBase<T>>d).OnSpinnerStyleChanged(args.OldValue, args.NewValue));
+        static SpinnerStyleProperty = DependencyProperty.Register("SpinnerStyle", () => Style, UpDownBase, undefined, <T>(d: UpDownBase<T>, args) => d.OnSpinnerStyleChanged(args.OldValue, args.NewValue));
         SpinnerStyle: Style;
         private OnSpinnerStyleChanged(oldStyle: Style, newStyle: Style) { }
 
@@ -39,7 +39,7 @@ module Fayde.Controls {
             this.SetTextBoxText();
         }
 
-        static IsEditableProperty = DependencyProperty.Register("IsEditable", () => Boolean, UpDownBase, true, (d, args) => (<UpDownBase<T>>d).OnIsEditableChanged(args));
+        static IsEditableProperty = DependencyProperty.Register("IsEditable", () => Boolean, UpDownBase, true, <T>(d: UpDownBase<T>, args) => d.OnIsEditableChanged(args));
         IsEditable: boolean;
         private OnIsEditableChanged(args: IDependencyPropertyChangedEventArgs) {
             if (!this._TextBox)
