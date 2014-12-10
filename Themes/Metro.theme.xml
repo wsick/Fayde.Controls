@@ -8,6 +8,8 @@
     <FontFamily x:Key="ContentFontFamily">Segoe UI, Lucida Sans Unicode, Verdana</FontFamily>
     <x:Double x:Key="ContentFontSize">14</x:Double>
 
+    <DropShadowEffect x:Key="DropShadowBrush" Direction="330" Opacity="0.3" ShadowDepth="0" BlurRadius="6"/>
+
     <SolidColorBrush x:Key="TextBrush" Color="Black"/>
     <SolidColorBrush x:Key="TextBoxBorderBrush" Color="#CCCCCC"/>
     <SolidColorBrush x:Key="TextBoxMouseOverBorderBrush" Color="#119EDA"/>
@@ -493,31 +495,25 @@
 
     <!--  controls:ContextMenu  -->
     <Style TargetType="controls:ContextMenu">
-        <Setter Property="Background" Value="#FFF5F5F5"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+        <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
+        <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
+        <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="#FF959595"/>
+        <Setter Property="MinWidth" Value="200"/>
+        <Setter Property="BorderBrush" Value="{StaticResource ThumbBrush}"/>
         <Setter Property="Padding" Value="2"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:ContextMenu">
-                    <Border BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Background="{TemplateBinding Background}" CornerRadius="2">
-                        <Border.Effect>
-                            <DropShadowEffect Color="LightGray" ShadowDepth="3"/>
-                        </Border.Effect>
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Effect="{StaticResource DropShadowBrush}">
                         <Grid>
-                            <Rectangle RadiusX="2" RadiusY="2" Fill="#FFF1F1F1" Width="28" Margin="2"
-                                       HorizontalAlignment="Left"/>
-                            <Rectangle Fill="#FFE2E3E3" Width="1" Margin="30,2,0,2" HorizontalAlignment="Left"/>
-                            <Rectangle Fill="#FFFFFFFF" Width="1" Margin="31,2,0,2" HorizontalAlignment="Left"/>
-                            <!--<ScrollViewer
-                                Margin="1,0,1,0"
-                                Grid.ColumnSpan="2"
-                                BorderThickness="0"
-                                VerticalScrollBarVisibility="Auto">-->
+                            <Rectangle Fill="White" HorizontalAlignment="Left" Margin="2" RadiusY="2" RadiusX="2" Width="28"/>
+                            <Rectangle Fill="White" HorizontalAlignment="Left" Margin="30,2,0,2" Width="1"/>
+                            <Rectangle Fill="White" HorizontalAlignment="Left" Margin="31,2,0,2" Width="1"/>
                             <ItemsPresenter Margin="{TemplateBinding Padding}"/>
-                            <!--</ScrollViewer>-->
                         </Grid>
                     </Border>
                 </ControlTemplate>
@@ -539,8 +535,10 @@
                                 <VisualState x:Name="Normal"/>
                                 <VisualState x:Name="Disabled">
                                     <Storyboard>
-                                        <DoubleAnimation Duration="0" Storyboard.TargetName="Presenter"
-                                                         Storyboard.TargetProperty="Opacity" To="0.5"/>
+                                        <DoubleAnimation Duration="0" To="0.5" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="Presenter"/>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="contentPresenter">
+                                            <EasingDoubleKeyFrame KeyTime="0" Value="0.3"/>
+                                        </DoubleAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
@@ -548,69 +546,29 @@
                                 <VisualState x:Name="Unfocused"/>
                                 <VisualState x:Name="Focused">
                                     <Storyboard>
-                                        <DoubleAnimation Duration="0" Storyboard.TargetName="Bg"
-                                                         Storyboard.TargetProperty="Opacity" To="1"/>
-                                        <ColorAnimation Duration="0" Storyboard.TargetName="InnerBorder"
-                                                        Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)"
-                                                        To="#40FFFFFF"/>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="MouseOverRectangle">
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0.695"/>
+                                        </DoubleAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <Rectangle RadiusX="2" RadiusY="2" Fill="{TemplateBinding Background}"
-                                   Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1"/>
-                        <Rectangle x:Name="Bg" RadiusX="2" RadiusY="2" Stroke="#8071CBF1" StrokeThickness="1"
-                                   Opacity="0">
-                            <Rectangle.Fill>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                    <LinearGradientBrush.GradientStops>
-                                        <GradientStop Color="#34C5EBFF" Offset="0"/>
-                                        <GradientStop Color="#3481D8FF" Offset="1"/>
-                                    </LinearGradientBrush.GradientStops>
-                                </LinearGradientBrush>
-                            </Rectangle.Fill>
-                        </Rectangle>
-                        <Rectangle x:Name="InnerBorder" RadiusX="2" RadiusY="2" Stroke="Transparent" Margin="1"/>
-                        <Grid>
+                        <Rectangle x:Name="MouseOverRectangle" IsHitTestVisible="False" Opacity="0" Fill="#FFD8D8D9"/>
+                        <Grid Background="Transparent">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" MinWidth="24"/>
+                                <ColumnDefinition MinWidth="24" Width="Auto"/>
                                 <ColumnDefinition Width="4"/>
                                 <ColumnDefinition Width="*"/>
-                                <!--<ColumnDefinition Width="37"/>
-                                <ColumnDefinition Width="Auto"/>-->
                                 <ColumnDefinition Width="17"/>
                             </Grid.ColumnDefinitions>
-                            <ContentPresenter Content="{TemplateBinding Icon}" Margin="1" VerticalAlignment="Center"/>
-                            <!--<Border
-                                BorderThickness="1"
-                                CornerRadius="3"
-                                BorderBrush="#FFCDD3E6"
-                                Background="#FFE6EFF4"
-                                x:Name="GlyphPanel"
-                                Width="22"
-                                Height="22"
-                                Margin="1"
-                                Visibility="Collapsed">
-                                <Path
-                                    Data="M0,5.1L1.7,5.2 3.4,7.1 8,0.4 9.2,0 3.3,10.8z"
-                                    Fill="#FF0C12A1"
-                                    x:Name="Glyph"
-                                    Width="9"
-                                    Height="11"
-                                    FlowDirection="LeftToRight"/>
-                            </Border>-->
-                            <ContentPresenter x:Name="Presenter" Content="{TemplateBinding Header}"
-                                              ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                              Margin="{TemplateBinding Padding}" Grid.Column="2"/>
-                            <!--<TextBlock
-                                Text="{TemplateBinding InputGestureText}"
-                                Margin="{TemplateBinding Padding}"
-                                Grid.Column="4"/>-->
+                            <ContentPresenter x:Name="contentPresenter" Content="{TemplateBinding Icon}" Margin="1" VerticalAlignment="Center"/>
+                            <ContentPresenter x:Name="Presenter" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" Grid.Column="2" Margin="{TemplateBinding Padding}"/>
                         </Grid>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     </Style>
 
     <!--  controls:Separator  -->
