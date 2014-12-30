@@ -2,7 +2,7 @@ var Fayde;
 (function (Fayde) {
     var Controls;
     (function (Controls) {
-        Controls.Version = '0.15.0';
+        Controls.Version = '0.15.1';
     })(Controls = Fayde.Controls || (Fayde.Controls = {}));
 })(Fayde || (Fayde = {}));
 var Fayde;
