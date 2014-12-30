@@ -1,7 +1,7 @@
 module runner {
     var libpath = "lib/Fayde.Controls/dist/Fayde.Controls";
     var testModules = [
-        ".build/tests/test1"
+        ".build/tests/numericupdown"
     ];
 
     Fayde.LoadConfigJson((config, err) => {
