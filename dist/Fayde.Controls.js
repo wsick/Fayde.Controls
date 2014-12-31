@@ -5219,7 +5219,7 @@ var Fayde;
                 var dict = this._ValidationSummaryItemDictionary;
                 if (dict[key]) {
                     this._Errors.Remove(dict[key]);
-                    this._ValidationSummaryItemDictionary[key] = undefined;
+                    dict[key] = undefined;
                 }
                 if (e.Action !== 0 /* Added */ || !ValidationSummary.GetShowErrorsInSummary(element))
                     return;

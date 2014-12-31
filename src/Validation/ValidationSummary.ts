@@ -227,7 +227,7 @@ module Fayde.Controls {
             var dict = this._ValidationSummaryItemDictionary;
             if (dict[key]) {
                 this._Errors.Remove(dict[key]);
-                this._ValidationSummaryItemDictionary[key] = undefined;
+                dict[key] = undefined;
             }
             if (e.Action !== Validation.ValidationErrorEventAction.Added || !ValidationSummary.GetShowErrorsInSummary(element))
                 return;
