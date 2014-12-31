@@ -5056,6 +5056,11 @@ var Fayde;
             ValidationSummary.SetShowErrorsInSummary = function (dobj, value) {
                 dobj.SetValue(ValidationSummary.ShowErrorsInSummaryProperty, value === true);
             };
+            ValidationSummary.OnShowErrorsInSummaryChanged = function (dobj, args) {
+                var root = Fayde.VisualTreeHelper.GetRoot(dobj);
+                if (root)
+                    ValidationSummary.UpdateDisplayedErrorsOnAllValidationSummaries(root);
+            };
             ValidationSummary.prototype.OnFilterChanged = function (oldValue, newValue) {
                 this.UpdateDisplayedErrors();
             };
@@ -5239,7 +5244,7 @@ var Fayde;
                 if (item.Sources.Count === 0)
                     this._CurSummItemsSource = null;
                 else if (ValidationSummary.FindMatchingErrorSource(item.Sources, this._CurSummItemsSource) < 0)
-                    this._CurSummItemsSource = item.Sources[0];
+                    this._CurSummItemsSource = item.Sources.GetValueAt(0);
                 var e = new Controls.FocusingInvalidControlEventArgs(item, this._CurSummItemsSource);
                 this.FocusingInvalidControl.raise(this, e);
                 if (!e.Handled && e.Target != null && e.Target.Control != null)
@@ -5254,7 +5259,7 @@ var Fayde;
                 if (!sources)
                     return -1;
                 for (var i = 0; i < sources.Count; i++) {
-                    if (sources[i].Equals(sourceToFind))
+                    if (sources.GetValueAt(i).Equals(sourceToFind))
                         return i;
                 }
                 return -1;
@@ -5271,7 +5276,7 @@ var Fayde;
                     }
                 }
             };
-            ValidationSummary.ShowErrorsInSummaryProperty = DependencyProperty.RegisterAttached("ShowErrorsInSummary", function () { return Boolean; }, ValidationSummary, true);
+            ValidationSummary.ShowErrorsInSummaryProperty = DependencyProperty.RegisterAttached("ShowErrorsInSummary", function () { return Boolean; }, ValidationSummary, true, ValidationSummary.OnShowErrorsInSummaryChanged);
             ValidationSummary.ErrorStyleProperty = DependencyProperty.Register("ErrorStyle", function () { return Fayde.Style; }, ValidationSummary);
             ValidationSummary.FilterProperty = DependencyProperty.Register("Filter", function () { return new Fayde.Enum(Controls.ValidationSummaryFilters); }, ValidationSummary, Controls.ValidationSummaryFilters.All, function (d, args) { return d.OnFilterChanged(args.OldValue, args.NewValue); });
             ValidationSummary.FocusControlsOnClickProperty = DependencyProperty.Register("FocusControlsOnClick", function () { return Boolean; }, ValidationSummary, true);

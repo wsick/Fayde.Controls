@@ -7,7 +7,7 @@
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="First Name:" Margin="4" VerticalAlignment="Center" />
                 <TextBox Margin="4" MinWidth="200" VerticalAlignment="Center"
-                         Text="{Binding Person.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                         Text="{Binding Person.FirstName, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Last Name:" Margin="4" VerticalAlignment="Center" />

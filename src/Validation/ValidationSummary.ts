@@ -255,7 +255,7 @@ module Fayde.Controls {
             if (item.Sources.Count === 0)
                 this._CurSummItemsSource = null;
             else if (ValidationSummary.FindMatchingErrorSource(item.Sources, this._CurSummItemsSource) < 0)
-                this._CurSummItemsSource = item.Sources[0];
+                this._CurSummItemsSource = item.Sources.GetValueAt(0);
             var e = new FocusingInvalidControlEventArgs(item, this._CurSummItemsSource);
             this.FocusingInvalidControl.raise(this, e);
             if (!e.Handled && e.Target != null && e.Target.Control != null)
@@ -271,7 +271,7 @@ module Fayde.Controls {
             if (!sources)
                 return -1;
             for (var i = 0; i < sources.Count; i++) {
-                if (sources[i].Equals(sourceToFind))
+                if (sources.GetValueAt(i).Equals(sourceToFind))
                     return i;
             }
             return -1;

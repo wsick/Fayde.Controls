@@ -1037,6 +1037,7 @@ declare module Fayde.Controls {
         HeaderTemplate: DataTemplate;
         SummaryListBoxStyle: Style;
         Target: UIElement;
+        private static OnShowErrorsInSummaryChanged(dobj, args);
         OnFilterChanged(oldValue: ValidationSummaryFilters, newValue: ValidationSummaryFilters): void;
         OnHeaderChanged(oldValue: any, newValue: any): void;
         OnTargetChanged(oldValue: UIElement, newValue: UIElement): void;
