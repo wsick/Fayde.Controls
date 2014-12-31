@@ -248,6 +248,12 @@ declare module Fayde.Controls {
         Regular = 0,
         Military = 1,
     }
+    enum ValidationSummaryFilters {
+        None = 0,
+        ObjectErrors = 1,
+        PropertyErrors = 2,
+        All,
+    }
 }
 declare module Fayde.Controls {
     class GridSplitter extends Control {
@@ -643,6 +649,30 @@ declare module Fayde.Controls {
         Value: T;
         Handled: boolean;
         constructor(text: string);
+    }
+}
+declare module Fayde.Controls {
+    class ValidationSummary extends Control {
+        static ShowErrorsInSummaryProperty: DependencyProperty;
+        static ErrorStyleProperty: DependencyProperty;
+        static FilterProperty: DependencyProperty;
+        static FocusControlsOnClickProperty: DependencyProperty;
+        static HasErrorsProperty: DependencyProperty;
+        static HasDisplayedErrorsProperty: DependencyProperty;
+        static HeaderProperty: DependencyProperty;
+        static HeaderTemplateProperty: DependencyProperty;
+        static SummaryListBoxStyleProperty: DependencyProperty;
+        static TargetProperty: DependencyProperty;
+        ShowErrorsInSummary: boolean;
+        ErrorStyle: Style;
+        Filter: ValidationSummaryFilters;
+        FocusControlsOnClick: boolean;
+        HasErrors: boolean;
+        HasDisplayedErrors: boolean;
+        Header: any;
+        HeaderTemplate: DataTemplate;
+        SummaryListBoxStyle: Style;
+        Target: UIElement;
     }
 }
 declare module Fayde.Controls.contextmenu {

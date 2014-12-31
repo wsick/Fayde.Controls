@@ -17,7 +17,7 @@ module Fayde.Controls {
         TextBoxCannotLoseFocus
     }
     Library.addEnum(InvalidInputAction, "InvalidInputAction");
-    
+
     export enum Dock {
         Left,
         Top,
@@ -37,4 +37,12 @@ module Fayde.Controls {
         Military
     }
     Library.addEnum(TimeDisplayMode, "TimeDisplayMode");
+
+    export enum ValidationSummaryFilters {
+        None = 0,
+        ObjectErrors = 1,
+        PropertyErrors = 2,
+        All = PropertyErrors | ObjectErrors,
+    }
+    Library.addEnum(ValidationSummaryFilters, "ValidationSummaryFilters");
 }
