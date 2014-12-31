@@ -233,9 +233,9 @@ module Fayde.Controls {
                 return;
 
             var caption = e.Error.PropertyName;
-            var validationSummaryItem = new ValidationSummaryItem(message, caption, ValidationSummaryItemType.PropertyError, new ValidationSummaryItemSource(caption, <Control>element), null);
-            this._Errors.Add(validationSummaryItem);
-            dict[key] = validationSummaryItem;
+            var item = new ValidationSummaryItem(message, caption, ValidationSummaryItemType.PropertyError, new ValidationSummaryItemSource(caption, <Control>element), null);
+            this._Errors.Add(item);
+            dict[key] = item;
         }
 
         private GetHeaderString (): string {
@@ -264,7 +264,7 @@ module Fayde.Controls {
                 return;
             var matchingErrorSource = ValidationSummary.FindMatchingErrorSource(item.Sources, e.Target);
             var index = matchingErrorSource < 0 ? 0 : (matchingErrorSource + 1) % item.Sources.Count;
-            this._CurSummItemsSource = item.Sources[index];
+            this._CurSummItemsSource = item.Sources.GetValueAt(index);
         }
 
         private static FindMatchingErrorSource (sources: nullstone.ICollection<ValidationSummaryItemSource>, sourceToFind: ValidationSummaryItemSource): number {

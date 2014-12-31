@@ -5224,9 +5224,9 @@ var Fayde;
                 if (e.Action !== 0 /* Added */ || !ValidationSummary.GetShowErrorsInSummary(element))
                     return;
                 var caption = e.Error.PropertyName;
-                var validationSummaryItem = new Controls.ValidationSummaryItem(message, caption, 2 /* PropertyError */, new Controls.ValidationSummaryItemSource(caption, element), null);
-                this._Errors.Add(validationSummaryItem);
-                dict[key] = validationSummaryItem;
+                var item = new Controls.ValidationSummaryItem(message, caption, 2 /* PropertyError */, new Controls.ValidationSummaryItemSource(caption, element), null);
+                this._Errors.Add(item);
+                dict[key] = item;
             };
             ValidationSummary.prototype.GetHeaderString = function () {
                 var count = this._DisplayedErrors.Count;
@@ -5253,7 +5253,7 @@ var Fayde;
                     return;
                 var matchingErrorSource = ValidationSummary.FindMatchingErrorSource(item.Sources, e.Target);
                 var index = matchingErrorSource < 0 ? 0 : (matchingErrorSource + 1) % item.Sources.Count;
-                this._CurSummItemsSource = item.Sources[index];
+                this._CurSummItemsSource = item.Sources.GetValueAt(index);
             };
             ValidationSummary.FindMatchingErrorSource = function (sources, sourceToFind) {
                 if (!sources)
