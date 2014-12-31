@@ -1004,6 +1004,16 @@ declare module Fayde.Controls.tabpanel.measure.tapins {
     function doVertical(input: IInput, state: IState, output: IOutput, tree: minerva.core.IUpdaterTree, availableSize: minerva.Size): boolean;
 }
 declare module Fayde.Controls {
+    class FocusingInvalidControlEventArgs implements nullstone.IEventArgs {
+        Handled: boolean;
+        Item: ValidationSummaryItem;
+        Target: ValidationSummaryItemSource;
+        constructor(item: ValidationSummaryItem, target: ValidationSummaryItemSource);
+    }
+}
+declare module Fayde.Controls {
+    import ObservableCollection = Fayde.Collections.ObservableCollection;
+    import ReadOnlyObservableCollection = Fayde.Collections.ReadOnlyObservableCollection;
     class ValidationSummary extends Control {
         static ShowErrorsInSummaryProperty: DependencyProperty;
         static ErrorStyleProperty: DependencyProperty;
@@ -1015,6 +1025,8 @@ declare module Fayde.Controls {
         static HeaderTemplateProperty: DependencyProperty;
         static SummaryListBoxStyleProperty: DependencyProperty;
         static TargetProperty: DependencyProperty;
+        static GetShowErrorsInSummary(dobj: DependencyObject): boolean;
+        static SetShowErrorsInSummary(dobj: DependencyObject, value: boolean): void;
         ShowErrorsInSummary: boolean;
         ErrorStyle: Style;
         Filter: ValidationSummaryFilters;
@@ -1025,6 +1037,39 @@ declare module Fayde.Controls {
         HeaderTemplate: DataTemplate;
         SummaryListBoxStyle: Style;
         Target: UIElement;
+        OnFilterChanged(oldValue: ValidationSummaryFilters, newValue: ValidationSummaryFilters): void;
+        OnHeaderChanged(oldValue: any, newValue: any): void;
+        OnTargetChanged(oldValue: UIElement, newValue: UIElement): void;
+        private _ErrorsListBox;
+        private _HeaderContentControl;
+        private _RegisteredParent;
+        private _ValidationSummaryItemDictionary;
+        private _CurSummItemsSource;
+        private _Errors;
+        Errors: ObservableCollection<ValidationSummaryItem>;
+        private _DisplayedErrors;
+        DisplayedErrors: ReadOnlyObservableCollection<ValidationSummaryItem>;
+        FocusingInvalidControl: nullstone.Event<FocusingInvalidControlEventArgs>;
+        SelectionChanged: nullstone.Event<Primitives.SelectionChangedEventArgs>;
+        constructor();
+        OnApplyTemplate(): void;
+        private Errors_CollectionChanged(sender, e);
+        private ErrorsListBox_KeyDown(sender, e);
+        private ErrorsListBox_MouseLeftButtonUp(sender, e);
+        private ErrorsListBox_SelectionChanged(sender, e);
+        private ValidationSummary_Loaded(sender, e);
+        private ValidationSummary_Unloaded(sender, e);
+        private ValidationSummary_IsEnabledChanged(sender, e);
+        private ValidationSummaryItem_PropertyChanged(sender, e);
+        private UpdateValidation(useTransitions);
+        private UpdateCommon(useTransitions);
+        private UpdateHeaderText();
+        private UpdateDisplayedErrors();
+        private Target_BindingValidationError(sender, e);
+        private GetHeaderString();
+        private ExecuteClick(sender);
+        private static FindMatchingErrorSource(sources, sourceToFind);
+        private static UpdateDisplayedErrorsOnAllValidationSummaries(parent);
     }
 }
 declare module Fayde.Controls {
@@ -1046,6 +1091,9 @@ declare module Fayde.Controls {
         constructor(propertyName: string, control?: Control);
         Equals(other: any): boolean;
     }
+}
+declare module Fayde.Controls {
+    function compareSummaryItems(item1: ValidationSummaryItem, item2: ValidationSummaryItem): number;
 }
 declare module Fayde.Controls {
     class WrapPanel extends Panel {

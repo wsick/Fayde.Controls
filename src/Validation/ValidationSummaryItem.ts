@@ -8,7 +8,7 @@ module Fayde.Controls {
         Context: any;
 
         private _Sources: ObservableCollection<ValidationSummaryItemSource>;
-        get Sources () {
+        get Sources (): ObservableCollection<ValidationSummaryItemSource> {
             return this._Sources;
         }
 
@@ -19,7 +19,7 @@ module Fayde.Controls {
             this.ItemType = itemType || ValidationSummaryItemType.ObjectError;
             this._Sources = new ObservableCollection<ValidationSummaryItemSource>();
             if (source != null)
-                this.Sources.Add(source);
+                this._Sources.Add(source);
             this.Context = context;
         }
     }

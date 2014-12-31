@@ -5008,26 +5008,306 @@ var Fayde;
 (function (Fayde) {
     var Controls;
     (function (Controls) {
+        var FocusingInvalidControlEventArgs = (function () {
+            function FocusingInvalidControlEventArgs(item, target) {
+                this.Handled = false;
+                Object.defineProperties(this, {
+                    "Item": {
+                        value: item,
+                        writable: false
+                    },
+                    "Target": {
+                        value: target,
+                        writable: false
+                    }
+                });
+            }
+            return FocusingInvalidControlEventArgs;
+        })();
+        Controls.FocusingInvalidControlEventArgs = FocusingInvalidControlEventArgs;
+    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    var Controls;
+    (function (Controls) {
+        var ObservableCollection = Fayde.Collections.ObservableCollection;
+        var ReadOnlyObservableCollection = Fayde.Collections.ReadOnlyObservableCollection;
         var ValidationSummary = (function (_super) {
             __extends(ValidationSummary, _super);
             function ValidationSummary() {
-                _super.apply(this, arguments);
+                _super.call(this);
+                this._ErrorsListBox = null;
+                this._HeaderContentControl = null;
+                this._ValidationSummaryItemDictionary = {};
+                this._Errors = new ValidationItemCollection();
+                this._DisplayedErrors = new ValidationItemCollection();
+                this.FocusingInvalidControl = new nullstone.Event();
+                this.SelectionChanged = new nullstone.Event();
+                this.DefaultStyleKey = ValidationSummary;
+                this._Errors.CollectionChanged.on(this.Errors_CollectionChanged, this);
+                this.Loaded.on(this.ValidationSummary_Loaded, this);
+                this.Unloaded.on(this.ValidationSummary_Unloaded, this);
+                this.IsEnabledChanged.on(this.ValidationSummary_IsEnabledChanged, this);
             }
+            ValidationSummary.GetShowErrorsInSummary = function (dobj) {
+                return dobj.GetValue(ValidationSummary.ShowErrorsInSummaryProperty) === true;
+            };
+            ValidationSummary.SetShowErrorsInSummary = function (dobj, value) {
+                dobj.SetValue(ValidationSummary.ShowErrorsInSummaryProperty, value === true);
+            };
+            ValidationSummary.prototype.OnFilterChanged = function (oldValue, newValue) {
+                this.UpdateDisplayedErrors();
+            };
+            ValidationSummary.prototype.OnHeaderChanged = function (oldValue, newValue) {
+                this.UpdateHeaderText();
+            };
+            ValidationSummary.prototype.OnTargetChanged = function (oldValue, newValue) {
+                if (this._RegisteredParent != null) {
+                    this._RegisteredParent.BindingValidationError.off(this.Target_BindingValidationError, this);
+                    this._RegisteredParent = null;
+                }
+                if (oldValue instanceof Fayde.FrameworkElement)
+                    oldValue.BindingValidationError.off(this.Target_BindingValidationError, this);
+                if (newValue instanceof Fayde.FrameworkElement)
+                    newValue.BindingValidationError.on(this.Target_BindingValidationError, this);
+                this._Errors.ClearErrors(2 /* PropertyError */);
+                this.UpdateDisplayedErrors();
+            };
+            Object.defineProperty(ValidationSummary.prototype, "Errors", {
+                get: function () {
+                    return this._Errors;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(ValidationSummary.prototype, "DisplayedErrors", {
+                get: function () {
+                    return new ReadOnlyObservableCollection(this._DisplayedErrors);
+                },
+                enumerable: true,
+                configurable: true
+            });
+            ValidationSummary.prototype.OnApplyTemplate = function () {
+                _super.prototype.OnApplyTemplate.call(this);
+                if (this._ErrorsListBox != null) {
+                    this._ErrorsListBox.MouseLeftButtonUp.off(this.ErrorsListBox_MouseLeftButtonUp, this);
+                    this._ErrorsListBox.KeyDown.off(this.ErrorsListBox_KeyDown, this);
+                    this._ErrorsListBox.SelectionChanged.off(this.ErrorsListBox_SelectionChanged, this);
+                }
+                this._ErrorsListBox = this.GetTemplateChild("SummaryListBox", Controls.ListBox);
+                if (this._ErrorsListBox != null) {
+                    this._ErrorsListBox.MouseLeftButtonUp.on(this.ErrorsListBox_MouseLeftButtonUp, this);
+                    this._ErrorsListBox.KeyDown.on(this.ErrorsListBox_KeyDown, this);
+                    this._ErrorsListBox.ItemsSource = this.DisplayedErrors;
+                    this._ErrorsListBox.SelectionChanged.on(this.ErrorsListBox_SelectionChanged, this);
+                }
+                this._HeaderContentControl = this.GetTemplateChild("HeaderContentControl", Controls.ContentControl);
+                this.UpdateDisplayedErrors();
+                this.UpdateCommon(false);
+                this.UpdateValidation(false);
+            };
+            ValidationSummary.prototype.Errors_CollectionChanged = function (sender, e) {
+                if (e.OldItems != null) {
+                    for (var i = 0, items = e.OldItems; i < items.length; i++) {
+                        var item = items[i];
+                        if (item)
+                            item.PropertyChanged.off(this.ValidationSummaryItem_PropertyChanged, this);
+                    }
+                }
+                if (e.NewItems != null) {
+                    for (var i = 0, items = e.NewItems; i < items.length; i++) {
+                        var item = items[i];
+                        if (item)
+                            item.PropertyChanged.on(this.ValidationSummaryItem_PropertyChanged, this);
+                    }
+                }
+                this.SetCurrentValue(ValidationSummary.HasErrorsProperty, this._Errors.Count > 0);
+                this.UpdateDisplayedErrors();
+            };
+            ValidationSummary.prototype.ErrorsListBox_KeyDown = function (sender, e) {
+                if (e.Key !== 3 /* Enter */)
+                    return;
+                this.ExecuteClick(sender);
+            };
+            ValidationSummary.prototype.ErrorsListBox_MouseLeftButtonUp = function (sender, e) {
+                this.ExecuteClick(sender);
+            };
+            ValidationSummary.prototype.ErrorsListBox_SelectionChanged = function (sender, e) {
+                this.SelectionChanged.raise(this, e);
+            };
+            ValidationSummary.prototype.ValidationSummary_Loaded = function (sender, e) {
+                if (!this.Target && !this._RegisteredParent) {
+                    var rp = Fayde.VisualTreeHelper.GetParent(this);
+                    this._RegisteredParent = rp instanceof Fayde.FrameworkElement ? rp : null;
+                    if (this._RegisteredParent != null)
+                        this._RegisteredParent.BindingValidationError.on(this.Target_BindingValidationError, this);
+                }
+                this.Loaded.off(this.ValidationSummary_Loaded, this);
+                //this._initialized = true;
+            };
+            ValidationSummary.prototype.ValidationSummary_Unloaded = function (sender, e) {
+                if (this._RegisteredParent != null)
+                    this._RegisteredParent.BindingValidationError.off(this.Target_BindingValidationError, this);
+                this.Unloaded.off(this.ValidationSummary_Unloaded, this);
+                //this._initialized = false;
+            };
+            ValidationSummary.prototype.ValidationSummary_IsEnabledChanged = function (sender, e) {
+                this.UpdateCommon(true);
+            };
+            ValidationSummary.prototype.ValidationSummaryItem_PropertyChanged = function (sender, e) {
+                if (!(e.PropertyName === "ItemType"))
+                    return;
+                this.UpdateDisplayedErrors();
+            };
+            ValidationSummary.prototype.UpdateValidation = function (useTransitions) {
+                var _this = this;
+                var gotoFunc = function (state) { return Fayde.Media.VSM.VisualStateManager.GoToState(_this, state, useTransitions); };
+                if (this._DisplayedErrors.Count > 0) {
+                    this.SetCurrentValue(ValidationSummary.HasDisplayedErrorsProperty, true);
+                    gotoFunc("HasErrors");
+                }
+                else {
+                    this.SetCurrentValue(ValidationSummary.HasDisplayedErrorsProperty, false);
+                    gotoFunc("Empty");
+                }
+            };
+            ValidationSummary.prototype.UpdateCommon = function (useTransitions) {
+                var _this = this;
+                var gotoFunc = function (state) { return Fayde.Media.VSM.VisualStateManager.GoToState(_this, state, useTransitions); };
+                if (this.IsEnabled)
+                    gotoFunc("Normal");
+                else
+                    gotoFunc("Disabled");
+            };
+            ValidationSummary.prototype.UpdateHeaderText = function () {
+                var hcc = this._HeaderContentControl;
+                if (!hcc)
+                    return;
+                hcc.Content = (this.Header != null) ? this.Header : this.GetHeaderString();
+            };
+            ValidationSummary.prototype.UpdateDisplayedErrors = function () {
+                var showoe = (this.Filter & 1 /* ObjectErrors */) !== 0 /* None */;
+                var showpe = (this.Filter & 2 /* PropertyErrors */) !== 0 /* None */;
+                var arr = [];
+                for (var en = this.Errors.getEnumerator(); en.moveNext();) {
+                    var item = en.current;
+                    if (!item)
+                        continue;
+                    if (showoe && item.ItemType === 1 /* ObjectError */)
+                        arr.push(item);
+                    else if (showpe && item.ItemType === 2 /* PropertyError */)
+                        arr.push(item);
+                }
+                arr.sort(Controls.compareSummaryItems);
+                this._DisplayedErrors.Clear();
+                this._DisplayedErrors.AddRange(arr);
+                this.UpdateValidation(true);
+                this.UpdateHeaderText();
+            };
+            ValidationSummary.prototype.Target_BindingValidationError = function (sender, e) {
+                var element = e.OriginalSource;
+                if (!e || !e.Error || (e.Error.ErrorContent == null || !(element instanceof Fayde.FrameworkElement)))
+                    return;
+                var message = e.Error.ErrorContent.toString();
+                var key = (element.Name || (element._ID).toString()) + message;
+                var dict = this._ValidationSummaryItemDictionary;
+                if (dict[key]) {
+                    this._Errors.Remove(dict[key]);
+                    this._ValidationSummaryItemDictionary[key] = undefined;
+                }
+                if (e.Action !== 0 /* Added */ || !ValidationSummary.GetShowErrorsInSummary(element))
+                    return;
+                var caption = e.Error.PropertyName;
+                var validationSummaryItem = new Controls.ValidationSummaryItem(message, caption, 2 /* PropertyError */, new Controls.ValidationSummaryItemSource(caption, element), null);
+                this._Errors.Add(validationSummaryItem);
+                dict[key] = validationSummaryItem;
+            };
+            ValidationSummary.prototype.GetHeaderString = function () {
+                var count = this._DisplayedErrors.Count;
+                if (count === 1)
+                    return "1 Error";
+                return count.toString() + " Errors";
+            };
+            ValidationSummary.prototype.ExecuteClick = function (sender) {
+                var lb = sender;
+                if (!(lb instanceof Controls.ListBox))
+                    return;
+                var item = lb.SelectedItem;
+                if (!(item instanceof Controls.ValidationSummaryItem) || !this.FocusControlsOnClick)
+                    return;
+                if (item.Sources.Count === 0)
+                    this._CurSummItemsSource = null;
+                else if (ValidationSummary.FindMatchingErrorSource(item.Sources, this._CurSummItemsSource) < 0)
+                    this._CurSummItemsSource = item.Sources[0];
+                var e = new Controls.FocusingInvalidControlEventArgs(item, this._CurSummItemsSource);
+                this.FocusingInvalidControl.raise(this, e);
+                if (!e.Handled && e.Target != null && e.Target.Control != null)
+                    e.Target.Control.Focus();
+                if (item.Sources.Count <= 0)
+                    return;
+                var matchingErrorSource = ValidationSummary.FindMatchingErrorSource(item.Sources, e.Target);
+                var index = matchingErrorSource < 0 ? 0 : (matchingErrorSource + 1) % item.Sources.Count;
+                this._CurSummItemsSource = item.Sources[index];
+            };
+            ValidationSummary.FindMatchingErrorSource = function (sources, sourceToFind) {
+                if (!sources)
+                    return -1;
+                for (var i = 0; i < sources.Count; i++) {
+                    if (sources[i].Equals(sourceToFind))
+                        return i;
+                }
+                return -1;
+            };
+            ValidationSummary.UpdateDisplayedErrorsOnAllValidationSummaries = function (parent) {
+                if (!parent)
+                    return;
+                if (parent instanceof ValidationSummary) {
+                    parent.UpdateDisplayedErrors();
+                }
+                else {
+                    for (var i = 0, count = Fayde.VisualTreeHelper.GetChildrenCount(parent); i < count; i++) {
+                        ValidationSummary.UpdateDisplayedErrorsOnAllValidationSummaries(Fayde.VisualTreeHelper.GetChild(parent, i));
+                    }
+                }
+            };
             ValidationSummary.ShowErrorsInSummaryProperty = DependencyProperty.RegisterAttached("ShowErrorsInSummary", function () { return Boolean; }, ValidationSummary, true);
             ValidationSummary.ErrorStyleProperty = DependencyProperty.Register("ErrorStyle", function () { return Fayde.Style; }, ValidationSummary);
-            ValidationSummary.FilterProperty = DependencyProperty.Register("Filter", function () { return new Fayde.Enum(Controls.ValidationSummaryFilters); }, ValidationSummary, Controls.ValidationSummaryFilters.All);
+            ValidationSummary.FilterProperty = DependencyProperty.Register("Filter", function () { return new Fayde.Enum(Controls.ValidationSummaryFilters); }, ValidationSummary, Controls.ValidationSummaryFilters.All, function (d, args) { return d.OnFilterChanged(args.OldValue, args.NewValue); });
             ValidationSummary.FocusControlsOnClickProperty = DependencyProperty.Register("FocusControlsOnClick", function () { return Boolean; }, ValidationSummary, true);
-            ValidationSummary.HasErrorsProperty = DependencyProperty.Register("HasErrors", function () { return Boolean; }, ValidationSummary, false);
-            ValidationSummary.HasDisplayedErrorsProperty = DependencyProperty.Register("HasDisplayedErrors", function () { return Boolean; }, ValidationSummary, false);
-            ValidationSummary.HeaderProperty = DependencyProperty.Register("Header", function () { return Object; }, ValidationSummary);
+            ValidationSummary.HasErrorsProperty = DependencyProperty.RegisterReadOnly("HasErrors", function () { return Boolean; }, ValidationSummary, false);
+            ValidationSummary.HasDisplayedErrorsProperty = DependencyProperty.RegisterReadOnly("HasDisplayedErrors", function () { return Boolean; }, ValidationSummary, false);
+            ValidationSummary.HeaderProperty = DependencyProperty.Register("Header", function () { return Object; }, ValidationSummary, undefined, function (d, args) { return d.OnHeaderChanged(args.OldValue, args.NewValue); });
             ValidationSummary.HeaderTemplateProperty = DependencyProperty.Register("HeaderTemplate", function () { return Fayde.DataTemplate; }, ValidationSummary);
             ValidationSummary.SummaryListBoxStyleProperty = DependencyProperty.Register("SummaryListBoxStyle", function () { return Fayde.Style; }, ValidationSummary);
-            ValidationSummary.TargetProperty = DependencyProperty.Register("Target", function () { return Fayde.UIElement; }, ValidationSummary);
+            ValidationSummary.TargetProperty = DependencyProperty.Register("Target", function () { return Fayde.UIElement; }, ValidationSummary, undefined, function (d, args) { return d.OnTargetChanged(args.OldValue, args.NewValue); });
             return ValidationSummary;
         })(Controls.Control);
         Controls.ValidationSummary = ValidationSummary;
         Controls.TemplateVisualStates(ValidationSummary, { GroupName: "CommonStates", Name: "Normal" }, { GroupName: "CommonStates", Name: "Disabled" }, { GroupName: "ValidationStates", Name: "HasErrors" }, { GroupName: "ValidationStates", Name: "Empty" });
         Controls.TemplateParts(ValidationSummary, { Name: "SummaryListBox", Type: Controls.ListBox });
+        var ValidationItemCollection = (function (_super) {
+            __extends(ValidationItemCollection, _super);
+            function ValidationItemCollection() {
+                _super.apply(this, arguments);
+            }
+            ValidationItemCollection.prototype.ClearErrors = function (errorType) {
+                var toremove = [];
+                for (var en = this.getEnumerator(); en.moveNext();) {
+                    if (en.current != null && en.current.ItemType === errorType)
+                        toremove.push(en.current);
+                }
+                for (var i = 0; i < toremove.length; i++) {
+                    this.Remove(toremove[i]);
+                }
+            };
+            ValidationItemCollection.prototype.ClearItems = function () {
+                while (this.Count > 0) {
+                    this.RemoveAt(0);
+                }
+            };
+            return ValidationItemCollection;
+        })(ObservableCollection);
     })(Controls = Fayde.Controls || (Fayde.Controls = {}));
 })(Fayde || (Fayde = {}));
 var Fayde;
@@ -5044,7 +5324,7 @@ var Fayde;
                 this.ItemType = itemType || 1 /* ObjectError */;
                 this._Sources = new ObservableCollection();
                 if (source != null)
-                    this.Sources.Add(source);
+                    this._Sources.Add(source);
                 this.Context = context;
             }
             Object.defineProperty(ValidationSummaryItem.prototype, "Sources", {
@@ -5086,6 +5366,73 @@ var Fayde;
             return ValidationSummaryItemSource;
         })();
         Controls.ValidationSummaryItemSource = ValidationSummaryItemSource;
+    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    var Controls;
+    (function (Controls) {
+        function compareSummaryItems(item1, item2) {
+            var refs = compareRefs(item1, item2);
+            if (refs != null)
+                return refs;
+            var comp = compareNum(item1.ItemType, item2.ItemType);
+            if (comp !== 0)
+                return comp;
+            var control1 = item1.Sources.Count > 0 ? item1.Sources[0].Control : null;
+            var control2 = item2.Sources.Count > 0 ? item2.Sources[0].Control : null;
+            if (control1 !== control2) {
+                refs = compareRefs(control1, control2);
+                if (refs != null)
+                    return refs;
+                comp = compareNum(control1.TabIndex, control2.TabIndex);
+                if (comp !== 0)
+                    return comp;
+                return compareVisualOrder(control1, control2);
+            }
+        }
+        Controls.compareSummaryItems = compareSummaryItems;
+        function compareRefs(item1, item2) {
+            if (item1 == null)
+                return item2 == null ? null : -1;
+            if (item2 == null)
+                return 1;
+            return null;
+        }
+        function compareNum(x, y) {
+            return x === y ? 0 : (x < y ? -1 : 1);
+        }
+        function compareVisualOrder(control1, control2) {
+            if (!control1 || !control2 || control1 === control2)
+                return 0;
+            var trail = [];
+            var cur = control1;
+            trail.push(cur);
+            while ((cur = Fayde.VisualTreeHelper.GetParent(cur)) != null) {
+                trail.push(cur);
+            }
+            cur = control2;
+            var last = cur;
+            while ((cur = Fayde.VisualTreeHelper.GetParent(cur)) != null) {
+                var index = trail.indexOf(cur);
+                if (index === 0)
+                    return -1;
+                if (index < 0)
+                    continue;
+                var prev = trail[index - 1];
+                if (!last || !prev)
+                    return 0;
+                for (var i = 0, count = Fayde.VisualTreeHelper.GetChildrenCount(cur); i < count; i++) {
+                    var child = Fayde.VisualTreeHelper.GetChild(cur, i);
+                    if (child === prev)
+                        return 1;
+                    if (child === last)
+                        return -1;
+                }
+                last = cur;
+            }
+            return 0;
+        }
     })(Controls = Fayde.Controls || (Fayde.Controls = {}));
 })(Fayde || (Fayde = {}));
 var Fayde;
