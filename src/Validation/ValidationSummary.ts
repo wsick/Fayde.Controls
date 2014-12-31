@@ -225,17 +225,19 @@ module Fayde.Controls {
             var message = e.Error.ErrorContent.toString();
             var key = (element.Name || ((<any>element)._ID).toString()) + message;
             var dict = this._ValidationSummaryItemDictionary;
-            if (dict[key]) {
-                this._Errors.Remove(dict[key]);
-                dict[key] = undefined;
+            if (e.Action === Validation.ValidationErrorEventAction.Added) {
+                if (ValidationSummary.GetShowErrorsInSummary(element) === false)
+                    return;
+                var caption = e.Error.PropertyName;
+                var item = new ValidationSummaryItem(message, caption, ValidationSummaryItemType.PropertyError, new ValidationSummaryItemSource(caption, <Control>element), null);
+                this._Errors.Add(item);
+                dict[key] = item;
+            } else if (e.Action === Validation.ValidationErrorEventAction.Removed) {
+                if (dict[key]) {
+                    this._Errors.Remove(dict[key]);
+                    dict[key] = undefined;
+                }
             }
-            if (e.Action !== Validation.ValidationErrorEventAction.Added || !ValidationSummary.GetShowErrorsInSummary(element))
-                return;
-
-            var caption = e.Error.PropertyName;
-            var item = new ValidationSummaryItem(message, caption, ValidationSummaryItemType.PropertyError, new ValidationSummaryItemSource(caption, <Control>element), null);
-            this._Errors.Add(item);
-            dict[key] = item;
         }
 
         private GetHeaderString (): string {

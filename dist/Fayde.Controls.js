@@ -5217,16 +5217,20 @@ var Fayde;
                 var message = e.Error.ErrorContent.toString();
                 var key = (element.Name || (element._ID).toString()) + message;
                 var dict = this._ValidationSummaryItemDictionary;
-                if (dict[key]) {
-                    this._Errors.Remove(dict[key]);
-                    dict[key] = undefined;
+                if (e.Action === 0 /* Added */) {
+                    if (ValidationSummary.GetShowErrorsInSummary(element) === false)
+                        return;
+                    var caption = e.Error.PropertyName;
+                    var item = new Controls.ValidationSummaryItem(message, caption, 2 /* PropertyError */, new Controls.ValidationSummaryItemSource(caption, element), null);
+                    this._Errors.Add(item);
+                    dict[key] = item;
                 }
-                if (e.Action !== 0 /* Added */ || !ValidationSummary.GetShowErrorsInSummary(element))
-                    return;
-                var caption = e.Error.PropertyName;
-                var item = new Controls.ValidationSummaryItem(message, caption, 2 /* PropertyError */, new Controls.ValidationSummaryItemSource(caption, element), null);
-                this._Errors.Add(item);
-                dict[key] = item;
+                else if (e.Action === 1 /* Removed */) {
+                    if (dict[key]) {
+                        this._Errors.Remove(dict[key]);
+                        dict[key] = undefined;
+                    }
+                }
             };
             ValidationSummary.prototype.GetHeaderString = function () {
                 var count = this._DisplayedErrors.Count;
