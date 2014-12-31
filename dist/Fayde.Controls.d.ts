@@ -254,6 +254,10 @@ declare module Fayde.Controls {
         PropertyErrors = 2,
         All,
     }
+    enum ValidationSummaryItemType {
+        ObjectError = 1,
+        PropertyError = 2,
+    }
 }
 declare module Fayde.Controls {
     class GridSplitter extends Control {
@@ -651,30 +655,6 @@ declare module Fayde.Controls {
         constructor(text: string);
     }
 }
-declare module Fayde.Controls {
-    class ValidationSummary extends Control {
-        static ShowErrorsInSummaryProperty: DependencyProperty;
-        static ErrorStyleProperty: DependencyProperty;
-        static FilterProperty: DependencyProperty;
-        static FocusControlsOnClickProperty: DependencyProperty;
-        static HasErrorsProperty: DependencyProperty;
-        static HasDisplayedErrorsProperty: DependencyProperty;
-        static HeaderProperty: DependencyProperty;
-        static HeaderTemplateProperty: DependencyProperty;
-        static SummaryListBoxStyleProperty: DependencyProperty;
-        static TargetProperty: DependencyProperty;
-        ShowErrorsInSummary: boolean;
-        ErrorStyle: Style;
-        Filter: ValidationSummaryFilters;
-        FocusControlsOnClick: boolean;
-        HasErrors: boolean;
-        HasDisplayedErrors: boolean;
-        Header: any;
-        HeaderTemplate: DataTemplate;
-        SummaryListBoxStyle: Style;
-        Target: UIElement;
-    }
-}
 declare module Fayde.Controls.contextmenu {
     class RootVisualTracker {
         mousePosition: Point;
@@ -1022,6 +1002,50 @@ declare module Fayde.Controls.tabpanel.measure.tapins {
 }
 declare module Fayde.Controls.tabpanel.measure.tapins {
     function doVertical(input: IInput, state: IState, output: IOutput, tree: minerva.core.IUpdaterTree, availableSize: minerva.Size): boolean;
+}
+declare module Fayde.Controls {
+    class ValidationSummary extends Control {
+        static ShowErrorsInSummaryProperty: DependencyProperty;
+        static ErrorStyleProperty: DependencyProperty;
+        static FilterProperty: DependencyProperty;
+        static FocusControlsOnClickProperty: DependencyProperty;
+        static HasErrorsProperty: DependencyProperty;
+        static HasDisplayedErrorsProperty: DependencyProperty;
+        static HeaderProperty: DependencyProperty;
+        static HeaderTemplateProperty: DependencyProperty;
+        static SummaryListBoxStyleProperty: DependencyProperty;
+        static TargetProperty: DependencyProperty;
+        ShowErrorsInSummary: boolean;
+        ErrorStyle: Style;
+        Filter: ValidationSummaryFilters;
+        FocusControlsOnClick: boolean;
+        HasErrors: boolean;
+        HasDisplayedErrors: boolean;
+        Header: any;
+        HeaderTemplate: DataTemplate;
+        SummaryListBoxStyle: Style;
+        Target: UIElement;
+    }
+}
+declare module Fayde.Controls {
+    import ObservableCollection = Collections.ObservableCollection;
+    class ValidationSummaryItem extends MVVM.ObservableObject {
+        Message: string;
+        MessageHeader: string;
+        ItemType: ValidationSummaryItemType;
+        Context: any;
+        private _Sources;
+        Sources: ObservableCollection<ValidationSummaryItemSource>;
+        constructor(message?: string, messageHeader?: string, itemType?: ValidationSummaryItemType, source?: ValidationSummaryItemSource, context?: any);
+    }
+}
+declare module Fayde.Controls {
+    class ValidationSummaryItemSource {
+        PropertyName: string;
+        Control: Control;
+        constructor(propertyName: string, control?: Control);
+        Equals(other: any): boolean;
+    }
 }
 declare module Fayde.Controls {
     class WrapPanel extends Panel {

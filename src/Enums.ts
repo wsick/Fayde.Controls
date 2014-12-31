@@ -45,4 +45,10 @@ module Fayde.Controls {
         All = PropertyErrors | ObjectErrors,
     }
     Library.addEnum(ValidationSummaryFilters, "ValidationSummaryFilters");
+
+    export enum ValidationSummaryItemType {
+        ObjectError = 1,
+        PropertyError = 2,
+    }
+    Library.addEnum(ValidationSummaryItemType, "ValidationSummaryItemType");
 }

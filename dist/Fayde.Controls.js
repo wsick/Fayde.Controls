@@ -1066,6 +1066,12 @@ var Fayde;
         })(Controls.ValidationSummaryFilters || (Controls.ValidationSummaryFilters = {}));
         var ValidationSummaryFilters = Controls.ValidationSummaryFilters;
         Controls.Library.addEnum(ValidationSummaryFilters, "ValidationSummaryFilters");
+        (function (ValidationSummaryItemType) {
+            ValidationSummaryItemType[ValidationSummaryItemType["ObjectError"] = 1] = "ObjectError";
+            ValidationSummaryItemType[ValidationSummaryItemType["PropertyError"] = 2] = "PropertyError";
+        })(Controls.ValidationSummaryItemType || (Controls.ValidationSummaryItemType = {}));
+        var ValidationSummaryItemType = Controls.ValidationSummaryItemType;
+        Controls.Library.addEnum(ValidationSummaryItemType, "ValidationSummaryItemType");
     })(Controls = Fayde.Controls || (Fayde.Controls = {}));
 })(Fayde || (Fayde = {}));
 var Fayde;
@@ -3383,32 +3389,6 @@ var Fayde;
 (function (Fayde) {
     var Controls;
     (function (Controls) {
-        var ValidationSummary = (function (_super) {
-            __extends(ValidationSummary, _super);
-            function ValidationSummary() {
-                _super.apply(this, arguments);
-            }
-            ValidationSummary.ShowErrorsInSummaryProperty = DependencyProperty.RegisterAttached("ShowErrorsInSummary", function () { return Boolean; }, ValidationSummary, true);
-            ValidationSummary.ErrorStyleProperty = DependencyProperty.Register("ErrorStyle", function () { return Fayde.Style; }, ValidationSummary);
-            ValidationSummary.FilterProperty = DependencyProperty.Register("Filter", function () { return new Fayde.Enum(Controls.ValidationSummaryFilters); }, ValidationSummary, Controls.ValidationSummaryFilters.All);
-            ValidationSummary.FocusControlsOnClickProperty = DependencyProperty.Register("FocusControlsOnClick", function () { return Boolean; }, ValidationSummary, true);
-            ValidationSummary.HasErrorsProperty = DependencyProperty.Register("HasErrors", function () { return Boolean; }, ValidationSummary, false);
-            ValidationSummary.HasDisplayedErrorsProperty = DependencyProperty.Register("HasDisplayedErrors", function () { return Boolean; }, ValidationSummary, false);
-            ValidationSummary.HeaderProperty = DependencyProperty.Register("Header", function () { return Object; }, ValidationSummary);
-            ValidationSummary.HeaderTemplateProperty = DependencyProperty.Register("HeaderTemplate", function () { return Fayde.DataTemplate; }, ValidationSummary);
-            ValidationSummary.SummaryListBoxStyleProperty = DependencyProperty.Register("SummaryListBoxStyle", function () { return Fayde.Style; }, ValidationSummary);
-            ValidationSummary.TargetProperty = DependencyProperty.Register("Target", function () { return Fayde.UIElement; }, ValidationSummary);
-            return ValidationSummary;
-        })(Controls.Control);
-        Controls.ValidationSummary = ValidationSummary;
-        Controls.TemplateVisualStates(ValidationSummary, { GroupName: "CommonStates", Name: "Normal" }, { GroupName: "CommonStates", Name: "Disabled" }, { GroupName: "ValidationStates", Name: "HasErrors" }, { GroupName: "ValidationStates", Name: "Empty" });
-        Controls.TemplateParts(ValidationSummary, { Name: "SummaryListBox", Type: Controls.ListBox });
-    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
-})(Fayde || (Fayde = {}));
-var Fayde;
-(function (Fayde) {
-    var Controls;
-    (function (Controls) {
         var contextmenu;
         (function (contextmenu) {
             var RootVisualTracker = (function () {
@@ -5022,6 +5002,90 @@ var Fayde;
                 })(tapins = measure.tapins || (measure.tapins = {}));
             })(measure = tabpanel.measure || (tabpanel.measure = {}));
         })(tabpanel = Controls.tabpanel || (Controls.tabpanel = {}));
+    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    var Controls;
+    (function (Controls) {
+        var ValidationSummary = (function (_super) {
+            __extends(ValidationSummary, _super);
+            function ValidationSummary() {
+                _super.apply(this, arguments);
+            }
+            ValidationSummary.ShowErrorsInSummaryProperty = DependencyProperty.RegisterAttached("ShowErrorsInSummary", function () { return Boolean; }, ValidationSummary, true);
+            ValidationSummary.ErrorStyleProperty = DependencyProperty.Register("ErrorStyle", function () { return Fayde.Style; }, ValidationSummary);
+            ValidationSummary.FilterProperty = DependencyProperty.Register("Filter", function () { return new Fayde.Enum(Controls.ValidationSummaryFilters); }, ValidationSummary, Controls.ValidationSummaryFilters.All);
+            ValidationSummary.FocusControlsOnClickProperty = DependencyProperty.Register("FocusControlsOnClick", function () { return Boolean; }, ValidationSummary, true);
+            ValidationSummary.HasErrorsProperty = DependencyProperty.Register("HasErrors", function () { return Boolean; }, ValidationSummary, false);
+            ValidationSummary.HasDisplayedErrorsProperty = DependencyProperty.Register("HasDisplayedErrors", function () { return Boolean; }, ValidationSummary, false);
+            ValidationSummary.HeaderProperty = DependencyProperty.Register("Header", function () { return Object; }, ValidationSummary);
+            ValidationSummary.HeaderTemplateProperty = DependencyProperty.Register("HeaderTemplate", function () { return Fayde.DataTemplate; }, ValidationSummary);
+            ValidationSummary.SummaryListBoxStyleProperty = DependencyProperty.Register("SummaryListBoxStyle", function () { return Fayde.Style; }, ValidationSummary);
+            ValidationSummary.TargetProperty = DependencyProperty.Register("Target", function () { return Fayde.UIElement; }, ValidationSummary);
+            return ValidationSummary;
+        })(Controls.Control);
+        Controls.ValidationSummary = ValidationSummary;
+        Controls.TemplateVisualStates(ValidationSummary, { GroupName: "CommonStates", Name: "Normal" }, { GroupName: "CommonStates", Name: "Disabled" }, { GroupName: "ValidationStates", Name: "HasErrors" }, { GroupName: "ValidationStates", Name: "Empty" });
+        Controls.TemplateParts(ValidationSummary, { Name: "SummaryListBox", Type: Controls.ListBox });
+    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    var Controls;
+    (function (Controls) {
+        var ObservableCollection = Fayde.Collections.ObservableCollection;
+        var ValidationSummaryItem = (function (_super) {
+            __extends(ValidationSummaryItem, _super);
+            function ValidationSummaryItem(message, messageHeader, itemType, source, context) {
+                _super.call(this);
+                this.Message = message || null;
+                this.MessageHeader = messageHeader || null;
+                this.ItemType = itemType || 1 /* ObjectError */;
+                this._Sources = new ObservableCollection();
+                if (source != null)
+                    this.Sources.Add(source);
+                this.Context = context;
+            }
+            Object.defineProperty(ValidationSummaryItem.prototype, "Sources", {
+                get: function () {
+                    return this._Sources;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            return ValidationSummaryItem;
+        })(Fayde.MVVM.ObservableObject);
+        Controls.ValidationSummaryItem = ValidationSummaryItem;
+        Fayde.MVVM.NotifyProperties(ValidationSummaryItem, ["Message", "MessageHeader", "ItemType", "Context"]);
+    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    var Controls;
+    (function (Controls) {
+        var ValidationSummaryItemSource = (function () {
+            function ValidationSummaryItemSource(propertyName, control) {
+                Object.defineProperties(this, {
+                    "PropertyName": {
+                        value: propertyName,
+                        writable: false
+                    },
+                    "Control": {
+                        value: control || null,
+                        writable: false
+                    }
+                });
+            }
+            ValidationSummaryItemSource.prototype.Equals = function (other) {
+                if (!(other instanceof ValidationSummaryItemSource))
+                    return false;
+                var vsis = other;
+                return vsis.PropertyName === this.PropertyName && vsis.Control === this.Control;
+            };
+            return ValidationSummaryItemSource;
+        })();
+        Controls.ValidationSummaryItemSource = ValidationSummaryItemSource;
     })(Controls = Fayde.Controls || (Fayde.Controls = {}));
 })(Fayde || (Fayde = {}));
 var Fayde;
