@@ -5388,8 +5388,8 @@ var Fayde;
             var comp = compareNum(item1.ItemType, item2.ItemType);
             if (comp !== 0)
                 return comp;
-            var control1 = item1.Sources.Count > 0 ? item1.Sources[0].Control : null;
-            var control2 = item2.Sources.Count > 0 ? item2.Sources[0].Control : null;
+            var control1 = item1.Sources.Count > 0 ? item1.Sources.GetValueAt(0).Control : null;
+            var control2 = item2.Sources.Count > 0 ? item2.Sources.GetValueAt(0).Control : null;
             if (control1 !== control2) {
                 refs = compareRefs(control1, control2);
                 if (refs != null)
