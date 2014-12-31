@@ -1,3 +1,5 @@
+import Person = require('./Person');
+
 class MainViewModel extends Fayde.MVVM.ViewModelBase {
     States: { Name: string }[] = [
         {Name: "Florida"},
@@ -24,6 +26,8 @@ class MainViewModel extends Fayde.MVVM.ViewModelBase {
     get List () {
         return this._list;
     }
+
+    Person = new Person();
 
     constructor () {
         super();
