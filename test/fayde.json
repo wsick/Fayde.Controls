@@ -5,7 +5,10 @@
     }
   },
   "themes": {
-    "Fayde.Controls": {
-    }
+    "Fayde.Controls": {}
+  },
+  "debug": {
+    "warnMissingThemes": false,
+    "warnBrokenPath": false
   }
 }

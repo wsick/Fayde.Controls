@@ -2,7 +2,8 @@
   "name": "Fayde.Controls",
   "client": {
     "files": [
-      "fayde.json"
+      "test/fayde.json",
+      "testsite/fayde.json"
     ]
   },
   "type": "lib",
