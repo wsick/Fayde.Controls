@@ -1,0 +1,14 @@
+{
+  "name": "Fayde.Controls",
+  "client": {
+    "files": [
+      "fayde.json"
+    ]
+  },
+  "type": "lib",
+  "dist": "dist/Fayde.Controls.js",
+  "library": {
+    "type": "export",
+    "exports": "Fayde.Controls"
+  }
+}
