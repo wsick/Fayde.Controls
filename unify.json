@@ -1,9 +1,15 @@
 {
   "name": "Fayde.Controls",
   "client": {
-    "files": [
-      "test/fayde.json",
-      "testsite/fayde.json"
+    "tests": [
+      {
+        "file": "test/fayde.json",
+        "lib": "test/lib"
+      },
+      {
+        "file": "testsite/fayde.json",
+        "lib": "testsite/lib"
+      }
     ]
   },
   "type": "lib",
