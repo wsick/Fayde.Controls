@@ -1,10 +1,8 @@
 {
   "name": "fayde.controls",
-  "version": "0.16.2",
+  "version": "0.16.3",
   "ignore": [
     "build",
-    "nuget",
-    "src",
     "test",
     "testsite",
     "typings",
