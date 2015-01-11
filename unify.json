@@ -13,9 +13,12 @@
     ]
   },
   "type": "lib",
-  "dist": "dist/Fayde.Controls.js",
+  "dist": "dist/Fayde.Controls",
   "library": {
     "type": "export",
     "exports": "Fayde.Controls"
-  }
+  },
+  "typings": [
+    "dist/Fayde.Controls.d.ts"
+  ]
 }

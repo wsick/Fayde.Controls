@@ -1,7 +1,8 @@
 var version = require('./build/version'),
     setup = require('./build/setup'),
     path = require('path'),
-    connect_livereload = require('connect-livereload');
+    connect_livereload = require('connect-livereload'),
+    gunify = require('grunt-fayde-unify');
 
 module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-typescript');
@@ -12,6 +13,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-open');
+    var unify = gunify(grunt);
 
     var ports = {
         server: 8002,
@@ -59,57 +61,61 @@ module.exports = function (grunt) {
             },
             test: {
                 files: [
-                    { src: './lib/nullstone', dest: '<%= dirs.test.lib %>/nullstone' },
-                    { src: './lib/minerva', dest: '<%= dirs.test.lib %>/minerva' },
-                    { src: './lib/fayde', dest: '<%= dirs.test.lib %>/fayde' },
-                    { src: './lib/qunit', dest: '<%= dirs.test.lib %>/qunit' },
-                    { src: './lib/requirejs', dest: '<%= dirs.test.lib %>/requirejs' },
-                    { src: './lib/requirejs-text', dest: '<%= dirs.test.lib %>/requirejs-text' },
-                    { src: './themes', dest: '<%= dirs.test.lib %>/<%= meta.name %>/themes' },
-                    { src: './dist', dest: '<%= dirs.test.lib %>/<%= meta.name %>/dist' },
-                    { src: './src', dest: '<%= dirs.test.lib %>/<%= meta.name %>/src' }
+                    {
+                        expand: true,
+                        src: ['themes/', 'dist/', 'src/'],
+                        dest: '<%= dirs.test.lib %>/<%= meta.name %>'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'lib/',
+                        src: ['*'],
+                        dest: dirs.test.lib,
+                        filter: 'isDirectory'
+                    }
                 ]
             },
             testsite: {
                 files: [
-                    { src: './lib/nullstone', dest: '<%= dirs.testsite.lib %>/nullstone' },
-                    { src: './lib/minerva', dest: '<%= dirs.testsite.lib %>/minerva' },
-                    { src: './lib/fayde', dest: '<%= dirs.testsite.lib %>/fayde' },
-                    { src: './lib/requirejs', dest: '<%= dirs.testsite.lib %>/requirejs' },
-                    { src: './lib/requirejs-text', dest: '<%= dirs.testsite.lib %>/requirejs-text' },
-                    { src: './themes', dest: '<%= dirs.testsite.lib %>/<%= meta.name %>/themes' },
-                    { src: './dist', dest: '<%= dirs.testsite.lib %>/<%= meta.name %>/dist' },
-                    { src: './src', dest: '<%= dirs.testsite.lib %>/<%= meta.name %>/src' }
+                    {
+                        expand: true,
+                        src: ['themes/', 'dist/', 'src/'],
+                        dest: '<%= dirs.testsite.lib %>/<%= meta.name %>'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'lib/',
+                        src: ['*', '!qunit'],
+                        dest: dirs.testsite.lib,
+                        filter: 'isDirectory'
+                    }
                 ]
             },
             localnullstone: {
                 files: [
-                    { src: '../nullstone', dest: './lib/nullstone' }
+                    {src: '../nullstone', dest: './lib/nullstone'}
                 ]
             },
             localminerva: {
                 files: [
-                    { src: '../minerva', dest: './lib/minerva' }
+                    {src: '../minerva', dest: './lib/minerva'}
                 ]
             },
             localfayde: {
                 files: [
-                    { src: '../fayde', dest: './lib/fayde' }
+                    {src: '../fayde', dest: './lib/fayde'}
                 ]
             }
         },
         typescript: {
             build: {
                 src: [
-                    'typings/*.d.ts',
-                    'lib/nullstone/dist/nullstone.d.ts',
-                    'lib/minerva/dist/minerva.d.ts',
-                    'lib/fayde/dist/fayde.d.ts',
+                    'typings/**/*.d.ts',
                     './src/_Version.ts',
                     './src/_Library.ts',
                     './src/*.ts',
                     './src/**/*.ts'
-                ],
+                ].concat(unify.typings({includeSelf: false})),
                 dest: './dist/<%= meta.name %>.js',
                 options: {
                     target: 'es5',
@@ -119,14 +125,10 @@ module.exports = function (grunt) {
             },
             test: {
                 src: [
-                    'typings/*.d.ts',
+                    'typings/**/*.d.ts',
                     '<%= dirs.test.root %>/**/*.ts',
-                    '!<%= dirs.test.lib %>/**/*.ts',
-                    'lib/nullstone/dist/nullstone.d.ts',
-                    'lib/minerva/dist/minerva.d.ts',
-                    'lib/fayde/dist/fayde.d.ts',
-                    'dist/<%= meta.name %>.d.ts'
-                ],
+                    '!<%= dirs.test.lib %>/**/*.ts'
+                ].concat(unify.typings()),
                 dest: dirs.test.build,
                 options: {
                     target: 'es5',
@@ -139,12 +141,8 @@ module.exports = function (grunt) {
                 src: [
                     'typings/*.d.ts',
                     '<%= dirs.testsite.root %>/**/*.ts',
-                    '!<%= dirs.testsite.lib %>/**/*.ts',
-                    'lib/nullstone/dist/nullstone.d.ts',
-                    'lib/minerva/dist/minerva.d.ts',
-                    'lib/fayde/dist/fayde.d.ts',
-                    'dist/<%= meta.name %>.d.ts'
-                ],
+                    '!<%= dirs.testsite.lib %>/**/*.ts'
+                ].concat(unify.typings()),
                 dest: dirs.testsite.build,
                 options: {
                     target: 'es5',
