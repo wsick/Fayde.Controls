@@ -9,7 +9,7 @@ var Fayde;
 (function (Fayde) {
     var Controls;
     (function (Controls) {
-        Controls.Library = Fayde.TypeManager.resolveLibrary("lib://Fayde.Controls");
+        Controls.Library = Fayde.TypeManager.resolveLibrary("lib://fayde.controls");
     })(Controls = Fayde.Controls || (Fayde.Controls = {}));
 })(Fayde || (Fayde = {}));
 var __extends = this.__extends || function (d, b) {
