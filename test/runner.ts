@@ -1,5 +1,5 @@
 module runner {
-    var libpath = "lib/Fayde.Controls/dist/Fayde.Controls";
+    var libpath = "lib/fayde.controls/dist/fayde.controls";
     var testModules = [
         ".build/tests/numericupdown"
     ];

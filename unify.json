@@ -1,5 +1,5 @@
 {
-  "name": "Fayde.Controls",
+  "name": "fayde.controls",
   "client": {
     "tests": [
       {
@@ -13,9 +13,12 @@
     ]
   },
   "type": "lib",
-  "dist": "dist/Fayde.Controls.js",
+  "dist": "dist/fayde.controls",
   "library": {
     "type": "export",
     "exports": "Fayde.Controls"
-  }
+  },
+  "typings": [
+    "dist/fayde.controls.d.ts"
+  ]
 }

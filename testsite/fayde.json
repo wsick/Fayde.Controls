@@ -1,11 +1,11 @@
 {
   "libs": {
-    "Fayde.Controls": {
+    "fayde.controls": {
       "exports": "Fayde.Controls"
     }
   },
   "themes": {
-    "Fayde.Controls": {}
+    "fayde.controls": {}
   },
   "debug": {
     "warnMissingThemes": false,
