@@ -1,6 +1,6 @@
 <Page xmlns="http://schemas.wsick.com/fayde"
       xmlns:x="http://schemas.wsick.com/fayde/x"
-      xmlns:controls="lib://Fayde.Controls"
+      xmlns:controls="lib://fayde.controls"
       Title="DomainUpDown Demo">
     <StackPanel Margin="5">
         <controls:DomainUpDown Margin="5" IsCyclic="True" ItemsSource="{Binding States}" Height="Auto" HorizontalAlignment="Left" Width="400">
