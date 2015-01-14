@@ -93,17 +93,17 @@ module.exports = function (grunt) {
             },
             localnullstone: {
                 files: [
-                    { src: '../nullstone', dest: './lib/nullstone' }
+                    {src: '../nullstone', dest: './lib/nullstone'}
                 ]
             },
             localminerva: {
                 files: [
-                    { src: '../minerva', dest: './lib/minerva' }
+                    {src: '../minerva', dest: './lib/minerva'}
                 ]
             },
             localfayde: {
                 files: [
-                    { src: '../fayde', dest: './lib/fayde' }
+                    {src: '../fayde', dest: './lib/fayde'}
                 ]
             }
         },
