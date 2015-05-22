@@ -51,4 +51,11 @@ module Fayde.Controls {
         PropertyError = 2,
     }
     Library.addEnum(ValidationSummaryItemType, "ValidationSummaryItemType");
+
+    export enum StretchDirection {
+        UpOnly,
+        DownOnly,
+        Both,
+    }
+    Library.addEnum(StretchDirection, "StretchDirection");
 }
