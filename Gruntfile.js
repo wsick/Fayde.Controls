@@ -13,10 +13,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-open');
+    grunt.loadNpmTasks("grunt-bower-install-simple");
+    grunt.loadNpmTasks("grunt-version-ts");
     var unify = gunify(grunt);
 
     var ports = {
-        server: 8002,
+        test: 7002,
+        testsite: 7003,
         livereload: 35730
     };
     var meta = {
@@ -50,11 +53,11 @@ module.exports = function (grunt) {
             testsite: [dirs.testsite.lib],
             test: [dirs.test.lib]
         },
-        setup: {
-            base: {
-                cwd: '.'
+        "bower-install-simple": {
+            fayde: {
+                directory: "lib"
             }
-        },
+        },       
         symlink: {
             options: {
                 overwrite: true
@@ -132,7 +135,7 @@ module.exports = function (grunt) {
                 dest: dirs.test.build,
                 options: {
                     target: 'es5',
-                    basePath: dirs.test.root,
+                    rootDir: dirs.test.root,
                     module: 'amd',
                     sourceMap: true
                 }
@@ -141,30 +144,43 @@ module.exports = function (grunt) {
                 src: [
                     'typings/*.d.ts',
                     '<%= dirs.testsite.root %>/**/*.ts',
-                    '!<%= dirs.testsite.lib %>/**/*.ts'
+                    '!<%= dirs.testsite.root %>/lib/**/*.ts'
                 ].concat(unify.typings()),
                 dest: dirs.testsite.build,
                 options: {
+                    rootDir: dirs.testsite.root,
                     target: 'es5',
-                    basePath: dirs.testsite.root,
                     module: 'amd',
                     sourceMap: true
                 }
-            }
+            },            
         },
         qunit: {
             all: ['<%= dirs.test.root %>/*.html']
         },
         connect: {
-            server: {
+            testsite: {
                 options: {
-                    port: ports.server,
+                    port: ports.testsite,
                     base: dirs.testsite.root,
                     middleware: function (connect) {
                         return [
                             connect_livereload({ port: ports.livereload }),
                             mount(connect, dirs.testsite.build),
                             mount(connect, dirs.testsite.root)
+                        ];
+                    }
+                }
+            },
+            test: {
+                options: {
+                    port: ports.test,
+                    base: dirs.test.root,
+                    middleware: function (connect) {
+                        return [
+                            connect_livereload({ port: ports.livereload }),
+                            mount(connect, dirs.test.build),
+                            mount(connect, dirs.test.root)
                         ];
                     }
                 }
@@ -202,7 +218,10 @@ module.exports = function (grunt) {
         },
         open: {
             testsite: {
-                path: 'http://localhost:<%= ports.server %>/default.html'
+                path: 'http://localhost:<%= ports.testsite %>/default.html'
+            },
+            test: {
+                path: 'http://localhost:<%= ports.test %>/tests.html'
             }
         },
         version: {
@@ -230,10 +249,10 @@ module.exports = function (grunt) {
 
     grunt.registerTask('default', ['typescript:build']);
     grunt.registerTask('test', ['typescript:build', 'typescript:test', 'qunit']);
-    grunt.registerTask('testsite', ['typescript:build', 'typescript:testsite', 'connect', 'open', 'watch']);
+    grunt.registerTask('testsite', ['typescript:build', 'typescript:testsite', 'connect:testsite', 'open:testsite', 'watch']);
     setup(grunt);
     version(grunt);
-    grunt.registerTask('lib:reset', ['clean', 'setup', 'symlink:test', 'symlink:testsite']);
+    grunt.registerTask('lib:reset', ['clean', 'bower-install-simple', 'symlink:test', 'symlink:testsite']);
     grunt.registerTask('link:minerva', ['symlink:localminerva']);
     grunt.registerTask('link:nullstone', ['symlink:localnullstone']);
     grunt.registerTask('link:fayde', ['symlink:localfayde']);
