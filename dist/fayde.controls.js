@@ -2,7 +2,7 @@ var Fayde;
 (function (Fayde) {
     var Controls;
     (function (Controls) {
-        Controls.Version = '0.17.1';
+        Controls.version = '0.17.3';
     })(Controls = Fayde.Controls || (Fayde.Controls = {}));
 })(Fayde || (Fayde = {}));
 var Fayde;
@@ -29,12 +29,8 @@ var Fayde;
                 function MenuBase() {
                     _super.apply(this, arguments);
                 }
-                MenuBase.prototype.IsItemItsOwnContainer = function (item) {
-                    return item instanceof Controls.MenuItem || item instanceof Controls.Separator;
-                };
-                MenuBase.prototype.GetContainerForItem = function () {
-                    return new Controls.MenuItem();
-                };
+                MenuBase.prototype.IsItemItsOwnContainer = function (item) { return item instanceof Controls.MenuItem || item instanceof Controls.Separator; };
+                MenuBase.prototype.GetContainerForItem = function () { return new Controls.MenuItem(); };
                 MenuBase.prototype.PrepareContainerForItem = function (element, item) {
                     _super.prototype.PrepareContainerForItem.call(this, element, item);
                     var menuItem = element;
@@ -101,15 +97,15 @@ var Fayde;
             };
             ContextMenu.prototype.OnKeyDown = function (e) {
                 switch (e.Key) {
-                    case 8 /* Escape */:
+                    case Fayde.Input.Key.Escape:
                         this.ClosePopup();
                         e.Handled = true;
                         break;
-                    case 15 /* Up */:
+                    case Fayde.Input.Key.Up:
                         this.FocusNextItem(false);
                         e.Handled = true;
                         break;
-                    case 17 /* Down */:
+                    case Fayde.Input.Key.Down:
                         this.FocusNextItem(true);
                         e.Handled = true;
                         break;
@@ -257,12 +253,8 @@ var Fayde;
         var ContextMenuService = (function () {
             function ContextMenuService() {
             }
-            ContextMenuService.GetContextMenu = function (d) {
-                return d.GetValue(ContextMenuService.ContextMenuProperty);
-            };
-            ContextMenuService.SetContextMenu = function (d, value) {
-                d.SetValue(ContextMenuService.ContextMenuProperty, value);
-            };
+            ContextMenuService.GetContextMenu = function (d) { return d.GetValue(ContextMenuService.ContextMenuProperty); };
+            ContextMenuService.SetContextMenu = function (d, value) { d.SetValue(ContextMenuService.ContextMenuProperty, value); };
             ContextMenuService.OnContextMenuPropertyChanged = function (d, args) {
                 var fe = d;
                 if (!(fe instanceof Fayde.FrameworkElement))
@@ -401,6 +393,66 @@ var Fayde;
 (function (Fayde) {
     var Controls;
     (function (Controls) {
+        (function (ValidSpinDirections) {
+            ValidSpinDirections[ValidSpinDirections["None"] = 0] = "None";
+            ValidSpinDirections[ValidSpinDirections["Increase"] = 1] = "Increase";
+            ValidSpinDirections[ValidSpinDirections["Decrease"] = 2] = "Decrease";
+        })(Controls.ValidSpinDirections || (Controls.ValidSpinDirections = {}));
+        var ValidSpinDirections = Controls.ValidSpinDirections;
+        Controls.Library.addEnum(ValidSpinDirections, "ValidSpinDirections");
+        (function (SpinDirection) {
+            SpinDirection[SpinDirection["Increase"] = 0] = "Increase";
+            SpinDirection[SpinDirection["Decrease"] = 1] = "Decrease";
+        })(Controls.SpinDirection || (Controls.SpinDirection = {}));
+        var SpinDirection = Controls.SpinDirection;
+        Controls.Library.addEnum(SpinDirection, "SpinDirection");
+        (function (InvalidInputAction) {
+            InvalidInputAction[InvalidInputAction["UseFallbackItem"] = 0] = "UseFallbackItem";
+            InvalidInputAction[InvalidInputAction["TextBoxCannotLoseFocus"] = 1] = "TextBoxCannotLoseFocus";
+        })(Controls.InvalidInputAction || (Controls.InvalidInputAction = {}));
+        var InvalidInputAction = Controls.InvalidInputAction;
+        Controls.Library.addEnum(InvalidInputAction, "InvalidInputAction");
+        (function (Dock) {
+            Dock[Dock["Left"] = 0] = "Left";
+            Dock[Dock["Top"] = 1] = "Top";
+            Dock[Dock["Right"] = 2] = "Right";
+            Dock[Dock["Bottom"] = 3] = "Bottom";
+        })(Controls.Dock || (Controls.Dock = {}));
+        var Dock = Controls.Dock;
+        Controls.Library.addEnum(Dock, "Dock");
+        (function (DatePickerFormat) {
+            DatePickerFormat[DatePickerFormat["Long"] = 0] = "Long";
+            DatePickerFormat[DatePickerFormat["Short"] = 1] = "Short";
+        })(Controls.DatePickerFormat || (Controls.DatePickerFormat = {}));
+        var DatePickerFormat = Controls.DatePickerFormat;
+        Controls.Library.addEnum(DatePickerFormat, "DatePickerFormat");
+        (function (TimeDisplayMode) {
+            TimeDisplayMode[TimeDisplayMode["Regular"] = 0] = "Regular";
+            TimeDisplayMode[TimeDisplayMode["Military"] = 1] = "Military";
+        })(Controls.TimeDisplayMode || (Controls.TimeDisplayMode = {}));
+        var TimeDisplayMode = Controls.TimeDisplayMode;
+        Controls.Library.addEnum(TimeDisplayMode, "TimeDisplayMode");
+        (function (ValidationSummaryFilters) {
+            ValidationSummaryFilters[ValidationSummaryFilters["None"] = 0] = "None";
+            ValidationSummaryFilters[ValidationSummaryFilters["ObjectErrors"] = 1] = "ObjectErrors";
+            ValidationSummaryFilters[ValidationSummaryFilters["PropertyErrors"] = 2] = "PropertyErrors";
+            ValidationSummaryFilters[ValidationSummaryFilters["All"] = 3] = "All";
+        })(Controls.ValidationSummaryFilters || (Controls.ValidationSummaryFilters = {}));
+        var ValidationSummaryFilters = Controls.ValidationSummaryFilters;
+        Controls.Library.addEnum(ValidationSummaryFilters, "ValidationSummaryFilters");
+        (function (ValidationSummaryItemType) {
+            ValidationSummaryItemType[ValidationSummaryItemType["ObjectError"] = 1] = "ObjectError";
+            ValidationSummaryItemType[ValidationSummaryItemType["PropertyError"] = 2] = "PropertyError";
+        })(Controls.ValidationSummaryItemType || (Controls.ValidationSummaryItemType = {}));
+        var ValidationSummaryItemType = Controls.ValidationSummaryItemType;
+        Controls.Library.addEnum(ValidationSummaryItemType, "ValidationSummaryItemType");
+    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
+})(Fayde || (Fayde = {}));
+/// <reference path="Enums.ts" />
+var Fayde;
+(function (Fayde) {
+    var Controls;
+    (function (Controls) {
         var ButtonBase = Controls.Primitives.ButtonBase;
         var Spinner = (function (_super) {
             __extends(Spinner, _super);
@@ -418,7 +470,7 @@ var Fayde;
                 this.EnableButtons();
             };
             Spinner.prototype.OnSpin = function (e) {
-                var valid = e.Direction === 0 /* Increase */ ? 1 /* Increase */ : 2 /* Decrease */;
+                var valid = e.Direction === Controls.SpinDirection.Increase ? Controls.ValidSpinDirections.Increase : Controls.ValidSpinDirections.Decrease;
                 if ((this.ValidSpinDirection & valid) !== valid)
                     throw new InvalidOperationException("Invalid Spin Direction");
                 this.Spin.raise(this, e);
@@ -439,16 +491,16 @@ var Fayde;
                 this.EnableButtons();
             };
             Spinner.prototype.OnIncreaseClick = function (sender, e) {
-                this.OnSpin(new Controls.SpinEventArgs(0 /* Increase */));
+                this.OnSpin(new Controls.SpinEventArgs(Controls.SpinDirection.Increase));
             };
             Spinner.prototype.OnDecreaseClick = function (sender, e) {
-                this.OnSpin(new Controls.SpinEventArgs(1 /* Decrease */));
+                this.OnSpin(new Controls.SpinEventArgs(Controls.SpinDirection.Decrease));
             };
             Spinner.prototype.EnableButtons = function () {
                 if (this._IncreaseButton)
-                    this._IncreaseButton.IsEnabled = (this.ValidSpinDirection & 1 /* Increase */) === 1 /* Increase */;
+                    this._IncreaseButton.IsEnabled = (this.ValidSpinDirection & Controls.ValidSpinDirections.Increase) === Controls.ValidSpinDirections.Increase;
                 if (this._DecreaseButton)
-                    this._DecreaseButton.IsEnabled = (this.ValidSpinDirection & 2 /* Decrease */) === 2 /* Decrease */;
+                    this._DecreaseButton.IsEnabled = (this.ValidSpinDirection & Controls.ValidSpinDirections.Decrease) === Controls.ValidSpinDirections.Decrease;
             };
             Spinner.prototype.GoToStates = function (gotoFunc) {
                 _super.prototype.GoToStates.call(this, gotoFunc);
@@ -463,10 +515,10 @@ var Fayde;
                 return gotoFunc("Normal");
             };
             Spinner.prototype.GoToStateIncrease = function (gotoFunc) {
-                return gotoFunc(((this.ValidSpinDirection & 1 /* Increase */) === 1 /* Increase */) ? "IncreaseEnabled" : "IncreaseDisabled");
+                return gotoFunc(((this.ValidSpinDirection & Controls.ValidSpinDirections.Increase) === Controls.ValidSpinDirections.Increase) ? "IncreaseEnabled" : "IncreaseDisabled");
             };
             Spinner.prototype.GoToStateDecrease = function (gotoFunc) {
-                return gotoFunc(((this.ValidSpinDirection & 2 /* Decrease */) === 2 /* Decrease */) ? "DecreaseEnabled" : "DecreaseDisabled");
+                return gotoFunc(((this.ValidSpinDirection & Controls.ValidSpinDirections.Decrease) === Controls.ValidSpinDirections.Decrease) ? "DecreaseEnabled" : "DecreaseDisabled");
             };
             Spinner.prototype.OnMouseEnter = function (e) {
                 _super.prototype.OnMouseEnter.call(this, e);
@@ -493,7 +545,7 @@ var Fayde;
                 this.UpdateVisualState();
             };
             Spinner.ContentProperty = DependencyProperty.Register("Content", function () { return Object; }, Spinner, undefined, function (d, args) { return d.OnContentChanged(args.OldValue, args.NewValue); });
-            Spinner.ValidSpinDirectionProperty = DependencyProperty.Register("ValidSpinDirection", function () { return new Fayde.Enum(Controls.ValidSpinDirections); }, Spinner, 1 /* Increase */, function (d, args) { return d.OnValidSpinDirectionChanged(args); });
+            Spinner.ValidSpinDirectionProperty = DependencyProperty.Register("ValidSpinDirection", function () { return new Fayde.Enum(Controls.ValidSpinDirections); }, Spinner, Controls.ValidSpinDirections.Increase, function (d, args) { return d.OnValidSpinDirectionChanged(args); });
             return Spinner;
         })(Controls.Control);
         Controls.Spinner = Spinner;
@@ -520,8 +572,7 @@ var Fayde;
                 this.Parsing = new Fayde.RoutedEvent();
                 this.ParseError = new Fayde.RoutedEvent();
             }
-            UpDownBase.prototype.OnSpinnerStyleChanged = function (oldStyle, newStyle) {
-            };
+            UpDownBase.prototype.OnSpinnerStyleChanged = function (oldStyle, newStyle) { };
             UpDownBase.prototype._OnValueChanged = function (args) {
                 if (this._IgnoreValueChange)
                     return;
@@ -590,15 +641,15 @@ var Fayde;
                 if (e.Handled)
                     return;
                 switch (e.Key) {
-                    case 3 /* Enter */:
+                    case Fayde.Input.Key.Enter:
                         this.ProcessUserInput();
                         e.Handled = true;
                         break;
-                    case 15 /* Up */:
+                    case Fayde.Input.Key.Up:
                         this.DoIncrement();
                         e.Handled = true;
                         break;
-                    case 17 /* Down */:
+                    case Fayde.Input.Key.Down:
                         this.DoDecrement();
                         e.Handled = true;
                         break;
@@ -655,12 +706,8 @@ var Fayde;
             UpDownBase.prototype.OnParsing = function (e) {
                 this.Parsing.raise(this, e);
             };
-            UpDownBase.prototype.ParseValue = function (text) {
-                return;
-            };
-            UpDownBase.prototype.FormatValue = function () {
-                return "";
-            };
+            UpDownBase.prototype.ParseValue = function (text) { return; };
+            UpDownBase.prototype.FormatValue = function () { return ""; };
             UpDownBase.prototype.SelectAllText = function () {
                 if (this._TextBox)
                     this._TextBox.SelectAll();
@@ -684,7 +731,7 @@ var Fayde;
                 this.OnSpin(e);
             };
             UpDownBase.prototype.OnSpin = function (e) {
-                if (e.Direction === 0 /* Increase */)
+                if (e.Direction === Controls.SpinDirection.Increase)
                     this.DoIncrement();
                 else
                     this.DoDecrement();
@@ -699,19 +746,17 @@ var Fayde;
                     this._TextBox.SelectionStart = selectionStart;
             };
             UpDownBase.prototype.DoDecrement = function () {
-                if (this._Spinner && (this._Spinner.ValidSpinDirection & 2 /* Decrease */) !== 2 /* Decrease */)
+                if (this._Spinner && (this._Spinner.ValidSpinDirection & Controls.ValidSpinDirections.Decrease) !== Controls.ValidSpinDirections.Decrease)
                     return;
                 this.OnDecrement();
             };
-            UpDownBase.prototype.OnDecrement = function () {
-            };
+            UpDownBase.prototype.OnDecrement = function () { };
             UpDownBase.prototype.DoIncrement = function () {
-                if (this._Spinner && (this._Spinner.ValidSpinDirection & 1 /* Increase */) !== 1 /* Increase */)
+                if (this._Spinner && (this._Spinner.ValidSpinDirection & Controls.ValidSpinDirections.Increase) !== Controls.ValidSpinDirections.Increase)
                     return;
                 this.OnIncrement();
             };
-            UpDownBase.prototype.OnIncrement = function () {
-            };
+            UpDownBase.prototype.OnIncrement = function () { };
             UpDownBase.SpinnerStyleProperty = DependencyProperty.Register("SpinnerStyle", function () { return Fayde.Style; }, UpDownBase, undefined, function (d, args) { return d.OnSpinnerStyleChanged(args.OldValue, args.NewValue); });
             UpDownBase.IsEditableProperty = DependencyProperty.Register("IsEditable", function () { return Boolean; }, UpDownBase, true, function (d, args) { return d.OnIsEditableChanged(args); });
             return UpDownBase;
@@ -781,26 +826,26 @@ var Fayde;
                 var index;
                 this.Items.IsReadOnly = false;
                 switch (e.Action) {
-                    case 1 /* Add */:
+                    case Fayde.Collections.CollectionChangedAction.Add:
                         index = e.NewStartingIndex;
                         for (var en = nullstone.IEnumerator_.fromArray(e.NewItems); en.moveNext();) {
                             this.Items.Insert(index, en.current);
                             index++;
                         }
                         break;
-                    case 2 /* Remove */:
+                    case Fayde.Collections.CollectionChangedAction.Remove:
                         for (var en = nullstone.IEnumerator_.fromArray(e.OldItems); en.moveNext();) {
                             this.Items.RemoveAt(e.OldStartingIndex);
                         }
                         break;
-                    case 3 /* Replace */:
+                    case Fayde.Collections.CollectionChangedAction.Replace:
                         index = e.NewStartingIndex;
                         for (var en = nullstone.IEnumerator_.fromArray(e.NewItems); en.moveNext();) {
                             this.Items.SetValueAt(index, en.current);
                             index++;
                         }
                         break;
-                    case 4 /* Reset */:
+                    case Fayde.Collections.CollectionChangedAction.Reset:
                         this.Items.Clear();
                         this.Items.AddRange(coll.ToArray());
                         break;
@@ -960,9 +1005,9 @@ var Fayde;
                 if (ov.Value != null)
                     return true;
                 ov.Value = this.Value;
-                if (this.InvalidInputAction === 1 /* TextBoxCannotLoseFocus */)
+                if (this.InvalidInputAction === Controls.InvalidInputAction.TextBoxCannotLoseFocus)
                     return false;
-                if (this.InvalidInputAction === 0 /* UseFallbackItem */) {
+                if (this.InvalidInputAction === Controls.InvalidInputAction.UseFallbackItem) {
                     ov.Value = this.FallbackItem;
                     if (ov.Value == null || !this.Items.Contains(ov.Value))
                         throw new ArgumentException("Cannot parse value.");
@@ -991,7 +1036,7 @@ var Fayde;
             DomainUpDown.SpinnerStyleProperty = DependencyProperty.Register("SpinnerStyle", function () { return Fayde.Style; }, DomainUpDown);
             DomainUpDown.CurrentIndexProperty = DependencyProperty.Register("CurrentIndex", function () { return Number; }, DomainUpDown, -1, function (d, args) { return d._Coercer.OnCurrentIndexChanged(args.OldValue, args.NewValue); });
             DomainUpDown.IsCyclicProperty = DependencyProperty.Register("IsCyclic", function () { return Boolean; }, DomainUpDown, false, function (d, args) { return d._OnIsCyclicChanged(args); });
-            DomainUpDown.InvalidInputActionProperty = DependencyProperty.RegisterFull("InvalidInputAction", function () { return new Fayde.Enum(Controls.InvalidInputAction); }, DomainUpDown, 0 /* UseFallbackItem */, undefined, undefined, false, inputActionValidator, true);
+            DomainUpDown.InvalidInputActionProperty = DependencyProperty.RegisterFull("InvalidInputAction", function () { return new Fayde.Enum(Controls.InvalidInputAction); }, DomainUpDown, Controls.InvalidInputAction.UseFallbackItem, undefined, undefined, false, inputActionValidator, true);
             DomainUpDown.FallbackItemProperty = DependencyProperty.Register("FallbackItem", function () { return Object; }, DomainUpDown, null);
             DomainUpDown.ItemsSourceProperty = DependencyProperty.Register("ItemsSource", function () { return nullstone.IEnumerable_; }, DomainUpDown, undefined, function (d, args) { return d._OnItemsSourceChanged(args.OldValue, args.NewValue); });
             DomainUpDown.ItemTemplateProperty = DependencyProperty.Register("ItemTemplate", function () { return Fayde.DataTemplate; }, DomainUpDown);
@@ -1001,8 +1046,8 @@ var Fayde;
         Controls.TemplateVisualStates(DomainUpDown, { GroupName: "CommonStates", Name: "Normal" }, { GroupName: "CommonStates", Name: "MouseOver" }, { GroupName: "CommonStates", Name: "Pressed" }, { GroupName: "CommonStates", Name: "Disabled" }, { GroupName: "FocusStates", Name: "Unfocused" }, { GroupName: "FocusStates", Name: "Focused" }, { GroupName: "ValidationStates", Name: "Valid" }, { GroupName: "ValidationStates", Name: "InvalidUnfocused" }, { GroupName: "ValidationStates", Name: "InvalidFocused" }, { GroupName: "DomainStates", Name: "ValidDomain" }, { GroupName: "DomainStates", Name: "InvalidDomain" });
         function inputActionValidator(d, propd, value) {
             switch (value) {
-                case 0 /* UseFallbackItem */:
-                case 1 /* TextBoxCannotLoseFocus */:
+                case Controls.InvalidInputAction.UseFallbackItem:
+                case Controls.InvalidInputAction.TextBoxCannotLoseFocus:
                     return true;
                 default:
                     return false;
@@ -1013,65 +1058,6 @@ var Fayde;
                 return text === item.toString();
             return text === (evaluator.GetDynamicValue(item) || "");
         }
-    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
-})(Fayde || (Fayde = {}));
-var Fayde;
-(function (Fayde) {
-    var Controls;
-    (function (Controls) {
-        (function (ValidSpinDirections) {
-            ValidSpinDirections[ValidSpinDirections["None"] = 0] = "None";
-            ValidSpinDirections[ValidSpinDirections["Increase"] = 1] = "Increase";
-            ValidSpinDirections[ValidSpinDirections["Decrease"] = 2] = "Decrease";
-        })(Controls.ValidSpinDirections || (Controls.ValidSpinDirections = {}));
-        var ValidSpinDirections = Controls.ValidSpinDirections;
-        Controls.Library.addEnum(ValidSpinDirections, "ValidSpinDirections");
-        (function (SpinDirection) {
-            SpinDirection[SpinDirection["Increase"] = 0] = "Increase";
-            SpinDirection[SpinDirection["Decrease"] = 1] = "Decrease";
-        })(Controls.SpinDirection || (Controls.SpinDirection = {}));
-        var SpinDirection = Controls.SpinDirection;
-        Controls.Library.addEnum(SpinDirection, "SpinDirection");
-        (function (InvalidInputAction) {
-            InvalidInputAction[InvalidInputAction["UseFallbackItem"] = 0] = "UseFallbackItem";
-            InvalidInputAction[InvalidInputAction["TextBoxCannotLoseFocus"] = 1] = "TextBoxCannotLoseFocus";
-        })(Controls.InvalidInputAction || (Controls.InvalidInputAction = {}));
-        var InvalidInputAction = Controls.InvalidInputAction;
-        Controls.Library.addEnum(InvalidInputAction, "InvalidInputAction");
-        (function (Dock) {
-            Dock[Dock["Left"] = 0] = "Left";
-            Dock[Dock["Top"] = 1] = "Top";
-            Dock[Dock["Right"] = 2] = "Right";
-            Dock[Dock["Bottom"] = 3] = "Bottom";
-        })(Controls.Dock || (Controls.Dock = {}));
-        var Dock = Controls.Dock;
-        Controls.Library.addEnum(Dock, "Dock");
-        (function (DatePickerFormat) {
-            DatePickerFormat[DatePickerFormat["Long"] = 0] = "Long";
-            DatePickerFormat[DatePickerFormat["Short"] = 1] = "Short";
-        })(Controls.DatePickerFormat || (Controls.DatePickerFormat = {}));
-        var DatePickerFormat = Controls.DatePickerFormat;
-        Controls.Library.addEnum(DatePickerFormat, "DatePickerFormat");
-        (function (TimeDisplayMode) {
-            TimeDisplayMode[TimeDisplayMode["Regular"] = 0] = "Regular";
-            TimeDisplayMode[TimeDisplayMode["Military"] = 1] = "Military";
-        })(Controls.TimeDisplayMode || (Controls.TimeDisplayMode = {}));
-        var TimeDisplayMode = Controls.TimeDisplayMode;
-        Controls.Library.addEnum(TimeDisplayMode, "TimeDisplayMode");
-        (function (ValidationSummaryFilters) {
-            ValidationSummaryFilters[ValidationSummaryFilters["None"] = 0] = "None";
-            ValidationSummaryFilters[ValidationSummaryFilters["ObjectErrors"] = 1] = "ObjectErrors";
-            ValidationSummaryFilters[ValidationSummaryFilters["PropertyErrors"] = 2] = "PropertyErrors";
-            ValidationSummaryFilters[ValidationSummaryFilters["All"] = ValidationSummaryFilters.PropertyErrors | ValidationSummaryFilters.ObjectErrors] = "All";
-        })(Controls.ValidationSummaryFilters || (Controls.ValidationSummaryFilters = {}));
-        var ValidationSummaryFilters = Controls.ValidationSummaryFilters;
-        Controls.Library.addEnum(ValidationSummaryFilters, "ValidationSummaryFilters");
-        (function (ValidationSummaryItemType) {
-            ValidationSummaryItemType[ValidationSummaryItemType["ObjectError"] = 1] = "ObjectError";
-            ValidationSummaryItemType[ValidationSummaryItemType["PropertyError"] = 2] = "PropertyError";
-        })(Controls.ValidationSummaryItemType || (Controls.ValidationSummaryItemType = {}));
-        var ValidationSummaryItemType = Controls.ValidationSummaryItemType;
-        Controls.Library.addEnum(ValidationSummaryItemType, "ValidationSummaryItemType");
     })(Controls = Fayde.Controls || (Fayde.Controls = {}));
 })(Fayde || (Fayde = {}));
 var Fayde;
@@ -1105,14 +1091,14 @@ var Fayde;
                     this._OnResizeDirectionChanged();
             };
             GridSplitter.prototype._OnResizeDirectionChanged = function () {
-                var isColumns = this._Helper.Direction === 1 /* Columns */;
-                this.Cursor = isColumns ? 7 /* SizeWE */ : 6 /* SizeNS */;
+                var isColumns = this._Helper.Direction === Controls.Internal.GridResizeDirection.Columns;
+                this.Cursor = isColumns ? Fayde.CursorType.SizeWE : Fayde.CursorType.SizeNS;
                 var ht = this._HorizontalTemplate;
                 if (ht)
-                    ht.Visibility = !isColumns ? 0 /* Visible */ : 1 /* Collapsed */;
+                    ht.Visibility = !isColumns ? Fayde.Visibility.Visible : Fayde.Visibility.Collapsed;
                 var vt = this._VerticalTemplate;
                 if (vt)
-                    vt.Visibility = isColumns ? 0 /* Visible */ : 1 /* Collapsed */;
+                    vt.Visibility = isColumns ? Fayde.Visibility.Visible : Fayde.Visibility.Collapsed;
             };
             GridSplitter.prototype.OnGotFocus = function (e) {
                 _super.prototype.OnGotFocus.call(this, e);
@@ -1124,7 +1110,7 @@ var Fayde;
             };
             GridSplitter.prototype.OnKeyDown = function (e) {
                 _super.prototype.OnKeyDown.call(this, e);
-                if (e.Key === 8 /* Escape */) {
+                if (e.Key === Fayde.Input.Key.Escape) {
                     if (!this._Helper)
                         return;
                     this._Helper = null;
@@ -1136,20 +1122,20 @@ var Fayde;
                 var horiz = 0;
                 var vert = 0;
                 switch (e.Key) {
-                    case 14 /* Left */:
+                    case Fayde.Input.Key.Left:
                         horiz = -keyIncrement;
                         break;
-                    case 15 /* Up */:
+                    case Fayde.Input.Key.Up:
                         vert = -keyIncrement;
                         break;
-                    case 16 /* Right */:
+                    case Fayde.Input.Key.Right:
                         horiz = keyIncrement;
                         break;
-                    case 17 /* Down */:
+                    case Fayde.Input.Key.Down:
                         vert = keyIncrement;
                         break;
                 }
-                if (this.FlowDirection === 1 /* RightToLeft */)
+                if (this.FlowDirection === Fayde.FlowDirection.RightToLeft)
                     e.Handled = this._HandleMove(-horiz, vert, true);
                 else
                     e.Handled = this._HandleMove(horiz, vert, true);
@@ -1363,7 +1349,7 @@ var Fayde;
                 _super.prototype.OnMouseRightButtonDown.call(this, e);
             };
             MenuItem.prototype.OnKeyDown = function (e) {
-                if (!e.Handled && 3 /* Enter */ === e.Key) {
+                if (!e.Handled && Fayde.Input.Key.Enter === e.Key) {
                     this.OnClick();
                     e.Handled = true;
                 }
@@ -1563,10 +1549,10 @@ var Fayde;
                 this._ElementTabPanelBottom = this.GetTemplateChild("TabPanelBottom", Controls.TabPanel);
                 this._ElementTabPanelLeft = this.GetTemplateChild("TabPanelLeft", Controls.TabPanel);
                 this._ElementTabPanelRight = this.GetTemplateChild("TabPanelRight", Controls.TabPanel);
-                Controls.TabPanel.setTabAlignment(this._ElementTabPanelTop, 1 /* Top */);
-                Controls.TabPanel.setTabAlignment(this._ElementTabPanelBottom, 3 /* Bottom */);
-                Controls.TabPanel.setTabAlignment(this._ElementTabPanelLeft, 0 /* Left */);
-                Controls.TabPanel.setTabAlignment(this._ElementTabPanelRight, 2 /* Right */);
+                Controls.TabPanel.setTabAlignment(this._ElementTabPanelTop, Controls.Dock.Top);
+                Controls.TabPanel.setTabAlignment(this._ElementTabPanelBottom, Controls.Dock.Bottom);
+                Controls.TabPanel.setTabAlignment(this._ElementTabPanelLeft, Controls.Dock.Left);
+                Controls.TabPanel.setTabAlignment(this._ElementTabPanelRight, Controls.Dock.Right);
                 this._ElementContentTop = this.GetTemplateChild("ContentTop", Controls.ContentPresenter);
                 this._ElementContentBottom = this.GetTemplateChild("ContentBottom", Controls.ContentPresenter);
                 this._ElementContentLeft = this.GetTemplateChild("ContentLeft", Controls.ContentPresenter);
@@ -1633,7 +1619,7 @@ var Fayde;
             TabControl.prototype.OnItemsChanged = function (e) {
                 _super.prototype.OnItemsChanged.call(this, e);
                 switch (e.Action) {
-                    case 1 /* Add */:
+                    case Fayde.Collections.CollectionChangedAction.Add:
                         var index1 = -1;
                         var len = e.NewItems.length;
                         for (var i = 0; i < len; i++) {
@@ -1673,7 +1659,7 @@ var Fayde;
                         this.SelectedItem = this._GetItemAtIndex(index1);
                         this.SelectedIndex = index1;
                         break;
-                    case 2 /* Remove */:
+                    case Fayde.Collections.CollectionChangedAction.Remove:
                         var len = e.OldItems.length;
                         var tabItem;
                         for (var i = 0; i < len; i++) {
@@ -1687,7 +1673,7 @@ var Fayde;
                                 this.SelectedItem = this._GetItemAtIndex(this.SelectedIndex);
                         }
                         break;
-                    case 4 /* Reset */:
+                    case Fayde.Collections.CollectionChangedAction.Reset:
                         this._ClearTabPanel();
                         this.SelectedIndex = -1;
                         var tabItem;
@@ -1712,10 +1698,10 @@ var Fayde;
                     return;
                 var nextTabItem;
                 switch (e.Key) {
-                    case 12 /* End */:
+                    case Fayde.Input.Key.End:
                         nextTabItem = this._FindEndTabItem();
                         break;
-                    case 13 /* Home */:
+                    case Fayde.Input.Key.Home:
                         nextTabItem = this._FindHomeTabItem();
                         break;
                     default:
@@ -1733,7 +1719,7 @@ var Fayde;
                 var tabItem = null;
                 for (var i = len - 1; i >= 0; i--) {
                     tabItem = items.GetValueAt(i);
-                    if (tabItem.IsEnabled && tabItem.Visibility === 0 /* Visible */)
+                    if (tabItem.IsEnabled && tabItem.Visibility === Fayde.Visibility.Visible)
                         return tabItem;
                 }
                 return null;
@@ -1744,7 +1730,7 @@ var Fayde;
                 var tabItem = null;
                 for (var i = 0; i < len; i++) {
                     tabItem = items.GetValueAt(i);
-                    if (tabItem.IsEnabled && tabItem.Visibility === 0 /* Visible */)
+                    if (tabItem.IsEnabled && tabItem.Visibility === Fayde.Visibility.Visible)
                         return tabItem;
                 }
                 return null;
@@ -1791,7 +1777,7 @@ var Fayde;
                 var contentHost2 = this._GetContentHost(newValue);
                 if (oldValue !== newValue) {
                     if (template1 != null)
-                        template1.Visibility = 1 /* Collapsed */;
+                        template1.Visibility = Fayde.Visibility.Collapsed;
                     if (tabPanel1 != null)
                         tabPanel1.Children.Clear();
                     if (tabPanel2 != null) {
@@ -1811,7 +1797,7 @@ var Fayde;
                 }
                 if (template2 == null)
                     return;
-                template2.Visibility = 0 /* Visible */;
+                template2.Visibility = Fayde.Visibility.Visible;
             };
             TabControl.prototype.UpdateSelectedContent = function (content) {
                 var tabItem = this.SelectedItem;
@@ -1876,13 +1862,13 @@ var Fayde;
             };
             TabControl.prototype._GetTabPanel = function (tabPlacement) {
                 switch (tabPlacement) {
-                    case 0 /* Left */:
+                    case Controls.Dock.Left:
                         return this._ElementTabPanelLeft;
-                    case 1 /* Top */:
+                    case Controls.Dock.Top:
                         return this._ElementTabPanelTop;
-                    case 2 /* Right */:
+                    case Controls.Dock.Right:
                         return this._ElementTabPanelRight;
-                    case 3 /* Bottom */:
+                    case Controls.Dock.Bottom:
                         return this._ElementTabPanelBottom;
                     default:
                         return null;
@@ -1890,13 +1876,13 @@ var Fayde;
             };
             TabControl.prototype._GetTemplate = function (tabPlacement) {
                 switch (tabPlacement) {
-                    case 0 /* Left */:
+                    case Controls.Dock.Left:
                         return this._ElementTemplateLeft;
-                    case 1 /* Top */:
+                    case Controls.Dock.Top:
                         return this._ElementTemplateTop;
-                    case 2 /* Right */:
+                    case Controls.Dock.Right:
                         return this._ElementTemplateRight;
-                    case 3 /* Bottom */:
+                    case Controls.Dock.Bottom:
                         return this._ElementTemplateBottom;
                     default:
                         return null;
@@ -1904,13 +1890,13 @@ var Fayde;
             };
             TabControl.prototype._GetContentHost = function (tabPlacement) {
                 switch (tabPlacement) {
-                    case 0 /* Left */:
+                    case Controls.Dock.Left:
                         return this._ElementContentLeft;
-                    case 1 /* Top */:
+                    case Controls.Dock.Top:
                         return this._ElementContentTop;
-                    case 2 /* Right */:
+                    case Controls.Dock.Right:
                         return this._ElementContentRight;
-                    case 3 /* Bottom */:
+                    case Controls.Dock.Bottom:
                         return this._ElementContentBottom;
                     default:
                         return null;
@@ -1935,7 +1921,7 @@ var Fayde;
             TabControl.SelectedItemProperty = DependencyProperty.Register("SelectedItem", function () { return Object; }, TabControl, null, function (d, args) { return d.OnSelectedItemChanged(args); });
             TabControl.SelectedIndexProperty = DependencyProperty.Register("SelectedIndex", function () { return Number; }, TabControl, -1, function (d, args) { return d.OnSelectedIndexChanged(args); });
             TabControl.SelectedContentProperty = DependencyProperty.Register("SelectedContent", function () { return Object; }, TabControl, null, function (d, args) { return d.OnSelectedContentChanged(args); });
-            TabControl.TabStripPlacementProperty = DependencyProperty.Register("TabStripPlacement", function () { return new Fayde.Enum(Controls.Dock); }, TabControl, 1 /* Top */, function (d, args) { return d.OnTabStripPlacementPropertyChanged(args); });
+            TabControl.TabStripPlacementProperty = DependencyProperty.Register("TabStripPlacement", function () { return new Fayde.Enum(Controls.Dock); }, TabControl, Controls.Dock.Top, function (d, args) { return d.OnTabStripPlacementPropertyChanged(args); });
             return TabControl;
         })(Controls.ItemsControl);
         Controls.TabControl = TabControl;
@@ -1962,7 +1948,7 @@ var Fayde;
                     var tabControlParent = this.TabControlParent;
                     if (tabControlParent != null)
                         return tabControlParent.TabStripPlacement;
-                    return 1 /* Top */;
+                    return Controls.Dock.Top;
                 },
                 enumerable: true,
                 configurable: true
@@ -2019,10 +2005,10 @@ var Fayde;
             TabItem.prototype.UpdateVisualState = function (useTransitions) {
                 var template = this.GetTemplate(this.IsSelected, this.TabStripPlacement);
                 if (this._PreviousTemplate != null && this._PreviousTemplate !== template)
-                    this._PreviousTemplate.Visibility = 1 /* Collapsed */;
+                    this._PreviousTemplate.Visibility = Fayde.Visibility.Collapsed;
                 this._PreviousTemplate = template;
                 if (template != null)
-                    template.Visibility = 0 /* Visible */;
+                    template.Visibility = Fayde.Visibility.Visible;
                 var contentControl = this._GetContentControl(this.IsSelected, this.TabStripPlacement);
                 if (this._PreviousHeader && this._PreviousHeader !== contentControl)
                     this._PreviousHeader.Content = null;
@@ -2076,12 +2062,12 @@ var Fayde;
                 var startIndex = parent.Items.IndexOf(this);
                 var nextTabItem = null;
                 switch (logicalKey) {
-                    case 14 /* Left */:
-                    case 15 /* Up */:
+                    case Fayde.Input.Key.Left:
+                    case Fayde.Input.Key.Up:
                         nextTabItem = this._FindPreviousTabItem(startIndex);
                         break;
-                    case 16 /* Right */:
-                    case 17 /* Down */:
+                    case Fayde.Input.Key.Right:
+                    case Fayde.Input.Key.Down:
                         nextTabItem = this._FindNextTabItem(startIndex);
                         break;
                     default:
@@ -2104,7 +2090,7 @@ var Fayde;
             TabItem.prototype._FindPreviousTabItem = function (startIndex) {
                 for (var i = startIndex, items = this.TabControlParent.Items; i >= 0; i--) {
                     var tabItem = items.GetValueAt(i);
-                    if (tabItem.IsEnabled && tabItem.Visibility === 0 /* Visible */)
+                    if (tabItem.IsEnabled && tabItem.Visibility === Fayde.Visibility.Visible)
                         return tabItem;
                 }
                 return null;
@@ -2112,7 +2098,7 @@ var Fayde;
             TabItem.prototype._FindNextTabItem = function (startIndex) {
                 for (var i = startIndex, items = this.TabControlParent.Items, len = items.Count; i < len; i++) {
                     var tabItem = items.GetValueAt(i);
-                    if (tabItem.IsEnabled && tabItem.Visibility === 0 /* Visible */)
+                    if (tabItem.IsEnabled && tabItem.Visibility === Fayde.Visibility.Visible)
                         return tabItem;
                 }
                 return null;
@@ -2232,7 +2218,7 @@ var Fayde;
             };
             TimePicker.prototype._GetHourInput = function () {
                 var text = this._HourTextBox.Text;
-                if (this.DisplayMode === 1 /* Military */)
+                if (this.DisplayMode === Controls.TimeDisplayMode.Military)
                     return text;
                 var h = parseFloat(text);
                 var isa = !!this._SuffixTextBlock && this._SuffixTextBlock.Text === "AM";
@@ -2276,7 +2262,7 @@ var Fayde;
                 this.CoerceHour(hour);
             };
             TimePicker.prototype._UpdateText = function () {
-                var isMilitary = this.DisplayMode === 1 /* Military */;
+                var isMilitary = this.DisplayMode === Controls.TimeDisplayMode.Military;
                 var h = this.SelectedHour;
                 var m = this.SelectedMinute;
                 var s = this.SelectedSecond;
@@ -2292,12 +2278,12 @@ var Fayde;
                     this._MinuteTextBox.Text = formatNumber(m, 2, "00");
                 if (this._SecondTextBox) {
                     this._SecondTextBox.Text = formatNumber(s, 2, "00");
-                    this._SecondTextBox.Visibility = isSecondShown ? 0 /* Visible */ : 1 /* Collapsed */;
+                    this._SecondTextBox.Visibility = isSecondShown ? Fayde.Visibility.Visible : Fayde.Visibility.Collapsed;
                 }
                 if (this._SecondSeparator)
-                    this._SecondSeparator.Visibility = isSecondShown ? 0 /* Visible */ : 1 /* Collapsed */;
+                    this._SecondSeparator.Visibility = isSecondShown ? Fayde.Visibility.Visible : Fayde.Visibility.Collapsed;
                 if (this._SuffixTextBlock) {
-                    this._SuffixTextBlock.Visibility = isMilitary ? 1 /* Collapsed */ : 0 /* Visible */;
+                    this._SuffixTextBlock.Visibility = isMilitary ? Fayde.Visibility.Collapsed : Fayde.Visibility.Visible;
                     this._SuffixTextBlock.Text = h >= 12 ? "PM" : "AM";
                 }
             };
@@ -2306,7 +2292,7 @@ var Fayde;
             TimePicker.SelectedSecondProperty = DependencyProperty.Register("SelectedSecond", function () { return Number; }, TimePicker, 0, function (d, args) { return d.OnSelectedSecondChanged(args); });
             TimePicker.SelectedTimeProperty = DependencyProperty.Register("SelectedTime", function () { return TimeSpan; }, TimePicker, undefined, function (d, args) { return d.OnSelectedTimeChanged(args); });
             TimePicker.IsSecondsShownProperty = DependencyProperty.Register("IsSecondsShown", function () { return Boolean; }, TimePicker, true, function (d, args) { return d._UpdateText(); });
-            TimePicker.DisplayModeProperty = DependencyProperty.Register("DisplayMode", function () { return new Fayde.Enum(Controls.TimeDisplayMode); }, TimePicker, 0 /* Regular */, function (d, args) { return d.OnDisplayModeChanged(args); });
+            TimePicker.DisplayModeProperty = DependencyProperty.Register("DisplayMode", function () { return new Fayde.Enum(Controls.TimeDisplayMode); }, TimePicker, Controls.TimeDisplayMode.Regular, function (d, args) { return d.OnDisplayModeChanged(args); });
             return TimePicker;
         })(Controls.Control);
         Controls.TimePicker = TimePicker;
@@ -2396,12 +2382,12 @@ var Fayde;
                     }
                 }
                 switch (e.Action) {
-                    case 2 /* Remove */:
-                    case 4 /* Reset */:
+                    case Fayde.Collections.CollectionChangedAction.Remove:
+                    case Fayde.Collections.CollectionChangedAction.Reset:
                         if (this.SelectedItem != null && !this.IsSelectedContainerHookedUp)
                             this.SelectFirstItem();
                         break;
-                    case 3 /* Replace */:
+                    case Fayde.Collections.CollectionChangedAction.Replace:
                         var selectedItem = this.SelectedItem;
                         if (selectedItem != null && (e.OldItems == null || nullstone.equals(selectedItem, e.OldItems[0])))
                             this.ChangeSelection(selectedItem, this.SelectedContainer, false);
@@ -2439,14 +2425,14 @@ var Fayde;
                     return;
                 if (Fayde.Input.Keyboard.HasControl()) {
                     switch (e.Key) {
-                        case 10 /* PageUp */:
-                        case 11 /* PageDown */:
-                        case 12 /* End */:
-                        case 13 /* Home */:
-                        case 14 /* Left */:
-                        case 15 /* Up */:
-                        case 16 /* Right */:
-                        case 17 /* Down */:
+                        case Fayde.Input.Key.PageUp:
+                        case Fayde.Input.Key.PageDown:
+                        case Fayde.Input.Key.End:
+                        case Fayde.Input.Key.Home:
+                        case Fayde.Input.Key.Left:
+                        case Fayde.Input.Key.Up:
+                        case Fayde.Input.Key.Right:
+                        case Fayde.Input.Key.Down:
                             if (ScrollEx.HandleKey(this.ItemsControlHelper.ScrollHost, e.Key, this.FlowDirection))
                                 e.Handled = true;
                             break;
@@ -2454,10 +2440,10 @@ var Fayde;
                 }
                 else {
                     switch (e.Key) {
-                        case 10 /* PageUp */:
-                        case 11 /* PageDown */:
+                        case Fayde.Input.Key.PageUp:
+                        case Fayde.Input.Key.PageDown:
                             if (this.SelectedContainer != null) {
-                                if (!this.HandleScrollByPage(e.Key === 10 /* PageUp */))
+                                if (!this.HandleScrollByPage(e.Key === Fayde.Input.Key.PageUp))
                                     break;
                                 e.Handled = true;
                                 break;
@@ -2468,18 +2454,18 @@ var Fayde;
                                 e.Handled = true;
                                 break;
                             }
-                        case 12 /* End */:
+                        case Fayde.Input.Key.End:
                             if (!this.FocusLastItem())
                                 break;
                             e.Handled = true;
                             break;
-                        case 13 /* Home */:
+                        case Fayde.Input.Key.Home:
                             if (!this.FocusFirstItem())
                                 break;
                             e.Handled = true;
                             break;
-                        case 15 /* Up */:
-                        case 17 /* Down */:
+                        case Fayde.Input.Key.Up:
+                        case Fayde.Input.Key.Down:
                             if (this.SelectedContainer != null || !this.FocusFirstItem())
                                 break;
                             e.Handled = true;
@@ -2819,9 +2805,7 @@ var Fayde;
                     this.UpdateVisualState();
             };
             Object.defineProperty(TreeViewItem.prototype, "ExpanderButton", {
-                get: function () {
-                    return this._expanderButton;
-                },
+                get: function () { return this._expanderButton; },
                 set: function (value) {
                     if (this._expanderButton) {
                         this._expanderButton.Click.off(this.OnExpanderClick, this);
@@ -2838,9 +2822,7 @@ var Fayde;
                 configurable: true
             });
             Object.defineProperty(TreeViewItem.prototype, "HeaderElement", {
-                get: function () {
-                    return this._headerElement;
-                },
+                get: function () { return this._headerElement; },
                 set: function (value) {
                     if (this._headerElement)
                         this._headerElement.MouseLeftButtonDown.off(this.OnHeaderMouseLeftButtonDown, this);
@@ -2852,9 +2834,7 @@ var Fayde;
                 configurable: true
             });
             Object.defineProperty(TreeViewItem.prototype, "ExpansionStateGroup", {
-                get: function () {
-                    return this._expansionStateGroup;
-                },
+                get: function () { return this._expansionStateGroup; },
                 set: function (value) {
                     if (this._expansionStateGroup)
                         this._expansionStateGroup.CurrentStateChanged.off(this.OnExpansionStateGroupStateChanged, this);
@@ -2866,9 +2846,7 @@ var Fayde;
                 configurable: true
             });
             Object.defineProperty(TreeViewItem.prototype, "ParentItemsControl", {
-                get: function () {
-                    return this._parentItemsControl;
-                },
+                get: function () { return this._parentItemsControl; },
                 set: function (value) {
                     if (this._parentItemsControl == value)
                         return;
@@ -2907,16 +2885,12 @@ var Fayde;
                 configurable: true
             });
             Object.defineProperty(TreeViewItem.prototype, "IsRoot", {
-                get: function () {
-                    return this.ParentItemsControl instanceof Controls.TreeView;
-                },
+                get: function () { return this.ParentItemsControl instanceof Controls.TreeView; },
                 enumerable: true,
                 configurable: true
             });
             Object.defineProperty(TreeViewItem.prototype, "CanExpandOnInput", {
-                get: function () {
-                    return this.HasItems && this.IsEnabled;
-                },
+                get: function () { return this.HasItems && this.IsEnabled; },
                 enumerable: true,
                 configurable: true
             });
@@ -2998,8 +2972,8 @@ var Fayde;
                     }
                 }
                 switch (e.Action) {
-                    case 2 /* Remove */:
-                    case 4 /* Reset */:
+                    case Fayde.Collections.CollectionChangedAction.Remove:
+                    case Fayde.Collections.CollectionChangedAction.Reset:
                         if (this.ContainsSelection) {
                             var parentTreeView = this.ParentTreeView;
                             if (parentTreeView != null && !parentTreeView.IsSelectedContainerHookedUp) {
@@ -3008,7 +2982,7 @@ var Fayde;
                             }
                         }
                         break;
-                    case 3 /* Replace */:
+                    case Fayde.Collections.CollectionChangedAction.Replace:
                         if (this.ContainsSelection) {
                             var parentTreeView = this.ParentTreeView;
                             if (parentTreeView != null) {
@@ -3125,32 +3099,32 @@ var Fayde;
                 if (this.IsEnabled) {
                     if (e.Handled)
                         return;
-                    var isRTL = this.FlowDirection === 1 /* RightToLeft */;
+                    var isRTL = this.FlowDirection === Fayde.FlowDirection.RightToLeft;
                     switch (e.Key) {
-                        case 14 /* Left */:
+                        case Fayde.Input.Key.Left:
                             if (!Fayde.Input.Keyboard.HasControl() && (isRTL ? this.HandleRightKey() : this.HandleLeftKey()))
                                 e.Handled = true;
                             break;
-                        case 15 /* Up */:
+                        case Fayde.Input.Key.Up:
                             if (!Fayde.Input.Keyboard.HasControl() && this.HandleUpKey())
                                 e.Handled = true;
                             break;
-                        case 16 /* Right */:
+                        case Fayde.Input.Key.Right:
                             if (!Fayde.Input.Keyboard.HasControl() && (isRTL ? this.HandleLeftKey() : this.HandleRightKey()))
                                 e.Handled = true;
                             break;
-                        case 17 /* Down */:
+                        case Fayde.Input.Key.Down:
                             if (!Fayde.Input.Keyboard.HasControl() && this.HandleDownKey())
                                 e.Handled = true;
                             break;
-                        case 79 /* Add */:
+                        case Fayde.Input.Key.Add:
                             if (this.CanExpandOnInput && !this.IsExpanded) {
                                 this.UserInitiatedExpansion = true;
                                 this.IsExpanded = true;
                                 e.Handled = true;
                             }
                             break;
-                        case 80 /* Subtract */:
+                        case Fayde.Input.Key.Subtract:
                             if (this.CanExpandOnInput && this.IsExpanded) {
                                 this.IsExpanded = false;
                                 e.Handled = true;
@@ -3464,9 +3438,7 @@ var Fayde;
                     this._ValueBinding = binding;
                 }
                 Object.defineProperty(BindingSourceEvaluator.prototype, "ValueBinding", {
-                    get: function () {
-                        return this._ValueBinding;
-                    },
+                    get: function () { return this._ValueBinding; },
                     enumerable: true,
                     configurable: true
                 });
@@ -3575,14 +3547,14 @@ var Fayde;
                     this.TextBox = null;
                 };
                 DomainCoercer.prototype.OnKeyDown = function (sender, e) {
-                    if (e != null && ((e.Key === 3 /* Enter */ || e.Key === 9 /* Space */) && !this.IsEditing && this.Owner.IsEditable)) {
+                    if (e != null && ((e.Key === Fayde.Input.Key.Enter || e.Key === Fayde.Input.Key.Space) && !this.IsEditing && this.Owner.IsEditable)) {
                         this.IsEditing = true;
                         e.Handled = true;
                     }
                     else {
                         if (e == null || e.Handled)
                             return;
-                        if (e.Key === 8 /* Escape */) {
+                        if (e.Key === Fayde.Input.Key.Escape) {
                             this.IsInvalidInput = false;
                             this.IsEditing = false;
                             e.Handled = true;
@@ -3595,7 +3567,7 @@ var Fayde;
                     var _this = this;
                     if (!this.IsInvalidInput)
                         this.IsEditing = false;
-                    else if (this.Owner.InvalidInputAction === 1 /* TextBoxCannotLoseFocus */ && this.TextBox.IsFocused)
+                    else if (this.Owner.InvalidInputAction === Controls.InvalidInputAction.TextBoxCannotLoseFocus && this.TextBox.IsFocused)
                         window.setTimeout(function () { return _this.TextBox.Focus(); }, 1);
                 };
                 DomainCoercer.prototype.OnValueChanged = function (oldValue, newValue) {
@@ -3766,11 +3738,12 @@ var Fayde;
             var GridSplitterResizer = (function () {
                 function GridSplitterResizer(gs) {
                     this.UpdateResizeDirection(gs);
-                    this.Behavior = resizeBehaviors[this.Direction !== 1 /* Columns */ ? gs.VerticalAlignment : gs.HorizontalAlignment] || 3 /* PreviousAndNext */;
+                    this.Behavior = resizeBehaviors[this.Direction !== GridResizeDirection.Columns ? gs.VerticalAlignment : gs.HorizontalAlignment]
+                        || GridResizeBehavior.PreviousAndNext;
                     this.SplitterLength = Math.min(gs.ActualWidth, gs.ActualHeight);
                 }
                 GridSplitterResizer.prototype.Setup = function (gs, grid) {
-                    var isColumns = this.Direction === 1 /* Columns */;
+                    var isColumns = this.Direction === GridResizeDirection.Columns;
                     var span = isColumns ? Controls.Grid.GetColumnSpan(gs) : Controls.Grid.GetRowSpan(gs);
                     if (span > 1)
                         return false;
@@ -3784,7 +3757,7 @@ var Fayde;
                     this.DS1.Index = indices[0];
                     this.DS2 = createSize(defs.GetValueAt(indices[1]));
                     this.DS2.Index = indices[1];
-                    this.SplitBehavior = (this.DS1.IsStar && this.DS2.IsStar) ? 0 /* Split */ : (!this.DS1.IsStar ? 1 /* ResizeDefinition1 */ : 2 /* ResizeDefinition2 */);
+                    this.SplitBehavior = (this.DS1.IsStar && this.DS2.IsStar) ? SplitBehavior.Split : (!this.DS1.IsStar ? SplitBehavior.ResizeDefinition1 : SplitBehavior.ResizeDefinition2);
                     return true;
                 };
                 GridSplitterResizer.prototype.Move = function (grid, horiz, vert) {
@@ -3792,45 +3765,46 @@ var Fayde;
                     var ds2 = this.DS2;
                     if (!ds1 || !ds2)
                         return true;
-                    if (this.SplitBehavior === 0 /* Split */ && !NumberEx.AreClose((ds1.ActualSize + ds2.ActualSize), (ds1.OrigActualSize + ds2.OrigActualSize)))
+                    if (this.SplitBehavior === SplitBehavior.Split && !NumberEx.AreClose((ds1.ActualSize + ds2.ActualSize), (ds1.OrigActualSize + ds2.OrigActualSize)))
                         return false;
                     var deltaConstraints = this.GetConstraints();
                     var num1 = deltaConstraints[0];
                     var num2 = deltaConstraints[1];
-                    var num = this.Direction === 1 /* Columns */ ? horiz : vert;
+                    var num = this.Direction === GridResizeDirection.Columns ? horiz : vert;
                     num = Math.min(Math.max(num, num1), num2);
                     this.SetLengths(grid, ds1.ActualSize + num, ds2.ActualSize - num);
                     return true;
                 };
                 GridSplitterResizer.prototype.UpdateResizeDirection = function (gs) {
                     var old = this.Direction;
-                    if (gs.HorizontalAlignment !== 3 /* Stretch */)
-                        this.Direction = 1 /* Columns */;
-                    else if (gs.VerticalAlignment === 3 /* Stretch */ && gs.ActualWidth <= gs.ActualHeight)
-                        this.Direction = 1 /* Columns */;
+                    if (gs.HorizontalAlignment !== Fayde.HorizontalAlignment.Stretch)
+                        this.Direction = GridResizeDirection.Columns;
+                    else if (gs.VerticalAlignment === Fayde.VerticalAlignment.Stretch && gs.ActualWidth <= gs.ActualHeight)
+                        this.Direction = GridResizeDirection.Columns;
                     else
-                        this.Direction = 2 /* Rows */;
+                        this.Direction = GridResizeDirection.Rows;
                     return old !== this.Direction;
                 };
                 GridSplitterResizer.prototype.SetLengths = function (grid, definition1Pixels, definition2Pixels) {
                     var columnDefinitions;
-                    if (this.SplitBehavior !== 0 /* Split */) {
-                        if (this.SplitBehavior === 1 /* ResizeDefinition1 */)
-                            this.DS1.Size = new Controls.GridLength(definition1Pixels, 1 /* Pixel */);
+                    if (this.SplitBehavior !== SplitBehavior.Split) {
+                        if (this.SplitBehavior === SplitBehavior.ResizeDefinition1)
+                            this.DS1.Size = new Controls.GridLength(definition1Pixels, GridUnitType.Pixel);
                         else
-                            this.DS2.Size = new Controls.GridLength(definition2Pixels, 1 /* Pixel */);
+                            this.DS2.Size = new Controls.GridLength(definition2Pixels, GridUnitType.Pixel);
                         return;
                     }
-                    var enumerator = this.Direction === 1 /* Columns */ ? grid.ColumnDefinitions.getEnumerator() : grid.RowDefinitions.getEnumerator();
+                    var enumerator = this.Direction === GridResizeDirection.Columns
+                        ? grid.ColumnDefinitions.getEnumerator() : grid.RowDefinitions.getEnumerator();
                     var i = 0;
                     while (enumerator.moveNext()) {
                         var ds = createSize(enumerator.current);
                         if (this.DS1.Index === i)
-                            ds.Size = new Controls.GridLength(definition1Pixels, 2 /* Star */);
+                            ds.Size = new Controls.GridLength(definition1Pixels, GridUnitType.Star);
                         else if (this.DS2.Index === i)
-                            ds.Size = new Controls.GridLength(definition2Pixels, 2 /* Star */);
+                            ds.Size = new Controls.GridLength(definition2Pixels, GridUnitType.Star);
                         else if (ds.IsStar)
-                            ds.Size = new Controls.GridLength(ds.ActualSize, 2 /* Star */);
+                            ds.Size = new Controls.GridLength(ds.ActualSize, GridUnitType.Star);
                         i++;
                     }
                 };
@@ -3847,13 +3821,13 @@ var Fayde;
                     else if (this.SplitterIndex === this.DS2.Index) {
                         minSize1 = Math.max(minSize1, this.SplitterLength);
                     }
-                    if (this.SplitBehavior === 0 /* Split */) {
+                    if (this.SplitBehavior === SplitBehavior.Split) {
                         return [
                             -Math.min(actualLength - minSize, maxSize1 - actualLength1),
                             Math.min(maxSize - actualLength, actualLength1 - minSize1)
                         ];
                     }
-                    if (this.SplitBehavior !== 1 /* ResizeDefinition1 */) {
+                    if (this.SplitBehavior !== SplitBehavior.ResizeDefinition1) {
                         return [
                             actualLength1 - maxSize1,
                             actualLength1 - minSize1
@@ -3866,9 +3840,9 @@ var Fayde;
                 };
                 GridSplitterResizer.prototype.GetBehaviorIndices = function (index) {
                     switch (this.Behavior) {
-                        case 1 /* CurrentAndNext */:
+                        case GridResizeBehavior.CurrentAndNext:
                             return [index, index + 1];
-                        case 2 /* PreviousAndCurrent */:
+                        case GridResizeBehavior.PreviousAndCurrent:
                             return [index - 1, index];
                         default:
                             return [index - 1, index + 1];
@@ -3878,10 +3852,10 @@ var Fayde;
             })();
             Internal.GridSplitterResizer = GridSplitterResizer;
             var resizeBehaviors = [];
-            resizeBehaviors[0 /* Top */] = 2 /* PreviousAndCurrent */;
-            resizeBehaviors[2 /* Bottom */] = 1 /* CurrentAndNext */;
-            resizeBehaviors[0 /* Left */] = 2 /* PreviousAndCurrent */;
-            resizeBehaviors[2 /* Right */] = 1 /* CurrentAndNext */;
+            resizeBehaviors[Fayde.VerticalAlignment.Top] = GridResizeBehavior.PreviousAndCurrent;
+            resizeBehaviors[Fayde.VerticalAlignment.Bottom] = GridResizeBehavior.CurrentAndNext;
+            resizeBehaviors[Fayde.HorizontalAlignment.Left] = GridResizeBehavior.PreviousAndCurrent;
+            resizeBehaviors[Fayde.HorizontalAlignment.Right] = GridResizeBehavior.CurrentAndNext;
             var RowDefinition = Fayde.Controls.RowDefinition;
             var ColumnDefinition = Fayde.Controls.ColumnDefinition;
             function createSize(definition) {
@@ -3913,7 +3887,7 @@ var Fayde;
                     });
                     Object.defineProperty(ds, "IsStar", {
                         get: function () {
-                            return !!rd.Height && rd.Height.Type === 2 /* Star */;
+                            return !!rd.Height && rd.Height.Type === GridUnitType.Star;
                         }
                     });
                     ds.Index = 0;
@@ -3948,7 +3922,7 @@ var Fayde;
                     });
                     Object.defineProperty(ds, "IsStar", {
                         get: function () {
-                            return !!cd.Width && cd.Width.Type === 2 /* Star */;
+                            return !!cd.Width && cd.Width.Type === GridUnitType.Star;
                         }
                     });
                     ds.Index = 0;
@@ -4177,36 +4151,36 @@ var Fayde;
                 ScrollEx.HandleKey = function (sv, key, flowDirection) {
                     if (!sv)
                         return false;
-                    var isRTL = flowDirection === 1 /* RightToLeft */;
+                    var isRTL = flowDirection === Fayde.FlowDirection.RightToLeft;
                     switch (key) {
-                        case 10 /* PageUp */:
+                        case Fayde.Input.Key.PageUp:
                             if (!NumberEx.IsGreaterThanClose(sv.ExtentHeight, sv.ViewportHeight))
                                 ScrollEx.PageLeft(sv);
                             else
                                 ScrollEx.PageUp(sv);
                             return true;
-                        case 11 /* PageDown */:
+                        case Fayde.Input.Key.PageDown:
                             if (!NumberEx.IsGreaterThanClose(sv.ExtentHeight, sv.ViewportHeight))
                                 ScrollEx.PageRight(sv);
                             else
                                 ScrollEx.PageDown(sv);
                             return true;
-                        case 12 /* End */:
+                        case Fayde.Input.Key.End:
                             ScrollEx.ScrollToBottom(sv);
                             return true;
-                        case 13 /* Home */:
+                        case Fayde.Input.Key.Home:
                             ScrollEx.ScrollToTop(sv);
                             return true;
-                        case 14 /* Left */:
+                        case Fayde.Input.Key.Left:
                             isRTL ? ScrollEx.LineRight(sv) : ScrollEx.LineLeft(sv);
                             return true;
-                        case 15 /* Up */:
+                        case Fayde.Input.Key.Up:
                             ScrollEx.LineUp(sv);
                             return true;
-                        case 16 /* Right */:
+                        case Fayde.Input.Key.Right:
                             isRTL ? ScrollEx.LineLeft(sv) : ScrollEx.LineRight(sv);
                             return true;
-                        case 17 /* Down */:
+                        case Fayde.Input.Key.Down:
                             ScrollEx.LineDown(sv);
                             return true;
                     }
@@ -4284,9 +4258,7 @@ var Fayde;
                     });
                 }
                 Object.defineProperty(SelectionHandler.prototype, "ActiveBox", {
-                    get: function () {
-                        return this._ActiveBox;
-                    },
+                    get: function () { return this._ActiveBox; },
                     enumerable: true,
                     configurable: true
                 });
@@ -4344,11 +4316,11 @@ var Fayde;
                         this.Spinner.Spin.on(this.Spinner_Spin, this);
                 }
                 SpinFlow.prototype.UpdateValid = function (increase, decrease) {
-                    var validSpinDirections = 0 /* None */;
+                    var validSpinDirections = Controls.ValidSpinDirections.None;
                     if (increase)
-                        validSpinDirections |= 1 /* Increase */;
+                        validSpinDirections |= Controls.ValidSpinDirections.Increase;
                     if (decrease)
-                        validSpinDirections |= 2 /* Decrease */;
+                        validSpinDirections |= Controls.ValidSpinDirections.Decrease;
                     if (this.Spinner)
                         this.Spinner.ValidSpinDirection = validSpinDirections;
                 };
@@ -4364,15 +4336,15 @@ var Fayde;
                     if (e.Handled)
                         return;
                     switch (e.Key) {
-                        case 3 /* Enter */:
+                        case Fayde.Input.Key.Enter:
                             this.Owner.OnSpin();
                             e.Handled = true;
                             break;
-                        case 15 /* Up */:
+                        case Fayde.Input.Key.Up:
                             this.DoIncrement();
                             e.Handled = true;
                             break;
-                        case 17 /* Down */:
+                        case Fayde.Input.Key.Down:
                             this.DoDecrement();
                             e.Handled = true;
                             break;
@@ -4391,17 +4363,17 @@ var Fayde;
                     this.Owner.OnSpin();
                     if (!this.Spinner)
                         return;
-                    if (e.Direction === 0 /* Increase */)
+                    if (e.Direction === Controls.SpinDirection.Increase)
                         this.DoIncrement();
                     else
                         this.DoDecrement();
                 };
                 SpinFlow.prototype.DoIncrement = function () {
-                    if (this.Spinner && (this.Spinner.ValidSpinDirection & 1 /* Increase */) === 1 /* Increase */)
+                    if (this.Spinner && (this.Spinner.ValidSpinDirection & Controls.ValidSpinDirections.Increase) === Controls.ValidSpinDirections.Increase)
                         this.Owner.OnIncrement();
                 };
                 SpinFlow.prototype.DoDecrement = function () {
-                    if (this.Spinner && (this.Spinner.ValidSpinDirection & 2 /* Decrease */) === 2 /* Decrease */)
+                    if (this.Spinner && (this.Spinner.ValidSpinDirection & Controls.ValidSpinDirections.Decrease) === Controls.ValidSpinDirections.Decrease)
                         this.Owner.OnDecrement();
                 };
                 return SpinFlow;
@@ -4430,9 +4402,7 @@ var Fayde;
                     this.UpdateIsEditable();
                 }
                 Object.defineProperty(TextBoxFormatter.prototype, "Value", {
-                    get: function () {
-                        return this.Control.Value;
-                    },
+                    get: function () { return this.Control.Value; },
                     enumerable: true,
                     configurable: true
                 });
@@ -4537,7 +4507,7 @@ var Fayde;
                     var tabControlParent = Fayde.VisualTreeHelper.GetParentOfType(this, Controls.TabControl);
                     if (tabControlParent != null)
                         return tabControlParent.TabStripPlacement;
-                    return 1 /* Top */;
+                    return Controls.Dock.Top;
                 },
                 enumerable: true,
                 configurable: true
@@ -4565,9 +4535,10 @@ var Fayde;
                     _super.apply(this, arguments);
                 }
                 TabPanelUpdater.prototype.init = function () {
-                    this.setMeasurePipe(minerva.singleton(tabpanel.measure.TabPanelMeasurePipeDef)).setArrangePipe(minerva.singleton(tabpanel.arrange.TabPanelArrangePipeDef));
+                    this.setMeasurePipe(minerva.singleton(tabpanel.measure.TabPanelMeasurePipeDef))
+                        .setArrangePipe(minerva.singleton(tabpanel.arrange.TabPanelArrangePipeDef));
                     var assets = this.assets;
-                    assets.tabAlignment = 1 /* Top */;
+                    assets.tabAlignment = Controls.Dock.Top;
                     assets.numRows = 1;
                     assets.numHeaders = 0;
                     assets.rowHeight = 0.0;
@@ -4591,7 +4562,9 @@ var Fayde;
                     __extends(TabPanelArrangePipeDef, _super);
                     function TabPanelArrangePipeDef() {
                         _super.call(this);
-                        this.addTapinAfter('doOverride', 'doVertical', arrange.tapins.doVertical).addTapinAfter('doVertical', 'doHorizontal', arrange.tapins.doHorizontal).removeTapin('doOverride');
+                        this.addTapinAfter('doOverride', 'doVertical', arrange.tapins.doVertical)
+                            .addTapinAfter('doVertical', 'doHorizontal', arrange.tapins.doHorizontal)
+                            .removeTapin('doOverride');
                     }
                     return TabPanelArrangePipeDef;
                 })(minerva.controls.panel.arrange.PanelArrangePipeDef);
@@ -4612,7 +4585,7 @@ var Fayde;
                 (function (tapins) {
                     var Point = minerva.Point;
                     function doHorizontal(input, state, output, tree, finalRect) {
-                        if (input.tabAlignment !== 1 /* Top */ && input.tabAlignment !== 3 /* Bottom */)
+                        if (input.tabAlignment !== Controls.Dock.Top && input.tabAlignment !== Controls.Dock.Bottom)
                             return true;
                         var fs = state.finalSize;
                         var isMultiRow = input.numRows > 1;
@@ -4622,10 +4595,10 @@ var Fayde;
                         var headersSize = tabpanel.helpers.getHeadersSize(tree);
                         if (isMultiRow) {
                             solution = tabpanel.helpers.calculateHeaderDistribution(tree, fs.width, headersSize);
-                            activeRow = tabpanel.helpers.getActiveRow(tree, solution, input.tabAlignment === 1 /* Top */);
-                            if (input.tabAlignment === 1 /* Top */)
+                            activeRow = tabpanel.helpers.getActiveRow(tree, solution, input.tabAlignment === Controls.Dock.Top);
+                            if (input.tabAlignment === Controls.Dock.Top)
                                 childOffset.y = (input.numRows - 1.0 - activeRow) * input.rowHeight;
-                            if (input.tabAlignment === 3 /* Bottom */ && activeRow !== 0)
+                            if (input.tabAlignment === Controls.Dock.Bottom && activeRow !== 0)
                                 childOffset.y = (input.numRows - activeRow) * input.rowHeight;
                         }
                         var cr = state.childRect;
@@ -4635,7 +4608,7 @@ var Fayde;
                         var separatorIndex = 0;
                         for (var walker = tree.walk(); walker.step();) {
                             var child = walker.current;
-                            if (child.assets.visibility === 1 /* Collapsed */)
+                            if (child.assets.visibility === minerva.Visibility.Collapsed)
                                 continue;
                             cr.width = headersSize[childIndex];
                             cr.height = input.rowHeight;
@@ -4645,7 +4618,8 @@ var Fayde;
                             child.arrange(cr);
                             cr.x += cr.width;
                             if (isLastHeaderInRow) {
-                                if ((separatorIndex === activeRow && input.tabAlignment === 1 /* Top */) || (separatorIndex === activeRow - 1 && input.tabAlignment === 3 /* Bottom */))
+                                if ((separatorIndex === activeRow && input.tabAlignment === Controls.Dock.Top) ||
+                                    (separatorIndex === activeRow - 1 && input.tabAlignment === Controls.Dock.Bottom))
                                     childOffset.y = 0;
                                 else
                                     childOffset.y += input.rowHeight;
@@ -4673,14 +4647,14 @@ var Fayde;
                 var tapins;
                 (function (tapins) {
                     function doVertical(input, state, output, tree, finalRect) {
-                        if (input.tabAlignment !== 0 /* Left */ && input.tabAlignment !== 2 /* Right */)
+                        if (input.tabAlignment !== Controls.Dock.Left && input.tabAlignment !== Controls.Dock.Right)
                             return true;
                         var cr = state.childRect;
                         cr.x = cr.y = 0;
                         cr.width = state.finalSize.width;
                         for (var walker = tree.walk(); walker.step();) {
                             var child = walker.current;
-                            if (child.assets.visibility === 1 /* Collapsed */)
+                            if (child.assets.visibility === minerva.Visibility.Collapsed)
                                 continue;
                             tabpanel.helpers.setTabItemZ(child);
                             var sizeWithoutMargin = tabpanel.helpers.getDesiredSizeWithoutMargin(child);
@@ -4733,7 +4707,7 @@ var Fayde;
                     var arr = [];
                     for (var walker = tree.walk(); walker.step();) {
                         var child = walker.current;
-                        var width = child.assets.visibility === 1 /* Collapsed */ ? 0.0 : getDesiredSizeWithoutMargin(child).width;
+                        var width = child.assets.visibility === Visibility.Collapsed ? 0.0 : getDesiredSizeWithoutMargin(child).width;
                         arr.push(width);
                     }
                     return arr;
@@ -4859,7 +4833,7 @@ var Fayde;
                     var index7 = 0;
                     for (var walker = tree.walk(); walker.step();) {
                         var child = walker.current;
-                        if (child.assets.visibility === 0 /* Visible */)
+                        if (child.assets.visibility === Visibility.Visible)
                             headerWidth[index7] += numArray6[index6];
                         if (index6 < length2 && numArray2[index6] == index7)
                             ++index6;
@@ -4885,7 +4859,9 @@ var Fayde;
                     __extends(TabPanelMeasurePipeDef, _super);
                     function TabPanelMeasurePipeDef() {
                         _super.call(this);
-                        this.addTapinAfter('doOverride', 'doVertical', measure.tapins.doVertical).addTapinAfter('doVertical', 'doHorizontal', measure.tapins.doHorizontal).removeTapin('doOverride');
+                        this.addTapinAfter('doOverride', 'doVertical', measure.tapins.doVertical)
+                            .addTapinAfter('doVertical', 'doHorizontal', measure.tapins.doHorizontal)
+                            .removeTapin('doOverride');
                     }
                     TabPanelMeasurePipeDef.prototype.createOutput = function () {
                         var output = _super.prototype.createOutput.call(this);
@@ -4924,7 +4900,7 @@ var Fayde;
                 var tapins;
                 (function (tapins) {
                     function doHorizontal(input, state, output, tree, availableSize) {
-                        if (input.tabAlignment !== 1 /* Top */ && input.tabAlignment !== 3 /* Bottom */)
+                        if (input.tabAlignment !== Controls.Dock.Top && input.tabAlignment !== Controls.Dock.Bottom)
                             return true;
                         var ds = output.desiredSize;
                         ds.width = ds.height = 0;
@@ -4936,7 +4912,7 @@ var Fayde;
                         var num3 = 0.0;
                         for (var walker = tree.walk(); walker.step();) {
                             var child = walker.current;
-                            if (child.assets.visibility === 1 /* Collapsed */)
+                            if (child.assets.visibility === minerva.Visibility.Collapsed)
                                 break;
                             output.numHeaders++;
                             child.measure(state.availableSize);
@@ -4978,7 +4954,7 @@ var Fayde;
                 var tapins;
                 (function (tapins) {
                     function doVertical(input, state, output, tree, availableSize) {
-                        if (input.tabAlignment !== 0 /* Left */ && input.tabAlignment !== 2 /* Right */)
+                        if (input.tabAlignment !== Controls.Dock.Left && input.tabAlignment !== Controls.Dock.Right)
                             return true;
                         var ds = output.desiredSize;
                         ds.width = ds.height = 0;
@@ -4987,7 +4963,7 @@ var Fayde;
                         output.rowHeight = 0.0;
                         for (var walker = tree.walk(); walker.step();) {
                             var child = walker.current;
-                            if (child.assets.visibility === 1 /* Collapsed */)
+                            if (child.assets.visibility === minerva.Visibility.Collapsed)
                                 break;
                             output.numHeaders++;
                             child.measure(state.availableSize);
@@ -5076,7 +5052,7 @@ var Fayde;
                     oldValue.BindingValidationError.off(this.Target_BindingValidationError, this);
                 if (newValue instanceof Fayde.FrameworkElement)
                     newValue.BindingValidationError.on(this.Target_BindingValidationError, this);
-                this._Errors.ClearErrors(2 /* PropertyError */);
+                this._Errors.ClearErrors(Controls.ValidationSummaryItemType.PropertyError);
                 this.UpdateDisplayedErrors();
             };
             Object.defineProperty(ValidationSummary.prototype, "Errors", {
@@ -5131,7 +5107,7 @@ var Fayde;
                 this.UpdateDisplayedErrors();
             };
             ValidationSummary.prototype.ErrorsListBox_KeyDown = function (sender, e) {
-                if (e.Key !== 3 /* Enter */)
+                if (e.Key !== Fayde.Input.Key.Enter)
                     return;
                 this.ExecuteClick(sender);
             };
@@ -5192,16 +5168,16 @@ var Fayde;
                 hcc.Content = (this.Header != null) ? this.Header : this.GetHeaderString();
             };
             ValidationSummary.prototype.UpdateDisplayedErrors = function () {
-                var showoe = (this.Filter & 1 /* ObjectErrors */) !== 0 /* None */;
-                var showpe = (this.Filter & 2 /* PropertyErrors */) !== 0 /* None */;
+                var showoe = (this.Filter & Controls.ValidationSummaryFilters.ObjectErrors) !== Controls.ValidationSummaryFilters.None;
+                var showpe = (this.Filter & Controls.ValidationSummaryFilters.PropertyErrors) !== Controls.ValidationSummaryFilters.None;
                 var arr = [];
                 for (var en = this.Errors.getEnumerator(); en.moveNext();) {
                     var item = en.current;
                     if (!item)
                         continue;
-                    if (showoe && item.ItemType === 1 /* ObjectError */)
+                    if (showoe && item.ItemType === Controls.ValidationSummaryItemType.ObjectError)
                         arr.push(item);
-                    else if (showpe && item.ItemType === 2 /* PropertyError */)
+                    else if (showpe && item.ItemType === Controls.ValidationSummaryItemType.PropertyError)
                         arr.push(item);
                 }
                 arr.sort(Controls.compareSummaryItems);
@@ -5217,15 +5193,15 @@ var Fayde;
                 var message = e.Error.ErrorContent.toString();
                 var key = (element.Name || (element._ID).toString()) + message;
                 var dict = this._ValidationSummaryItemDictionary;
-                if (e.Action === 0 /* Added */) {
+                if (e.Action === Fayde.Validation.ValidationErrorEventAction.Added) {
                     if (ValidationSummary.GetShowErrorsInSummary(element) === false)
                         return;
                     var caption = e.Error.PropertyName;
-                    var item = new Controls.ValidationSummaryItem(message, caption, 2 /* PropertyError */, new Controls.ValidationSummaryItemSource(caption, element), null);
+                    var item = new Controls.ValidationSummaryItem(message, caption, Controls.ValidationSummaryItemType.PropertyError, new Controls.ValidationSummaryItemSource(caption, element), null);
                     this._Errors.Add(item);
                     dict[key] = item;
                 }
-                else if (e.Action === 1 /* Removed */) {
+                else if (e.Action === Fayde.Validation.ValidationErrorEventAction.Removed) {
                     if (dict[key]) {
                         this._Errors.Remove(dict[key]);
                         dict[key] = undefined;
@@ -5330,7 +5306,7 @@ var Fayde;
                 _super.call(this);
                 this.Message = message || null;
                 this.MessageHeader = messageHeader || null;
-                this.ItemType = itemType || 1 /* ObjectError */;
+                this.ItemType = itemType || Controls.ValidationSummaryItemType.ObjectError;
                 this._Sources = new ObservableCollection();
                 if (source != null)
                     this._Sources.Add(source);
@@ -5456,7 +5432,7 @@ var Fayde;
             WrapPanel.prototype.CreateLayoutUpdater = function () {
                 return new Controls.wrappanel.WrapPanelUpdater();
             };
-            WrapPanel.OrientationProperty = DependencyProperty.Register("Orientation", function () { return new Fayde.Enum(Fayde.Orientation); }, WrapPanel, 0 /* Horizontal */);
+            WrapPanel.OrientationProperty = DependencyProperty.Register("Orientation", function () { return new Fayde.Enum(Fayde.Orientation); }, WrapPanel, Fayde.Orientation.Horizontal);
             WrapPanel.ItemWidthProperty = DependencyProperty.Register("ItemWidth", function () { return Number; }, WrapPanel, NaN);
             WrapPanel.ItemHeightProperty = DependencyProperty.Register("ItemHeight", function () { return Number; }, WrapPanel, NaN);
             return WrapPanel;
@@ -5482,9 +5458,10 @@ var Fayde;
                     _super.apply(this, arguments);
                 }
                 WrapPanelUpdater.prototype.init = function () {
-                    this.setMeasurePipe(minerva.singleton(wrappanel.measure.WrapPanelMeasurePipeDef)).setArrangePipe(minerva.singleton(wrappanel.arrange.WrapPanelArrangePipeDef));
+                    this.setMeasurePipe(minerva.singleton(wrappanel.measure.WrapPanelMeasurePipeDef))
+                        .setArrangePipe(minerva.singleton(wrappanel.arrange.WrapPanelArrangePipeDef));
                     var assets = this.assets;
-                    assets.orientation = 0 /* Horizontal */;
+                    assets.orientation = Fayde.Orientation.Horizontal;
                     assets.itemWidth = NaN;
                     assets.itemHeight = NaN;
                     _super.prototype.init.call(this);
@@ -5508,7 +5485,9 @@ var Fayde;
                     __extends(WrapPanelArrangePipeDef, _super);
                     function WrapPanelArrangePipeDef() {
                         _super.call(this);
-                        this.addTapinAfter('doOverride', 'doHorizontal', arrange.tapins.doHorizontal).addTapinAfter('doOverride', 'doVertical', arrange.tapins.doVertical).removeTapin('doOverride');
+                        this.addTapinAfter('doOverride', 'doHorizontal', arrange.tapins.doHorizontal)
+                            .addTapinAfter('doOverride', 'doVertical', arrange.tapins.doVertical)
+                            .removeTapin('doOverride');
                     }
                     return WrapPanelArrangePipeDef;
                 })(panel.arrange.PanelArrangePipeDef);
@@ -5529,7 +5508,7 @@ var Fayde;
                 (function (tapins) {
                     var Size = minerva.Size;
                     function doHorizontal(input, state, output, tree, finalRect) {
-                        if (input.orientation !== 0 /* Horizontal */)
+                        if (input.orientation !== Fayde.Orientation.Horizontal)
                             return true;
                         var fs = state.finalSize;
                         var as = state.arrangedSize;
@@ -5571,7 +5550,7 @@ var Fayde;
                 (function (tapins) {
                     var Size = minerva.Size;
                     function doVertical(input, state, output, tree, finalRect) {
-                        if (input.orientation !== 1 /* Vertical */)
+                        if (input.orientation !== Fayde.Orientation.Vertical)
                             return true;
                         var fs = state.finalSize;
                         var as = state.arrangedSize;
@@ -5637,7 +5616,9 @@ var Fayde;
                     __extends(WrapPanelMeasurePipeDef, _super);
                     function WrapPanelMeasurePipeDef() {
                         _super.call(this);
-                        this.addTapinAfter('doOverride', 'doHorizontal', measure.tapins.doHorizontal).addTapinAfter('doOverride', 'doVertical', measure.tapins.doVertical).removeTapin('doOverride');
+                        this.addTapinAfter('doOverride', 'doHorizontal', measure.tapins.doHorizontal)
+                            .addTapinAfter('doOverride', 'doVertical', measure.tapins.doVertical)
+                            .removeTapin('doOverride');
                     }
                     return WrapPanelMeasurePipeDef;
                 })(panel.measure.PanelMeasurePipeDef);
@@ -5657,7 +5638,7 @@ var Fayde;
                 var tapins;
                 (function (tapins) {
                     function doHorizontal(input, state, output, tree, availableSize) {
-                        if (input.orientation !== 0 /* Horizontal */)
+                        if (input.orientation !== Fayde.Orientation.Horizontal)
                             return true;
                         var as = state.availableSize;
                         if (!isNaN(input.height))
@@ -5704,7 +5685,7 @@ var Fayde;
                 var tapins;
                 (function (tapins) {
                     function doVertical(input, state, output, tree, availableSize) {
-                        if (input.orientation !== 1 /* Vertical */)
+                        if (input.orientation !== Fayde.Orientation.Vertical)
                             return true;
                         var as = state.availableSize;
                         if (!isNaN(input.width))

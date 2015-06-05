@@ -1,11 +1,11 @@
 declare module Fayde.Controls {
-    var Version: string;
+    var version: string;
 }
 declare module Fayde.Controls {
     var Library: nullstone.ILibrary;
 }
 declare module Fayde.Controls.Primitives {
-    class MenuBase extends ItemsControl {
+    class MenuBase extends Fayde.Controls.ItemsControl {
         static ItemContainerStyleProperty: DependencyProperty;
         ItemContainerStyle: Style;
         IsItemItsOwnContainer(item: any): boolean;
@@ -89,6 +89,45 @@ declare module Fayde.Controls {
     }
 }
 declare module Fayde.Controls {
+    enum ValidSpinDirections {
+        None = 0,
+        Increase = 1,
+        Decrease = 2,
+    }
+    enum SpinDirection {
+        Increase = 0,
+        Decrease = 1,
+    }
+    enum InvalidInputAction {
+        UseFallbackItem = 0,
+        TextBoxCannotLoseFocus = 1,
+    }
+    enum Dock {
+        Left = 0,
+        Top = 1,
+        Right = 2,
+        Bottom = 3,
+    }
+    enum DatePickerFormat {
+        Long = 0,
+        Short = 1,
+    }
+    enum TimeDisplayMode {
+        Regular = 0,
+        Military = 1,
+    }
+    enum ValidationSummaryFilters {
+        None = 0,
+        ObjectErrors = 1,
+        PropertyErrors = 2,
+        All = 3,
+    }
+    enum ValidationSummaryItemType {
+        ObjectError = 1,
+        PropertyError = 2,
+    }
+}
+declare module Fayde.Controls {
     class Spinner extends Control {
         static ContentProperty: DependencyProperty;
         static ValidSpinDirectionProperty: DependencyProperty;
@@ -140,8 +179,8 @@ declare module Fayde.Controls {
         OnApplyTemplate(): void;
         private SetTextBox(d);
         private SetSpinner(d);
-        OnKeyDown(e: Input.KeyEventArgs): void;
-        OnMouseWheel(e: Input.MouseWheelEventArgs): void;
+        OnKeyDown(e: Fayde.Input.KeyEventArgs): void;
+        OnMouseWheel(e: Fayde.Input.MouseWheelEventArgs): void;
         ApplyValue(text: string): void;
         OnParseError(e: UpDownParseErrorEventArgs): void;
         OnParsing(e: UpDownParsingEventArgs<T>): void;
@@ -194,7 +233,7 @@ declare module Fayde.Controls {
         ParseError: RoutedEvent<UpDownParseErrorEventArgs>;
         ValueMemberPath: string;
         private _ValueBindingEvaluator;
-        ValueMemberBinding: Data.Binding;
+        ValueMemberBinding: Fayde.Data.Binding;
         private _Coercer;
         private _SpinFlow;
         private _CanEditByFocus;
@@ -202,10 +241,10 @@ declare module Fayde.Controls {
         OnApplyTemplate(): void;
         OnGotFocus(e: RoutedEventArgs): void;
         OnLostFocus(e: RoutedEventArgs): void;
-        OnMouseEnter(e: Input.MouseEventArgs): void;
-        OnMouseLeave(e: Input.MouseEventArgs): void;
-        OnMouseLeftButtonDown(e: Input.MouseButtonEventArgs): void;
-        OnMouseLeftButtonUp(e: Input.MouseButtonEventArgs): void;
+        OnMouseEnter(e: Fayde.Input.MouseEventArgs): void;
+        OnMouseLeave(e: Fayde.Input.MouseEventArgs): void;
+        OnMouseLeftButtonDown(e: Fayde.Input.MouseButtonEventArgs): void;
+        OnMouseLeftButtonUp(e: Fayde.Input.MouseButtonEventArgs): void;
         GoToStates(gotoFunc: (state: string) => boolean): void;
         GoToStateEditing(gotoFunc: (state: string) => boolean): boolean;
         GoToStateValid(gotoFunc: (state: string) => boolean): boolean;
@@ -218,45 +257,6 @@ declare module Fayde.Controls {
         OnDecrement(): void;
         TryParseValue(text: string, ov: IOutValue): boolean;
         FormatValue(): string;
-    }
-}
-declare module Fayde.Controls {
-    enum ValidSpinDirections {
-        None = 0,
-        Increase = 1,
-        Decrease = 2,
-    }
-    enum SpinDirection {
-        Increase = 0,
-        Decrease = 1,
-    }
-    enum InvalidInputAction {
-        UseFallbackItem = 0,
-        TextBoxCannotLoseFocus = 1,
-    }
-    enum Dock {
-        Left = 0,
-        Top = 1,
-        Right = 2,
-        Bottom = 3,
-    }
-    enum DatePickerFormat {
-        Long = 0,
-        Short = 1,
-    }
-    enum TimeDisplayMode {
-        Regular = 0,
-        Military = 1,
-    }
-    enum ValidationSummaryFilters {
-        None = 0,
-        ObjectErrors = 1,
-        PropertyErrors = 2,
-        All,
-    }
-    enum ValidationSummaryItemType {
-        ObjectError = 1,
-        PropertyError = 2,
     }
 }
 declare module Fayde.Controls {
@@ -301,7 +301,7 @@ declare module Fayde.Controls {
     }
 }
 declare module Fayde.Controls {
-    class MenuItem extends HeaderedItemsControl {
+    class MenuItem extends Fayde.Controls.HeaderedItemsControl {
         ParentMenuBase: Primitives.MenuBase;
         Click: RoutedEvent<RoutedEventArgs>;
         static CommandProperty: DependencyProperty;
@@ -410,7 +410,7 @@ declare module Fayde.Controls {
         private _FindEndTabItem();
         private _FindHomeTabItem();
         private SelectItem(oldItem, newItem);
-        OnSelectionChanged(e: Primitives.SelectionChangedEventArgs): void;
+        OnSelectionChanged(e: Controls.Primitives.SelectionChangedEventArgs): void;
         private UpdateTabPanelLayout(oldValue, newValue);
         private UpdateSelectedContent(content);
         private EnsureLanguageBinding(tabItem);
@@ -682,7 +682,7 @@ declare module Fayde.Controls.Internal {
 }
 declare module Fayde.Controls.Internal {
     interface IDomainOwner extends UIElement {
-        Items: ObservableObjectCollection;
+        Items: Internal.ObservableObjectCollection;
         InvalidInputAction: InvalidInputAction;
         FallbackItem: any;
         Value: any;
@@ -953,13 +953,12 @@ declare module Fayde.Controls.tabpanel.arrange {
     }
     interface IOutput extends panel.arrange.IOutput {
     }
-    class TabPanelArrangePipeDef extends panel.arrange.PanelArrangePipeDef {
+    class TabPanelArrangePipeDef extends minerva.controls.panel.arrange.PanelArrangePipeDef {
         constructor();
     }
 }
 declare module Fayde.Controls.tabpanel.arrange.tapins {
-    import Rect = minerva.Rect;
-    function doHorizontal(input: IInput, state: IState, output: IOutput, tree: minerva.controls.panel.PanelUpdaterTree, finalRect: Rect): boolean;
+    function doHorizontal(input: IInput, state: IState, output: IOutput, tree: minerva.controls.panel.PanelUpdaterTree, finalRect: minerva.Rect): boolean;
 }
 declare module Fayde.Controls.tabpanel.arrange.tapins {
     function doVertical(input: IInput, state: IState, output: IOutput, tree: minerva.core.IUpdaterTree, finalRect: minerva.Rect): boolean;
@@ -1097,12 +1096,12 @@ declare module Fayde.Controls {
     function compareSummaryItems(item1: ValidationSummaryItem, item2: ValidationSummaryItem): number;
 }
 declare module Fayde.Controls {
-    class WrapPanel extends Panel {
+    class WrapPanel extends Fayde.Controls.Panel {
         CreateLayoutUpdater(): wrappanel.WrapPanelUpdater;
         static OrientationProperty: DependencyProperty;
         static ItemWidthProperty: DependencyProperty;
         static ItemHeightProperty: DependencyProperty;
-        Orientation: Orientation;
+        Orientation: Fayde.Orientation;
         ItemWidth: number;
         ItemHeight: number;
     }
