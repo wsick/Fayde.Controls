@@ -1,16 +1,11 @@
 {
   "libs": {
     "fayde.controls": {
-      "exports": "Fayde.Controls",
-      "deps": [
-        "qunit"
-      ]
-    },
-    "qunit": {}
+      "exports": "Fayde.Controls"
+    }
   },
   "themes": {
-    "fayde.controls": {},
-    "qunit": "none"
+    "fayde.controls": {}
   },
   "debug": {
     "warnMissingThemes": false,
