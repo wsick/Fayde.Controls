@@ -1,11 +1,10 @@
-var version = require('./build/version'),
-    setup = require('./build/setup'),
-    path = require('path'),
+var path = require('path'),
     connect_livereload = require('connect-livereload'),
     gunify = require('grunt-fayde-unify');
 
 module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-typescript');
+    grunt.loadNpmTasks('grunt-bower-install-simple');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-qunit');
@@ -13,12 +12,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-open');
-    grunt.loadNpmTasks("grunt-bower-install-simple");
     grunt.loadNpmTasks("grunt-version-ts");
     var unify = gunify(grunt);
 
     var ports = {
-        test: 7002,
         testsite: 7003,
         livereload: 35730
     };
@@ -54,10 +51,10 @@ module.exports = function (grunt) {
             test: [dirs.test.lib]
         },
         "bower-install-simple": {
-            fayde: {
+            lib: {
                 directory: "lib"
             }
-        },       
+        },
         symlink: {
             options: {
                 overwrite: true
@@ -142,18 +139,18 @@ module.exports = function (grunt) {
             },
             testsite: {
                 src: [
-                    'typings/*.d.ts',
+                    'typings/**/*.d.ts',
                     '<%= dirs.testsite.root %>/**/*.ts',
-                    '!<%= dirs.testsite.root %>/lib/**/*.ts'
+                    '!<%= dirs.testsite.lib %>/**/*.ts'
                 ].concat(unify.typings()),
                 dest: dirs.testsite.build,
                 options: {
-                    rootDir: dirs.testsite.root,
                     target: 'es5',
+                    rootDir: dirs.testsite.root,
                     module: 'amd',
                     sourceMap: true
                 }
-            },            
+            }
         },
         qunit: {
             all: ['<%= dirs.test.root %>/*.html']
@@ -168,19 +165,6 @@ module.exports = function (grunt) {
                             connect_livereload({ port: ports.livereload }),
                             mount(connect, dirs.testsite.build),
                             mount(connect, dirs.testsite.root)
-                        ];
-                    }
-                }
-            },
-            test: {
-                options: {
-                    port: ports.test,
-                    base: dirs.test.root,
-                    middleware: function (connect) {
-                        return [
-                            connect_livereload({ port: ports.livereload }),
-                            mount(connect, dirs.test.build),
-                            mount(connect, dirs.test.root)
                         ];
                     }
                 }
@@ -219,30 +203,11 @@ module.exports = function (grunt) {
         open: {
             testsite: {
                 path: 'http://localhost:<%= ports.testsite %>/default.html'
-            },
-            test: {
-                path: 'http://localhost:<%= ports.test %>/tests.html'
             }
         },
-        version: {
-            bump: {
-            },
-            apply: {
-                src: './build/_VersionTemplate._ts',
-                dest: './src/_Version.ts'
-            }
-        },
-        uglify: {
+        "version-apply": {
             options: {
-                sourceMap: function (path) {
-                    return path.replace(/(.*).min.js/, "$1.js.map");
-                },
-                sourceMapIn: 'dist/<%= meta.name %>.js.map',
-                sourceMapIncludeSources: true
-            },
-            dist: {
-                src: ['dist/<%= meta.name %>.js'],
-                dest: 'dist/<%= meta.name %>.min.js'
+                label: 'version'
             }
         }
     });
@@ -250,13 +215,11 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ['typescript:build']);
     grunt.registerTask('test', ['typescript:build', 'typescript:test', 'qunit']);
     grunt.registerTask('testsite', ['typescript:build', 'typescript:testsite', 'connect:testsite', 'open:testsite', 'watch']);
-    setup(grunt);
-    version(grunt);
     grunt.registerTask('lib:reset', ['clean', 'bower-install-simple', 'symlink:test', 'symlink:testsite']);
     grunt.registerTask('link:minerva', ['symlink:localminerva']);
     grunt.registerTask('link:nullstone', ['symlink:localnullstone']);
     grunt.registerTask('link:fayde', ['symlink:localfayde']);
-    grunt.registerTask('dist:upbuild', ['version:bump', 'version:apply', 'typescript:build', 'uglify:dist']);
-    grunt.registerTask('dist:upminor', ['version:bump:minor', 'version:apply', 'typescript:build', 'uglify:dist']);
-    grunt.registerTask('dist:upmajor', ['version:bump:major', 'version:apply', 'typescript:build', 'uglify:dist']);
+    grunt.registerTask('dist:upbuild', ['bump-build', 'version-apply', 'typescript:build']);
+    grunt.registerTask('dist:upminor', ['bump-minor', 'version-apply', 'typescript:build']);
+    grunt.registerTask('dist:upmajor', ['bump-major', 'version-apply', 'typescript:build']);
 };

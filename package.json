@@ -1,6 +1,6 @@
 {
   "name": "fayde.controls",
-  "version": "0.17.2",
+  "version": "0.17.3",
   "description": "Extended control library for Fayde",
   "main": "Gruntfile.js",
   "scripts": {
@@ -31,9 +31,10 @@
     "grunt-contrib-symlink": "^0.3.0",
     "grunt-contrib-uglify": "^0.4.0",
     "grunt-contrib-watch": "^0.6.1",
-    "grunt-fayde-unify": "^0.4.1",
     "grunt-open": "^0.2.3",
-    "grunt-typescript": "^0.6.1",
-    "grunt-version-ts": "^0.1.0"
+    "grunt-typescript": "^0.6.2",
+    "grunt-version-ts": "^0.1.0",
+    "grunt-fayde-unify": "^0.4.0",
+    "fayde-unify": "^0.4.0"
   }
 }

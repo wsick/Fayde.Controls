@@ -1,3 +1,5 @@
+/// <reference path="Enums.ts" />
+
 module Fayde.Controls {
     import ButtonBase = Controls.Primitives.ButtonBase;
 

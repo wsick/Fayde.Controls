@@ -4,12 +4,17 @@
     "tests": [
       {
         "file": "test/fayde.json",
-        "lib": "test/lib"
+        "lib": "test/lib",
+        "exclude": [
+          "qunit"
+        ]
       },
       {
         "file": "testsite/fayde.json",
         "lib": "testsite/lib",
-        "exclude": ["qunit"]
+        "exclude": [
+          "qunit"
+        ]
       }
     ]
   },
