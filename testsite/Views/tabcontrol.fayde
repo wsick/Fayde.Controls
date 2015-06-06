@@ -1,31 +1,56 @@
 ﻿<Page xmlns="http://schemas.wsick.com/fayde"
       xmlns:x="http://schemas.wsick.com/fayde/x"
       xmlns:controls="lib://fayde.controls"
-      xmlns:viewmodels="ViewModels"
+      xmlns:vms="ViewModels"
       Title="TabControl Demo">
-    <Page.Resources>
-    </Page.Resources>
-
     <Page.DataContext>
-        <viewmodels:MainViewModel/>
+      <vms:TabViewModel/>
     </Page.DataContext>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"></RowDefinition>
+      <RowDefinition Height="Auto"></RowDefinition>
+      <RowDefinition Height="*"></RowDefinition>
+    </Grid.RowDefinitions>
+    
+    <controls:TabControl Margin="5" x:Name="Tab1"  >
+        <controls:TabItem Header="Tab 1">
+            <TextBlock Text="Tab One Content" />
+        </controls:TabItem>
+            
+        <controls:TabItem >
+            <controls:TabItem.HeaderTemplate>
+              <DataTemplate>
+                <StackPanel Orientation="Horizontal">
+                  <TextBlock Text="Tab 2"/>
+                  <Ellipse Width="20" Height="20" Fill="Blue" />
+                </StackPanel>
+              </DataTemplate>
+            </controls:TabItem.HeaderTemplate>
+            <TextBlock Text="Tab 2 Content"/>
+        </controls:TabItem>
+                   
+        <controls:TabItem>
+            <controls:TabItem.Header>          
+                <Button Content="Button as Tab Header" />         
+            </controls:TabItem.Header>
+            <ScrollViewer>
+                <StackPanel>
+                    <TextBlock Text="Stack Panel with TextBlock and Ellipse" FontSize="18" />
+                    <Ellipse Width="20" Height="20" Fill="Blue" />
+                </StackPanel>
+            </ScrollViewer>
+        </controls:TabItem>
+    </controls:TabControl>
+        
+		<Button Grid.Row="1"
+              Margin="5"
+              Content="Dynamically adds TabItem to TabControl Below" 
+              Command="{Binding AddTabCommand}"/>
 
-        <controls:TabControl>
-            <controls:TabItem Header="Tab Item 1">
-                <TextBlock Text="Tab Content 1" />
-            </controls:TabItem>
-            <controls:TabItem Header="Tab Item 2">
-                <TextBlock Text="Tab Content 2" />
-            </controls:TabItem>
-            <controls:TabItem Header="Tab Item 3">
-                <TextBlock Text="Tab Content 3" />
-            </controls:TabItem>
-        </controls:TabControl>
-    </Grid>
+    <controls:TabControl Grid.Row="2" TabStripPlacement="Right"
+                         Margin="5" ItemsSource="{Binding Tabs}" >
+    </controls:TabControl>
+  </Grid>
 </Page>

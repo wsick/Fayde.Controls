@@ -1,0 +1,23 @@
+﻿<Page xmlns="http://schemas.wsick.com/fayde"
+      xmlns:x="http://schemas.wsick.com/fayde/x"
+      xmlns:controls="lib://fayde.controls"
+      Title="Draggable Control Demo">
+	  <Grid>
+      <controls:DraggableControl HorizontalAlignment="Left" VerticalAlignment="Top" CanResize="False" Margin="0,200,0,0">
+        <Border Background="Orange">
+          <StackPanel Margin="10,10,10,10">
+            <TextBlock>You can drag me around (by mouse or figure)</TextBlock>               
+          </StackPanel>
+        </Border>
+      </controls:DraggableControl>
+
+      <controls:DraggableControl HorizontalAlignment="Left" VerticalAlignment="Top" CanResize="True" Margin="200,200,0,0">
+        <Border BorderBrush="Red" BorderThickness="2">
+          <StackPanel Margin="10,10,10,10">
+            <TextBlock>You can drag me, resize me</TextBlock>           
+          </StackPanel>
+        </Border>
+      </controls:DraggableControl>
+	  
+  </Grid>
+</Page>
