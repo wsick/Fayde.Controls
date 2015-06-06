@@ -16,10 +16,11 @@
         </Grid.ColumnDefinitions>
         <StackPanel>
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/gridsplitter" Content="Grid Splitter" />
+            <HyperlinkButton TargetName="ContentFrame" NavigateUri="/draggable" Content="Draggable Control" />
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/numericupdown" Content="Numeric Up Down" />
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/domainupdown" Content="Domain Up Down" />
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/treeview" Content="TreeView" />
-            <HyperlinkButton TargetName="ContentFrame" NavigateUri="/tabcontrol" Content="TabControl" />
+            <HyperlinkButton TargetName="ContentFrame" NavigateUri="/tabcontrol" Content="Tab Control" />
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/wrappanel" Content="WrapPanel" />
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/datepicker" Content="DatePicker" />
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/timepicker" Content="TimePicker" />

@@ -5,14 +5,26 @@
     <Grid Margin="5">
         <Border Background="Black" Padding="5" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Foreground="White" Text="Right click me!">
-                <controls:ContextMenuService.ContextMenu>
-                    <controls:ContextMenu>
-                        <controls:MenuItem Header="Test 1"/>
-                        <controls:MenuItem Header="Test 2"/>
-                        <controls:Separator/>
-                        <controls:MenuItem Header="Test 3"/>
-                    </controls:ContextMenu>
-                </controls:ContextMenuService.ContextMenu>
+              <controls:ContextMenuService.ContextMenu>
+                <controls:ContextMenu>
+                  <controls:MenuItem Header="Move Up">
+                    <controls:MenuItem.Icon>
+                      <Rectangle Width="16" Height="16" Fill="Red"/>
+                    </controls:MenuItem.Icon>
+                  </controls:MenuItem>
+                  <controls:MenuItem Header="Move Down">
+                    <controls:MenuItem.Icon>
+                      <Rectangle Width="16" Height="16" Fill="Green"/>
+                    </controls:MenuItem.Icon>
+                  </controls:MenuItem>
+                  <controls:Separator/>
+                  <controls:MenuItem Header="Delete">
+                    <controls:MenuItem.Icon>
+                      <Rectangle Width="16" Height="16" Fill="Blue"/>
+                    </controls:MenuItem.Icon>
+                  </controls:MenuItem>
+                </controls:ContextMenu>
+              </controls:ContextMenuService.ContextMenu>
             </TextBlock>
         </Border>
     </Grid>

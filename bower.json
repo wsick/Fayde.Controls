@@ -9,7 +9,7 @@
     "Gruntfile.js"
   ],
   "dependencies": {
-    "fayde": "~0.16.26"
+    "fayde": "~0.16.29"
   },
   "devDependencies": {
     "qunit": "~1.18.0"
