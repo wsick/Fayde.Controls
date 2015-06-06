@@ -276,19 +276,19 @@ declare module Fayde.Controls {
         static OffsetYProperty: DependencyProperty;
         OffsetX: number;
         OffsetY: number;
-        private OnOffsetXChanged(oldValue, newValue);
-        private OnOffsetYChanged(oldValue, newValue);
+        private _OnOffsetXChanged(oldValue, newValue);
+        private _OnOffsetYChanged(oldValue, newValue);
         OnTouchDown(e: Fayde.Input.TouchEventArgs): void;
         OnTouchMove(e: Fayde.Input.TouchEventArgs): void;
         OnTouchUp(e: Fayde.Input.TouchEventArgs): void;
         OnMouseLeftButtonDown(e: Fayde.Input.MouseButtonEventArgs): void;
         OnMouseLeftButtonUp(e: Fayde.Input.MouseButtonEventArgs): void;
         OnMouseMove(e: Fayde.Input.MouseButtonEventArgs): void;
-        private dragStart;
-        private dragMove;
-        private dragEnd;
-        private ResizeHitTest;
-        private SetCursor;
+        private _DragStart;
+        private _DragMove;
+        private _DragEnd;
+        private _ResizeHitTest;
+        private _SetCursor;
     }
 }
 declare module Fayde.Controls {

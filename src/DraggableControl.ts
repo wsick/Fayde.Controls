@@ -28,19 +28,19 @@
             this.SetValue(DraggableControl.CanResizeProperty, value);
         }
 
-        static OffsetXProperty: DependencyProperty = DependencyProperty.Register("OffsetX", () => Number, DraggableControl, 0, (d, args) => (<DraggableControl>d).OnOffsetXChanged(args.OldValue, args.NewValue));
-        static OffsetYProperty: DependencyProperty = DependencyProperty.Register("OffsetY", () => Number, DraggableControl, 0, (d, args) => (<DraggableControl>d).OnOffsetYChanged(args.OldValue, args.NewValue));
+        static OffsetXProperty: DependencyProperty = DependencyProperty.Register("OffsetX", () => Number, DraggableControl, 0, (d, args) => (<DraggableControl>d)._OnOffsetXChanged(args.OldValue, args.NewValue));
+        static OffsetYProperty: DependencyProperty = DependencyProperty.Register("OffsetY", () => Number, DraggableControl, 0, (d, args) => (<DraggableControl>d)._OnOffsetYChanged(args.OldValue, args.NewValue));
 
         OffsetX: number = 0;
         OffsetY: number = 0;
 
-        private OnOffsetXChanged(oldValue: number, newValue: number) {
+        private _OnOffsetXChanged(oldValue: number, newValue: number) {
             if (oldValue !== newValue) {
                 this._Transform.X= newValue;
             }
         }
 
-        private OnOffsetYChanged(oldValue: number, newValue: number) {
+        private _OnOffsetYChanged(oldValue: number, newValue: number) {
             if (oldValue !== newValue) {
                 this._Transform.Y = newValue;
             }
@@ -52,7 +52,7 @@
             if (e.Handled) {
                 return;
             }
-            this.dragStart(e.GetTouchPoint(null).Position);
+            this._DragStart(e.GetTouchPoint(null).Position);
         }
 
         OnTouchMove(e: Fayde.Input.TouchEventArgs) {
@@ -60,12 +60,12 @@
             if (e.Handled) {
                 return;
             }
-            this.dragMove(e.GetTouchPoint(null).Position);
+            this._DragMove(e.GetTouchPoint(null).Position);
         }
 
         OnTouchUp(e: Fayde.Input.TouchEventArgs) {
             super.OnTouchUp(e);
-            this.dragEnd();
+            this._DragEnd();
         }        
         //#endregion
 
@@ -76,23 +76,23 @@
                 return;
             }
             this.CaptureMouse();
-            this.dragStart(e.GetPosition(null));
+            this._DragStart(e.GetPosition(null));
         }
 
         OnMouseLeftButtonUp(e: Fayde.Input.MouseButtonEventArgs) {
             super.OnMouseLeftButtonUp(e);
-            this.dragEnd();
+            this._DragEnd();
             this.ReleaseMouseCapture();
         }
 
         OnMouseMove(e: Fayde.Input.MouseButtonEventArgs) {
             super.OnMouseMove(e);
-            this.dragMove(e.GetPosition(null));
+            this._DragMove(e.GetPosition(null));
         }
         //#endregion
 
         //#region private functions
-        private dragStart = (pos: Point) => {
+        private _DragStart = (pos: Point) => {
             this._CurrentPoint = pos;
             this.Opacity *= 0.8;
             var zIndex = this.GetValue(Fayde.Controls.Canvas.ZIndexProperty);
@@ -104,7 +104,7 @@
             this.SetValue(Fayde.Controls.Panel.ZIndexProperty, DraggableControl.MaxZIndex);
         }
 
-        private dragMove = (pos: Point) => {
+        private _DragMove = (pos: Point) => {
             var newPoint =pos; // absolute position of the mouse
             if (this._CurrentPoint !== null) {
                 var change = new Point(newPoint.x - this._CurrentPoint.x, newPoint.y - this._CurrentPoint.y);
@@ -161,13 +161,13 @@
             } else {
                 // Check to see if mouse is on a resize area
                 if (this.CanResize) {
-                    this.ResizeHitTest(newPoint);
-                    this.SetCursor();
+                    this._ResizeHitTest(newPoint);
+                    this._SetCursor();
                 }
             }
         }
 
-        private dragEnd = () => {           
+        private _DragEnd = () => {           
             if (this._CurrentPoint !== null) {
                 this.Opacity = 1;
                 this._CurrentPoint = null;
@@ -175,7 +175,7 @@
             this._SizingDirection = "";
         }
 
-        private ResizeHitTest = (pt: Point) => {
+        private _ResizeHitTest = (pt: Point) => {
             var x0 = pt.x;
             var y0 = pt.y;
 
@@ -209,7 +209,7 @@
             }
         }
 
-        private SetCursor = () => {
+        private _SetCursor = () => {
             if (this._SizingDirection === "n" || this._SizingDirection === "s") {
                 this.Cursor = Fayde.CursorType.SizeNS;
             } else if (this._SizingDirection === "w" || this._SizingDirection === "e") {
