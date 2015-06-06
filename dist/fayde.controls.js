@@ -1064,6 +1064,223 @@ var Fayde;
 (function (Fayde) {
     var Controls;
     (function (Controls) {
+        var DraggableControl = (function (_super) {
+            __extends(DraggableControl, _super);
+            function DraggableControl() {
+                var _this = this;
+                _super.call(this);
+                this.PositionChanged = new nullstone.Event();
+                this.Resized = new nullstone.Event();
+                this._Transform = new Fayde.Media.TranslateTransform();
+                this._CurrentPoint = null;
+                this._SizingDirection = "";
+                this.OffsetX = 0;
+                this.OffsetY = 0;
+                //#endregion
+                //#region private functions
+                this.dragStart = function (pos) {
+                    _this._CurrentPoint = pos;
+                    _this.Opacity *= 0.8;
+                    var zIndex = _this.GetValue(Fayde.Controls.Canvas.ZIndexProperty);
+                    if (zIndex > DraggableControl.MaxZIndex) {
+                        DraggableControl.MaxZIndex = zIndex + 1;
+                    }
+                    else if (zIndex < DraggableControl.MaxZIndex) {
+                        DraggableControl.MaxZIndex++;
+                    }
+                    _this.SetValue(Fayde.Controls.Panel.ZIndexProperty, DraggableControl.MaxZIndex);
+                };
+                this.dragMove = function (pos) {
+                    var newPoint = pos; // absolute position of the mouse
+                    if (_this._CurrentPoint !== null) {
+                        var change = new Point(newPoint.x - _this._CurrentPoint.x, newPoint.y - _this._CurrentPoint.y);
+                        //Make sure the Point is within Application.Current.RootVisual
+                        var parent = _this.VisualParent;
+                        var p0 = _this.TransformToVisual(parent).Transform(new Point(0, 0));
+                        if (_this._SizingDirection === "") {
+                            if (p0.x + change.x >= 0 &&
+                                p0.y + change.x >= 0 &&
+                                p0.x + change.x + _this.ActualWidth <= parent.ActualWidth &&
+                                p0.y + change.y + _this.ActualHeight <= parent.ActualHeight) {
+                                _this.OffsetX += change.x;
+                                _this.OffsetY += change.y;
+                                _this.PositionChanged.raise(_this, null);
+                            }
+                        }
+                        else {
+                            if (p0.x + change.x > 0 &&
+                                p0.y + change.y > 0 &&
+                                p0.x + change.x + _this.ActualWidth <= parent.ActualWidth &&
+                                p0.y + change.y + _this.ActualHeight <= parent.ActualHeight) {
+                                if (_this._SizingDirection.indexOf("n") > -1 && _this.ActualHeight - change.y > 2 &&
+                                    (_this.MaxHeight !== Number.NaN && _this.ActualHeight < _this.MaxHeight && change.y < 0 ||
+                                        _this.MinHeight !== Number.NaN && _this.ActualHeight > _this.MinHeight && change.y > 0)) {
+                                    _this.OffsetY += change.y;
+                                    _this.Height = _this.ActualHeight - change.y;
+                                    _this.PositionChanged.raise(_this, null);
+                                    _this.Resized.raise(_this, null);
+                                }
+                                if (_this._SizingDirection.indexOf("s") > -1 && _this.ActualHeight + change.y > 2 &&
+                                    (_this.MaxHeight !== Number.NaN && _this.ActualHeight < _this.MaxHeight && change.y > 0 ||
+                                        _this.MinHeight !== Number.NaN && _this.ActualHeight > _this.MinHeight && change.y < 0)) {
+                                    _this.Height = _this.ActualHeight + change.y;
+                                    _this.Resized.raise(_this, null);
+                                }
+                                if (_this._SizingDirection.indexOf("w") > -1 && _this.ActualWidth - change.x > 2 &&
+                                    (_this.MaxWidth !== Number.NaN && _this.ActualWidth < _this.MaxWidth && change.x < 0 ||
+                                        _this.MinWidth !== Number.NaN && _this.ActualWidth > _this.MinWidth && change.x > 0)) {
+                                    _this.OffsetX += change.x;
+                                    _this.Width = _this.ActualWidth - change.x;
+                                    _this.PositionChanged.raise(_this, null);
+                                    _this.Resized.raise(_this, null);
+                                }
+                                if (_this._SizingDirection.indexOf("e") > -1 && _this.ActualWidth + change.x > 2 &&
+                                    (_this.MaxWidth !== Number.NaN && _this.ActualWidth < _this.MaxWidth && change.x > 0 ||
+                                        _this.MinWidth !== Number.NaN && _this.ActualWidth > _this.MinWidth && change.x < 0)) {
+                                    _this.Width = _this.ActualWidth + change.x;
+                                    _this.Resized.raise(_this, null);
+                                }
+                            }
+                        }
+                        _this._CurrentPoint = newPoint;
+                    }
+                    else {
+                        // Check to see if mouse is on a resize area
+                        if (_this.CanResize) {
+                            _this.ResizeHitTest(newPoint);
+                            _this.SetCursor();
+                        }
+                    }
+                };
+                this.dragEnd = function () {
+                    if (_this._CurrentPoint !== null) {
+                        _this.Opacity = 1;
+                        _this._CurrentPoint = null;
+                    }
+                    _this._SizingDirection = "";
+                };
+                this.ResizeHitTest = function (pt) {
+                    var x0 = pt.x;
+                    var y0 = pt.y;
+                    var P = _this.TransformToVisual(null).Transform(new Point(0, 0));
+                    var x1 = P.x;
+                    var y1 = P.y;
+                    var x2 = x1 + _this.ActualWidth;
+                    var y2 = y1 + _this.ActualHeight;
+                    // Corners
+                    if (Math.abs(x0 - x1) < 6 && Math.abs(y0 - y1) < 6) {
+                        _this._SizingDirection = "nw";
+                    }
+                    else if (Math.abs(x0 - x1) < 6 && Math.abs(y2 - y0) < 6) {
+                        _this._SizingDirection = "sw";
+                    }
+                    else if (Math.abs(x2 - x0) < 6 && Math.abs(y2 - y0) < 6) {
+                        _this._SizingDirection = "se";
+                    }
+                    else if (Math.abs(x2 - x0) < 6 && Math.abs(y0 - y1) < 6) {
+                        _this._SizingDirection = "ne";
+                    }
+                    else if (Math.abs(y0 - y1) < 4) {
+                        _this._SizingDirection = "n";
+                    }
+                    else if (Math.abs(x2 - x0) < 4) {
+                        _this._SizingDirection = "e";
+                    }
+                    else if (Math.abs(y2 - y0) < 4) {
+                        _this._SizingDirection = "s";
+                    }
+                    else if (Math.abs(x0 - x1) < 4) {
+                        _this._SizingDirection = "w";
+                    }
+                    else {
+                        _this._SizingDirection = "";
+                    }
+                };
+                this.SetCursor = function () {
+                    if (_this._SizingDirection === "n" || _this._SizingDirection === "s") {
+                        _this.Cursor = Fayde.CursorType.SizeNS;
+                    }
+                    else if (_this._SizingDirection === "w" || _this._SizingDirection === "e") {
+                        _this.Cursor = Fayde.CursorType.SizeWE;
+                    }
+                    else {
+                        _this.Cursor = Fayde.CursorType.Default;
+                    }
+                };
+                this.DefaultStyleKey = DraggableControl;
+                this.RenderTransform = this._Transform;
+            }
+            Object.defineProperty(DraggableControl.prototype, "CanResize", {
+                get: function () {
+                    return this.GetValue(DraggableControl.CanResizeProperty);
+                },
+                set: function (value) {
+                    this.SetValue(DraggableControl.CanResizeProperty, value);
+                },
+                enumerable: true,
+                configurable: true
+            });
+            DraggableControl.prototype.OnOffsetXChanged = function (oldValue, newValue) {
+                if (oldValue !== newValue) {
+                    this._Transform.X = newValue;
+                }
+            };
+            DraggableControl.prototype.OnOffsetYChanged = function (oldValue, newValue) {
+                if (oldValue !== newValue) {
+                    this._Transform.Y = newValue;
+                }
+            };
+            //#region Touch Event
+            DraggableControl.prototype.OnTouchDown = function (e) {
+                _super.prototype.OnTouchDown.call(this, e);
+                if (e.Handled) {
+                    return;
+                }
+                this.dragStart(e.GetTouchPoint(null).Position);
+            };
+            DraggableControl.prototype.OnTouchMove = function (e) {
+                _super.prototype.OnTouchMove.call(this, e);
+                if (e.Handled) {
+                    return;
+                }
+                this.dragMove(e.GetTouchPoint(null).Position);
+            };
+            DraggableControl.prototype.OnTouchUp = function (e) {
+                _super.prototype.OnTouchUp.call(this, e);
+                this.dragEnd();
+            };
+            //#endregion
+            //#region Mouse Event
+            DraggableControl.prototype.OnMouseLeftButtonDown = function (e) {
+                _super.prototype.OnMouseLeftButtonDown.call(this, e);
+                if (e.Handled) {
+                    return;
+                }
+                this.CaptureMouse();
+                this.dragStart(e.GetPosition(null));
+            };
+            DraggableControl.prototype.OnMouseLeftButtonUp = function (e) {
+                _super.prototype.OnMouseLeftButtonUp.call(this, e);
+                this.dragEnd();
+                this.ReleaseMouseCapture();
+            };
+            DraggableControl.prototype.OnMouseMove = function (e) {
+                _super.prototype.OnMouseMove.call(this, e);
+                this.dragMove(e.GetPosition(null));
+            };
+            DraggableControl.MaxZIndex = 1;
+            DraggableControl.CanResizeProperty = DependencyProperty.Register("CanResize", function () { return Boolean; }, DraggableControl, null);
+            DraggableControl.OffsetXProperty = DependencyProperty.Register("OffsetX", function () { return Number; }, DraggableControl, 0, function (d, args) { return d.OnOffsetXChanged(args.OldValue, args.NewValue); });
+            DraggableControl.OffsetYProperty = DependencyProperty.Register("OffsetY", function () { return Number; }, DraggableControl, 0, function (d, args) { return d.OnOffsetYChanged(args.OldValue, args.NewValue); });
+            return DraggableControl;
+        })(Fayde.Controls.ContentControl);
+        Controls.DraggableControl = DraggableControl;
+    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    var Controls;
+    (function (Controls) {
         var dragIncrement = 1;
         var keyIncrement = 10;
         var GridSplitter = (function (_super) {

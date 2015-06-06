@@ -4,6 +4,8 @@ declare module Fayde.Controls {
 declare module Fayde.Controls {
     var Library: nullstone.ILibrary;
 }
+declare module Fayde.Controls {
+}
 declare module Fayde.Controls.Primitives {
     class MenuBase extends Fayde.Controls.ItemsControl {
         static ItemContainerStyleProperty: DependencyProperty;
@@ -257,6 +259,36 @@ declare module Fayde.Controls {
         OnDecrement(): void;
         TryParseValue(text: string, ov: IOutValue): boolean;
         FormatValue(): string;
+    }
+}
+declare module Fayde.Controls {
+    class DraggableControl extends Fayde.Controls.ContentControl {
+        constructor();
+        static MaxZIndex: number;
+        PositionChanged: nullstone.Event<nullstone.IEventArgs>;
+        Resized: nullstone.Event<nullstone.IEventArgs>;
+        private _Transform;
+        private _CurrentPoint;
+        private _SizingDirection;
+        static CanResizeProperty: DependencyProperty;
+        CanResize: boolean;
+        static OffsetXProperty: DependencyProperty;
+        static OffsetYProperty: DependencyProperty;
+        OffsetX: number;
+        OffsetY: number;
+        private OnOffsetXChanged(oldValue, newValue);
+        private OnOffsetYChanged(oldValue, newValue);
+        OnTouchDown(e: Fayde.Input.TouchEventArgs): void;
+        OnTouchMove(e: Fayde.Input.TouchEventArgs): void;
+        OnTouchUp(e: Fayde.Input.TouchEventArgs): void;
+        OnMouseLeftButtonDown(e: Fayde.Input.MouseButtonEventArgs): void;
+        OnMouseLeftButtonUp(e: Fayde.Input.MouseButtonEventArgs): void;
+        OnMouseMove(e: Fayde.Input.MouseButtonEventArgs): void;
+        private dragStart;
+        private dragMove;
+        private dragEnd;
+        private ResizeHitTest;
+        private SetCursor;
     }
 }
 declare module Fayde.Controls {

@@ -1,0 +1,44 @@
+﻿<Page xmlns="http://schemas.wsick.com/fayde"
+      xmlns:x="http://schemas.wsick.com/fayde/x"
+      xmlns:controls="lib://fayde.controls"
+      Title="Child Window Demo">
+	  <Grid>
+      <controls:DraggableControl x:Name="Cwindow">
+        <!--<controls:ChildWindow.Header>
+          <TextBlock Text="Modal Window" FontWeight="Bold" Margin="2"/>
+        </controls:ChildWindow.Header>-->
+        <Grid Margin="10,10,10,10">
+          <TextBlock Text="Modal ChildWindow"/>
+        </Grid>
+      </controls:DraggableControl>
+
+        <controls:DraggableControl CanResize="True" x:Name="Cwindow2"  Margin="0,100,0,0">
+        <!--<controls:ChildWindow.Header>
+          <TextBlock Text="Non-Modal Window" FontWeight="Bold" Margin="2"/>
+        </controls:ChildWindow.Header>-->
+        <Grid Margin="10,10,10,10">
+          <TextBlock Text="this is content of ChildWindow"/>
+        </Grid>
+      </controls:DraggableControl>
+      
+      <controls:DraggableControl HorizontalAlignment="Left" VerticalAlignment="Top" CanResize="False" Margin="0,200,0,0">
+        <Border Background="Orange">
+          <StackPanel Margin="10,10,10,10">
+            <TextBlock>You can drag me around</TextBlock>
+            <!--<ToggleButton Content="Open Model Window" IsChecked="{Binding ElementName=Cwindow, Path=IsOpen, Mode=TwoWay}"/>
+            <ToggleButton Content="Open ChildWindow" IsChecked="{Binding ElementName=Cwindow2, Path=IsOpen, Mode=TwoWay}"/>-->         
+          </StackPanel>
+        </Border>
+      </controls:DraggableControl>
+
+      <controls:DraggableControl HorizontalAlignment="Left" VerticalAlignment="Top" CanResize="True" Margin="200,200,0,0">
+        <Border BorderBrush="Red" BorderThickness="2">
+          <StackPanel Margin="10,10,10,10">
+            <TextBlock>You can drag me, resize me</TextBlock>
+            <!--<ToggleButton Content="Open Model Window" IsChecked="{Binding ElementName=Cwindow, Path=IsOpen, Mode=TwoWay}"/>
+            <ToggleButton Content="Open ChildWindow" IsChecked="{Binding ElementName=Cwindow2, Path=IsOpen, Mode=TwoWay}"/>-->
+          </StackPanel>
+        </Border>
+      </controls:DraggableControl>
+	  </Grid>
+</Page>
