@@ -446,6 +446,13 @@ var Fayde;
         })(Controls.ValidationSummaryItemType || (Controls.ValidationSummaryItemType = {}));
         var ValidationSummaryItemType = Controls.ValidationSummaryItemType;
         Controls.Library.addEnum(ValidationSummaryItemType, "ValidationSummaryItemType");
+        (function (StretchDirection) {
+            StretchDirection[StretchDirection["UpOnly"] = 0] = "UpOnly";
+            StretchDirection[StretchDirection["DownOnly"] = 1] = "DownOnly";
+            StretchDirection[StretchDirection["Both"] = 2] = "Both";
+        })(Controls.StretchDirection || (Controls.StretchDirection = {}));
+        var StretchDirection = Controls.StretchDirection;
+        Controls.Library.addEnum(StretchDirection, "StretchDirection");
     })(Controls = Fayde.Controls || (Fayde.Controls = {}));
 })(Fayde || (Fayde = {}));
 /// <reference path="Enums.ts" />
@@ -5418,6 +5425,197 @@ var Fayde;
             }
             return 0;
         }
+    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    var Controls;
+    (function (Controls) {
+        var Viewbox = (function (_super) {
+            __extends(Viewbox, _super);
+            function Viewbox() {
+                _super.apply(this, arguments);
+            }
+            Viewbox.prototype.CreateLayoutUpdater = function () {
+                return new Controls.viewbox.ViewboxUpdater();
+            };
+            Viewbox.ChildProperty = DependencyProperty.Register("Child", function () { return Fayde.UIElement; }, Viewbox);
+            Viewbox.StretchProperty = DependencyProperty.Register("Stretch", function () { return new Fayde.Enum(Fayde.Media.Stretch); }, Viewbox, undefined, function (d, args) { return d.InvalidateMeasure(); });
+            Viewbox.StretchDirectionProperty = DependencyProperty.Register("StretchDirection", function () { return new Fayde.Enum(Controls.StretchDirection); }, Viewbox, undefined, function (d, args) { return d.InvalidateMeasure(); });
+            return Viewbox;
+        })(Fayde.FrameworkElement);
+        Controls.Viewbox = Viewbox;
+        Fayde.Markup.Content(Viewbox, Viewbox.ChildProperty);
+        var reactions;
+        (function (reactions) {
+            Fayde.UIReaction(Viewbox.StretchProperty, function (updater, ov, nv) { return updater.invalidateMeasure(); }, false);
+            Fayde.UIReaction(Viewbox.StretchDirectionProperty, function (updater, ov, nv) { return updater.invalidateMeasure(); }, false);
+            Fayde.UIReaction(Viewbox.ChildProperty, function (upd, ov, nv, viewbox) {
+                var node = viewbox.XamlNode;
+                var error = new BError();
+                if (ov instanceof Fayde.UIElement)
+                    node.DetachVisualChild(ov, error);
+                if (nv instanceof Fayde.UIElement)
+                    node.AttachVisualChild(nv, error);
+                if (error.Message)
+                    error.ThrowException();
+                upd.updateBounds();
+                upd.invalidateMeasure();
+            }, false, false);
+        })(reactions || (reactions = {}));
+    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    var Controls;
+    (function (Controls) {
+        var viewbox;
+        (function (viewbox) {
+            var ViewboxUpdater = (function (_super) {
+                __extends(ViewboxUpdater, _super);
+                function ViewboxUpdater() {
+                    _super.apply(this, arguments);
+                }
+                ViewboxUpdater.prototype.init = function () {
+                    this.setProcessDownPipe(minerva.singleton(viewbox.processdown.ViewboxProcessDownPipeDef));
+                    var assets = this.assets;
+                    assets.stretch = Fayde.Media.Stretch.Uniform;
+                    assets.stretchDirection = Controls.StretchDirection.Both;
+                    assets.viewXform = mat3.identity();
+                    _super.prototype.init.call(this);
+                };
+                ViewboxUpdater.prototype.measureOverride = function (availableSize) {
+                    var child = this.tree.subtree;
+                    if (!child)
+                        return new Size();
+                    child.measure(new Size(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY));
+                    var childSize = child.assets.desiredSize;
+                    var scalefac = viewbox.helpers.computeScaleFactor(availableSize, childSize, this.assets.stretch, this.assets.stretchDirection);
+                    return new Size(scalefac.width * childSize.width, scalefac.height * childSize.height);
+                };
+                ViewboxUpdater.prototype.arrangeOverride = function (finalSize) {
+                    var child = this.tree.subtree;
+                    if (!child)
+                        return new Size();
+                    var assets = this.assets;
+                    var childSize = child.assets.desiredSize;
+                    var scale = viewbox.helpers.computeScaleFactor(finalSize, childSize, assets.stretch, assets.stretchDirection);
+                    child.arrange(new Rect(0, 0, childSize.width, childSize.height));
+                    this.setViewXform(scale.width, scale.height);
+                    return new Size(scale.width * childSize.width, scale.height * childSize.height);
+                };
+                ViewboxUpdater.prototype.setViewXform = function (sx, sy) {
+                    var assets = this.assets;
+                    var xform = mat3.createScale(sx, sy);
+                    if (!mat3.equal(assets.viewXform, xform)) {
+                        mat3.copyTo(xform, assets.viewXform);
+                        assets.dirtyFlags |= minerva.DirtyFlags.Transform;
+                    }
+                };
+                return ViewboxUpdater;
+            })(minerva.anon.AnonymousUpdater);
+            viewbox.ViewboxUpdater = ViewboxUpdater;
+        })(viewbox = Controls.viewbox || (Controls.viewbox = {}));
+    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    var Controls;
+    (function (Controls) {
+        var viewbox;
+        (function (viewbox) {
+            var helpers;
+            (function (helpers) {
+                function computeScaleFactor(availableSize, contentSize, stretch, stretchDirection) {
+                    var scaleX = 1.0;
+                    var scaleY = 1.0;
+                    var isConstrainedWidth = isFinite(availableSize.width);
+                    var isConstrainedHeight = isFinite(availableSize.height);
+                    if ((stretch === Fayde.Media.Stretch.Uniform || stretch === Fayde.Media.Stretch.UniformToFill || stretch === Fayde.Media.Stretch.Fill)
+                        && (isConstrainedWidth || isConstrainedHeight)) {
+                        scaleX = isZero(contentSize.width) ? 0.0 : availableSize.width / contentSize.width;
+                        scaleY = isZero(contentSize.height) ? 0.0 : availableSize.height / contentSize.height;
+                        if (!isConstrainedWidth)
+                            scaleX = scaleY;
+                        else if (!isConstrainedHeight)
+                            scaleY = scaleX;
+                        else {
+                            switch (stretch) {
+                                case Fayde.Media.Stretch.Uniform:
+                                    var minscale = scaleX < scaleY ? scaleX : scaleY;
+                                    scaleX = scaleY = minscale;
+                                    break;
+                                case Fayde.Media.Stretch.UniformToFill:
+                                    var maxscale = scaleX > scaleY ? scaleX : scaleY;
+                                    scaleX = scaleY = maxscale;
+                                    break;
+                                case Fayde.Media.Stretch.Fill:
+                                    break;
+                            }
+                        }
+                        //Apply stretch direction by bounding scales.
+                        //In the uniform case, scaleX=scaleY, so this sort of clamping will maintain aspect ratio
+                        //In the uniform fill case, we have the same result too.
+                        //In the fill case, note that we change aspect ratio, but that is okay
+                        switch (stretchDirection) {
+                            case Controls.StretchDirection.UpOnly:
+                                if (scaleX < 1.0)
+                                    scaleX = 1.0;
+                                if (scaleY < 1.0)
+                                    scaleY = 1.0;
+                                break;
+                            case Controls.StretchDirection.DownOnly:
+                                if (scaleX > 1.0)
+                                    scaleX = 1.0;
+                                if (scaleY > 1.0)
+                                    scaleY = 1.0;
+                                break;
+                            case Controls.StretchDirection.Both:
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    return new Size(scaleX, scaleY);
+                }
+                helpers.computeScaleFactor = computeScaleFactor;
+                var epsilon = 1.192093E-07;
+                function isZero(val) {
+                    return Math.abs(val) < epsilon;
+                }
+            })(helpers = viewbox.helpers || (viewbox.helpers = {}));
+        })(viewbox = Controls.viewbox || (Controls.viewbox = {}));
+    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    var Controls;
+    (function (Controls) {
+        var viewbox;
+        (function (viewbox) {
+            var processdown;
+            (function (processdown) {
+                var ViewboxProcessDownPipeDef = (function (_super) {
+                    __extends(ViewboxProcessDownPipeDef, _super);
+                    function ViewboxProcessDownPipeDef() {
+                        _super.call(this);
+                        this.addTapinAfter('calcRenderXform', 'applyViewXform', tapins.applyViewXform);
+                    }
+                    return ViewboxProcessDownPipeDef;
+                })(minerva.core.processdown.ProcessDownPipeDef);
+                processdown.ViewboxProcessDownPipeDef = ViewboxProcessDownPipeDef;
+                var tapins;
+                (function (tapins) {
+                    function applyViewXform(input, state, output, vpinput, tree) {
+                        if ((input.dirtyFlags & minerva.DirtyFlags.Transform) === 0)
+                            return true;
+                        mat3.preapply(output.renderXform, input.viewXform);
+                        return true;
+                    }
+                    tapins.applyViewXform = applyViewXform;
+                })(tapins || (tapins = {}));
+            })(processdown = viewbox.processdown || (viewbox.processdown = {}));
+        })(viewbox = Controls.viewbox || (Controls.viewbox = {}));
     })(Controls = Fayde.Controls || (Fayde.Controls = {}));
 })(Fayde || (Fayde = {}));
 var Fayde;

@@ -6,10 +6,10 @@ module Fayde.Controls.viewbox.processdown {
     }
     export interface IOutput extends minerva.core.processdown.IOutput {
     }
-    export class ViewBoxProcessDownPipeDef extends minerva.core.processdown.ProcessDownPipeDef {
+    export class ViewboxProcessDownPipeDef extends minerva.core.processdown.ProcessDownPipeDef {
         constructor () {
             super();
-            this.addTapinAfter('calcAbsoluteXform', 'applyViewXform', tapins.applyViewXform);
+            this.addTapinAfter('calcRenderXform', 'applyViewXform', tapins.applyViewXform);
         }
     }
 
@@ -17,7 +17,7 @@ module Fayde.Controls.viewbox.processdown {
         export function applyViewXform (input: IInput, state: IState, output: IOutput, vpinput: IInput, tree: minerva.core.UpdaterTree): boolean {
             if ((input.dirtyFlags & minerva.DirtyFlags.Transform) === 0)
                 return true;
-            mat3.multiply(input.viewXform, output.absoluteXform, output.absoluteXform);
+            mat3.preapply(output.renderXform, input.viewXform);
             return true;
         }
     }
