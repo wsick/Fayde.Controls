@@ -126,6 +126,11 @@ declare module Fayde.Controls {
         ObjectError = 1,
         PropertyError = 2,
     }
+    enum StretchDirection {
+        UpOnly = 0,
+        DownOnly = 1,
+        Both = 2,
+    }
 }
 declare module Fayde.Controls {
     class Spinner extends Control {
@@ -1094,6 +1099,46 @@ declare module Fayde.Controls {
 }
 declare module Fayde.Controls {
     function compareSummaryItems(item1: ValidationSummaryItem, item2: ValidationSummaryItem): number;
+}
+declare module Fayde.Controls {
+    class Viewbox extends FrameworkElement {
+        CreateLayoutUpdater(): viewbox.ViewboxUpdater;
+        static ChildProperty: DependencyProperty;
+        static StretchProperty: DependencyProperty;
+        static StretchDirectionProperty: DependencyProperty;
+        Child: UIElement;
+        Stretch: Media.Stretch;
+        StretchDirection: StretchDirection;
+    }
+}
+declare module Fayde.Controls.viewbox {
+    interface IViewboxUpdaterAssets extends minerva.core.IUpdaterAssets, processdown.IInput {
+        stretch: Media.Stretch;
+        stretchDirection: StretchDirection;
+    }
+    class ViewboxUpdater extends minerva.anon.AnonymousUpdater {
+        tree: minerva.core.UpdaterTree;
+        assets: IViewboxUpdaterAssets;
+        init(): void;
+        measureOverride(availableSize: Size): Size;
+        arrangeOverride(finalSize: Size): Size;
+        private setViewXform(sx, sy);
+    }
+}
+declare module Fayde.Controls.viewbox.helpers {
+    function computeScaleFactor(availableSize: minerva.ISize, contentSize: minerva.ISize, stretch: Media.Stretch, stretchDirection: StretchDirection): Size;
+}
+declare module Fayde.Controls.viewbox.processdown {
+    interface IInput extends minerva.core.processdown.IInput {
+        viewXform: number[];
+    }
+    interface IState extends minerva.core.processdown.IState {
+    }
+    interface IOutput extends minerva.core.processdown.IOutput {
+    }
+    class ViewboxProcessDownPipeDef extends minerva.core.processdown.ProcessDownPipeDef {
+        constructor();
+    }
 }
 declare module Fayde.Controls {
     class WrapPanel extends Fayde.Controls.Panel {

@@ -1,6 +1,6 @@
 {
   "name": "fayde.controls",
-  "version": "0.17.3",
+  "version": "0.17.4",
   "ignore": [
     "build",
     "test",
@@ -9,7 +9,7 @@
     "Gruntfile.js"
   ],
   "dependencies": {
-    "fayde": "~0.16.26"
+    "fayde": "~0.16.34"
   },
   "devDependencies": {
     "qunit": "~1.18.0"
