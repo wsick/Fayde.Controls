@@ -448,7 +448,6 @@
                         <Grid x:Name="VerticalTemplate"
                               Visibility="Collapsed"
                               HorizontalAligment="Center">
-                            >
                             <StackPanel VerticalAlignment="Center" Height="18" HorizontalAligment="Center">
                                 <Rectangle Height="2"
                                            Width="2"

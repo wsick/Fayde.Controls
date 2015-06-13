@@ -1,6 +1,6 @@
 {
   "name": "fayde.controls",
-  "version": "0.17.4",
+  "version": "0.17.5",
   "description": "Extended control library for Fayde",
   "main": "Gruntfile.js",
   "scripts": {
