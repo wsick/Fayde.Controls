@@ -3,6 +3,7 @@
       xmlns:controls="lib://fayde.controls"
       Title="DatePicker Demo">
     <StackPanel Margin="5">
-        <controls:DatePicker />
+        <controls:DatePicker x:Name="DatePicke1"/>
+        <controls:DatePicker x:Name="DatePicke2" SelectedDate="07/08/2015"/>
     </StackPanel>
 </Page>
