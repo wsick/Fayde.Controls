@@ -3,7 +3,7 @@
         static SelectedMonthProperty = DependencyProperty.Register("SelectedMonth", () => Number, DatePicker, NaN, (d, args) => (<DatePicker>d).OnSelectedMonthChanged(args));
         static SelectedDayProperty = DependencyProperty.Register("SelectedDay", () => Number, DatePicker, NaN, (d, args) => (<DatePicker>d).OnSelectedDayChanged(args));
         static SelectedYearProperty = DependencyProperty.Register("SelectedYear", () => Number, DatePicker, NaN, (d, args) => (<DatePicker>d).OnSelectedYearChanged(args));
-        static SelectedDateProperty = DependencyProperty.Register("SelectedDate", () => DateTime, DatePicker, undefined, (d, args) => (<DatePicker>d).OnSelectedDateChanged(args));
+        static SelectedDateProperty = DependencyProperty.Register("SelectedDate", () => DateTime, DatePicker, DateTime.Today, (d, args) => (<DatePicker>d).OnSelectedDateChanged(args));
         SelectedMonth: number;
         SelectedDay: number;
         SelectedYear: number;
@@ -72,6 +72,9 @@
             this._SelectionHandler = new Internal.SelectionHandler([this._MonthTextBox, this._DayTextBox, this._YearTextBox]);
 
             this._UpdateText();
+
+            console.log("SelectedDate on " + this.Name + " is DateTime? " + (this.SelectedDate instanceof DateTime));     
+            console.log("Type of SelectedDate on " + this.Name + " is " + (typeof this.SelectedDate));     
         }
 
         private CoerceMonth(month: any) {
