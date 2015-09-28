@@ -5,12 +5,16 @@
       {
         "file": "test/fayde.json",
         "lib": "test/lib",
-        "exclude": ["qunit"]
+        "exclude": [
+          "qunit"
+        ]
       },
       {
         "file": "testsite/fayde.json",
         "lib": "testsite/lib",
-        "exclude": ["qunit"]
+        "exclude": [
+          "qunit"
+        ]
       }
     ]
   },
