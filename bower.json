@@ -2,16 +2,16 @@
   "name": "fayde.controls",
   "version": "0.17.5",
   "ignore": [
-    "build",
+    "gulp",
     "test",
     "testsite",
     "typings",
-    "Gruntfile.js"
+    "gulpfile.js"
   ],
   "dependencies": {
-    "fayde": "~0.16.34"
+    "fayde": "~0.17.1"
   },
   "devDependencies": {
-    "qunit": "~1.18.0"
+    "qunit": "~1.19.0"
   }
 }
