@@ -1,6 +1,6 @@
 {
   "name": "fayde.controls",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "description": "Extended control library for Fayde",
   "main": "gulpfile.js",
   "repository": {
