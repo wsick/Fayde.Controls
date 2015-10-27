@@ -20,12 +20,14 @@
         <controls:BusyIndicator Grid.Column="0" Grid.Row="1"
             IsBusy="True" 
             IsIndeterminate="True" 
+            Foreground="#FF3E3E3E"
             OverlayBrush="#CBFFFBFB"
             BusyContent="Please wait..."/>
         <TextBlock Text="Progress bar" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/> 
         <controls:BusyIndicator Grid.Column="1" Grid.Row="1" 
             IsBusy="True" 
-            Value="{Binding BusyValue,Mode=TwoWay}"  
+            Value="{Binding BusyValue,Mode=TwoWay}" 
+            Foreground="#FF3E3E3E" 
             OverlayBrush="#CBFFFBFB"
             BusyContent="Please wait..."/>
         <Button Content="Load something" Click="{EventBinding LoadSomething}" Grid.Column="1" Grid.Row="2"/>

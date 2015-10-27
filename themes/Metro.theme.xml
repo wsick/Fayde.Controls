@@ -2518,7 +2518,7 @@
                                         <RowDefinition Height="20"/>
                                         <RowDefinition Height="60"/>
                                     </Grid.RowDefinitions>
-                                    <TextBlock Text="{TemplateBinding BusyContent}" Grid.Row="0" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{TemplateBinding BusyContent}" Foreground="{TemplateBinding Foreground}" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     <Rectangle Fill="#FFD5D4D2" Height="10" Grid.Row="1"/>
                                     <Rectangle x:Name="ProgressBarFillElement" Fill="#FF198BAB" 
                                         HorizontalAlignment="Left" Width="0" 
@@ -2530,7 +2530,7 @@
                                         <RowDefinition Height="80"/>
                                         <RowDefinition Height="20"/>
                                     </Grid.RowDefinitions>
-                                    <TextBlock Text="{TemplateBinding BusyContent}" Grid.Row="1"/>
+                                    <TextBlock Text="{TemplateBinding BusyContent}" Foreground="{TemplateBinding Foreground}" Grid.Row="1"/>
                                      <Canvas Grid.Row="0" Margin="40,40,0,0">
                                         <Canvas.Triggers>
                                             <EventTrigger RoutedEvent = "Canvas.Loaded">

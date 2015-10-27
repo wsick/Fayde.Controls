@@ -8,6 +8,7 @@ module Fayde.Controls {
         static MaxValueProperty = DependencyProperty.Register("MaxValue", () => Number, BusyIndicator);
         static MinValueProperty = DependencyProperty.Register("MinValue", () => Number, BusyIndicator);
         static BusyContentProperty = DependencyProperty.Register("BusyContent", () => String, BusyIndicator);
+        static ForegroundProperty = DependencyProperty.Register("Foreground", () => Media.Brush, BusyIndicator);
         IsBusy: boolean;
         OverlayBrush: Media.Brush;
         IsIndeterminate: boolean;
@@ -15,6 +16,7 @@ module Fayde.Controls {
         MaxValue: number = 100.0;
         MinValue: number = 0.0;
         BusyContent: string = "";
+        Foreground : Media.Brush;
 
         private _ProgressRingElement : Grid = null;
         private _ProgressBarElement : Grid = null;
