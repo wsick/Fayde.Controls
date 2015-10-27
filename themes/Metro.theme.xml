@@ -427,7 +427,7 @@
                         </VisualStateManager.VisualStateGroups>
                         <Rectangle Fill="{TemplateBinding Background}"/>
                         <Grid x:Name="HorizontalTemplate">
-                            <StackPanel Width="18" HorizontalAligment="Center" Orientation="Horizontal">
+                            <StackPanel Width="18" HorizontalAlignment="Center" Orientation="Horizontal">
                                 <Rectangle Height="2"
                                            Width="2"
                                            Margin="2,2"
@@ -447,22 +447,22 @@
                         </Grid>
                         <Grid x:Name="VerticalTemplate"
                               Visibility="Collapsed"
-                              HorizontalAligment="Center">
-                            <StackPanel VerticalAlignment="Center" Height="18" HorizontalAligment="Center">
+                              HorizontalAlignment="Center">
+                            <StackPanel VerticalAlignment="Center" Height="18" HorizontalAlignment="Center">
                                 <Rectangle Height="2"
                                            Width="2"
                                            Margin="2,2"
-                                           HorizontalAligment="Center"
+                                           HorizontalAlignment="Center"
                                            Fill="#FF777777"/>
                                 <Rectangle Height="2"
                                            Width="2"
                                            Margin="2,2"
-                                           HorizontalAligment="Center"
+                                           HorizontalAlignment="Center"
                                            Fill="#FF777777"/>
                                 <Rectangle Height="2"
                                            Width="2"
                                            Margin="2,2"
-                                           HorizontalAligment="Center"
+                                           HorizontalAlignment="Center"
                                            Fill="#FF777777"/>
                             </StackPanel>
                         </Grid>
