@@ -10,26 +10,26 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="400"/>
             <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="400"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="200"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Progress ring" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/> 
-        <controls:BusyIndicator Grid.Column="0" Grid.Row="1"
-            IsBusy="True" 
-            IsIndeterminate="True" 
-            Foreground="#FF3E3E3E"
-            OverlayBrush="#CBFFFBFB"
-            BusyContent="Please wait..."/>
-        <TextBlock Text="Progress bar" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/> 
-        <controls:BusyIndicator Grid.Column="1" Grid.Row="1" 
-            IsBusy="True" 
-            Value="{Binding BusyValue,Mode=TwoWay}" 
-            Foreground="#FF3E3E3E" 
-            OverlayBrush="#CBFFFBFB"
-            BusyContent="Please wait..."/>
-        <Button Content="Load something" Click="{EventBinding LoadSomething}" Grid.Column="1" Grid.Row="2"/>
+        <TextBlock Text="Default Settings" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/> 
+        <controls:BusyIndicator Grid.Column="0" Grid.Row="1" IsBusy="True"/>
+        <TextBlock Text="Custom Message" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/> 
+        <controls:BusyIndicator Grid.Column="1" Grid.Row="1" IsBusy="True" BusyContent="Lorem Ipsum dolorem"/>
+        <TextBlock Text="Custom Content" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/> 
+        <controls:BusyIndicator Grid.Column="2" Grid.Row="1" IsBusy="True" BusyContent="Lorem Ipsum dolorem">
+            <controls:BusyIndicator.BusyContentTemplate>
+                <DataTemplate>
+                  <StackPanel Margin="4">
+                    <TextBlock Text="Downloading Email" FontWeight="Bold" HorizontalAlignment="Center"/>
+                  </StackPanel>
+                </DataTemplate>
+            </controls:BusyIndicator.BusyContentTemplate>
+        </controls:BusyIndicator>
     </Grid>
 </Page>
