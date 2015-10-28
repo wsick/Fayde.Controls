@@ -4,7 +4,7 @@
       xmlns:viewmodels="ViewModels"
       Title="Busy indicator Demo">
     <Page.DataContext>
-        <viewmodels:MainViewModel/>
+        <viewmodels:BusyIndicatorViewModel />
     </Page.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
