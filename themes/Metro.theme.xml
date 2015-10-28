@@ -50,41 +50,6 @@
     <!-- Particle Styling -->
     <SolidColorBrush x:Key="BusyIndicatorParticleColor" Color="#006699"/>
     <SolidColorBrush x:Key="BusyIndicatorParticleBackgroundColor" Color="Transparent"/>
-    <x:Double x:Key="BusyIndicatorParticleOpacity">1</x:Double>
-    <x:Double x:Key="BusyIndicatorParticleRadius">7</x:Double>
-
-    <x:Double x:Key="BusyIndicatorStartingPointX">0</x:Double>
-    <x:Double x:Key="BusyIndicatorStartingPointY">-30</x:Double>
-
-    <x:Double x:Key="BusyIndicatorRotationPointX">0.5</x:Double>
-    <x:Double x:Key="BusyIndicatorRotationPointY">0.5</x:Double>
-
-    <!-- Particle Origin Angles -->
-    <x:Double x:Key="ParticleOriginAngleP0">0</x:Double>
-    <x:Double x:Key="ParticleOriginAngleP1">-10</x:Double>
-    <x:Double x:Key="ParticleOriginAngleP2">-20</x:Double>
-    <x:Double x:Key="ParticleOriginAngleP3">-30</x:Double>
-    <x:Double x:Key="ParticleOriginAngleP4">-40</x:Double>
-
-    <!-- Particle Position & Timing 1 -->
-    <x:Double x:Key="BusyIndicatorParticleBeginAngle1">0</x:Double>
-    <x:Double x:Key="BusyIndicatorParticleEndAngle1">90</x:Double>
-
-    <!-- Particle Position & Timing 2 -->
-    <x:Double x:Key="BusyIndicatorParticleBeginAngle2">90</x:Double>
-    <x:Double x:Key="BusyIndicatorParticleEndAngle2">270</x:Double>
-
-    <!-- Particle Position & Timing 3 -->
-    <x:Double x:Key="BusyIndicatorParticleBeginAngle3">270</x:Double>
-    <x:Double x:Key="BusyIndicatorParticleEndAngle3">360</x:Double>
-
-    <Style x:Key="EllipseStyle" TargetType="Ellipse">
-        <Setter Property="Width" Value="{StaticResource BusyIndicatorParticleRadius}"/>
-        <Setter Property="Height" Value="{StaticResource BusyIndicatorParticleRadius}"/>
-        <Setter Property="Fill" Value="{StaticResource BusyIndicatorParticleColor}"/>
-        <Setter Property="RenderTransformOrigin" Value="0.5, 0.5"/>
-        <Setter Property="Opacity" Value="{StaticResource BusyIndicatorParticleOpacity}"/>
-    </Style>
 
     <!--ValidationToolTipTemplate Style-->
     <ControlTemplate x:Key="ValidationToolTipTemplate" TargetType="ToolTip">
@@ -2506,6 +2471,242 @@
         </Setter>
     </Style>
 
+    <!-- Spinner -->
+    <Style x:Key="SpinnerProgressBar" TargetType="ProgressBar">
+        <Setter Property="Background" Value="{StaticResource BusyIndicatorParticleBackgroundColor}" />
+        <Setter Property="Foreground" Value="{StaticResource BusyIndicatorParticleColor}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ProgressBar">
+                    <Canvas x:Name="Root">
+                        <Canvas.Resources>
+                            <x:Double x:Key="BusyIndicatorParticleOpacity">1</x:Double>
+                            <x:Double x:Key="BusyIndicatorParticleRadius">7</x:Double>
+
+                            <x:Double x:Key="BusyIndicatorStartingPointX">0</x:Double>
+                            <x:Double x:Key="BusyIndicatorStartingPointY">-30</x:Double>
+
+                            <x:Double x:Key="BusyIndicatorRotationPointX">0.5</x:Double>
+                            <x:Double x:Key="BusyIndicatorRotationPointY">0.5</x:Double>
+
+                            <!-- Particle Origin Angles -->
+                            <x:Double x:Key="ParticleOriginAngleP0">0</x:Double>
+                            <x:Double x:Key="ParticleOriginAngleP1">-10</x:Double>
+                            <x:Double x:Key="ParticleOriginAngleP2">-20</x:Double>
+                            <x:Double x:Key="ParticleOriginAngleP3">-30</x:Double>
+                            <x:Double x:Key="ParticleOriginAngleP4">-40</x:Double>
+
+                            <!-- Particle Position & Timing 1 -->
+                            <x:Double x:Key="BusyIndicatorParticleBeginAngle1">0</x:Double>
+                            <x:Double x:Key="BusyIndicatorParticleEndAngle1">90</x:Double>
+
+                            <!-- Particle Position & Timing 2 -->
+                            <x:Double x:Key="BusyIndicatorParticleBeginAngle2">90</x:Double>
+                            <x:Double x:Key="BusyIndicatorParticleEndAngle2">270</x:Double>
+
+                            <!-- Particle Position & Timing 3 -->
+                            <x:Double x:Key="BusyIndicatorParticleBeginAngle3">270</x:Double>
+                            <x:Double x:Key="BusyIndicatorParticleEndAngle3">360</x:Double>
+
+                            <Style x:Key="EllipseStyle" TargetType="Ellipse">
+                                <Setter Property="Width" Value="{StaticResource BusyIndicatorParticleRadius}"/>
+                                <Setter Property="Height" Value="{StaticResource BusyIndicatorParticleRadius}"/>
+                                <Setter Property="RenderTransformOrigin" Value="0.5, 0.5"/>
+                                <Setter Property="Opacity" Value="{StaticResource BusyIndicatorParticleOpacity}"/>
+                            </Style>
+                        </Canvas.Resources>
+                        <Canvas.Triggers>
+                            <EventTrigger RoutedEvent="Canvas.Loaded">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard>
+                                        <Storyboard
+                                                BeginTime="00:00:00.000"
+                                                Duration="00:00:01.800"
+                                                RepeatBehavior="Forever">
+                                            <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="p0"
+                                                    Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)">
+                                                <EasingDoubleKeyFrame KeyTime="00:00:00.000" Value="0"/>
+                                                <EasingDoubleKeyFrame KeyTime="00:00:00.750" Value="90"/>
+                                                <EasingDoubleKeyFrame KeyTime="00:00:01.050" Value="270"/>
+                                                <EasingDoubleKeyFrame KeyTime="00:00:01.800" Value="360"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                    <BeginStoryboard>
+                                        <Storyboard
+                                                BeginTime="00:00:00.100"
+                                                Duration="00:00:01.800"
+                                                RepeatBehavior="Forever">
+                                            <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="p1"
+                                                    Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)">
+                                                <EasingDoubleKeyFrame KeyTime="00:00:00.000" Value="0"/>
+                                                <EasingDoubleKeyFrame KeyTime="00:00:00.750" Value="90"/>
+                                                <EasingDoubleKeyFrame KeyTime="00:00:01.050" Value="270"/>
+                                                <EasingDoubleKeyFrame KeyTime="00:00:01.800" Value="360"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                    <BeginStoryboard>
+                                        <Storyboard
+                                                BeginTime="00:00:00.200"
+                                                Duration="00:00:01.800"
+                                                RepeatBehavior="Forever">
+                                            <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="p2"
+                                                    Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)">
+                                                <EasingDoubleKeyFrame KeyTime="00:00:00.000" Value="0"/>
+                                                <EasingDoubleKeyFrame KeyTime="00:00:00.750" Value="90"/>
+                                                <EasingDoubleKeyFrame KeyTime="00:00:01.050" Value="270"/>
+                                                <EasingDoubleKeyFrame KeyTime="00:00:01.800" Value="360"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                    <BeginStoryboard>
+                                        <Storyboard
+                                                BeginTime="00:00:00.300"
+                                                Duration="00:00:01.800"
+                                                RepeatBehavior="Forever">
+                                            <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="p3"
+                                                    Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)">
+                                                <EasingDoubleKeyFrame KeyTime="00:00:00.000" Value="0"/>
+                                                <EasingDoubleKeyFrame KeyTime="00:00:00.750" Value="90"/>
+                                                <EasingDoubleKeyFrame KeyTime="00:00:01.050" Value="270"/>
+                                                <EasingDoubleKeyFrame KeyTime="00:00:01.800" Value="360"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                    <BeginStoryboard>
+                                        <Storyboard
+                                                BeginTime="00:00:00.400"
+                                                Duration="00:00:01.800"
+                                                RepeatBehavior="Forever">
+                                            <DoubleAnimationUsingKeyFrames
+                                                    Storyboard.TargetName="p4"
+                                                    Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)">
+                                                <EasingDoubleKeyFrame KeyTime="00:00:00.000" Value="0"/>
+                                                <EasingDoubleKeyFrame KeyTime="00:00:00.750" Value="90"/>
+                                                <EasingDoubleKeyFrame KeyTime="00:00:01.050" Value="270"/>
+                                                <EasingDoubleKeyFrame KeyTime="00:00:01.800" Value="360"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                        </Canvas.Triggers>
+                        <Border
+                                x:Name="p0"
+                                Background="{TemplateBinding Background}"
+                                Opacity="{StaticResource BusyIndicatorParticleOpacity}">
+                            <Border.RenderTransform>
+                                <RotateTransform/>
+                            </Border.RenderTransform>
+                            <Border.RenderTransformOrigin>
+                                <Point X="{StaticResource BusyIndicatorRotationPointX}"
+                                       Y="{StaticResource BusyIndicatorRotationPointY}"/>
+                            </Border.RenderTransformOrigin>
+                            <Ellipse Style="{StaticResource EllipseStyle}">
+                                <Ellipse.RenderTransform>
+                                    <TransformGroup>
+                                        <TranslateTransform X="{StaticResource BusyIndicatorStartingPointX}"
+                                                            Y="{StaticResource BusyIndicatorStartingPointY}"/>
+                                        <RotateTransform Angle="{StaticResource ParticleOriginAngleP0}"/>
+                                    </TransformGroup>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                        </Border>
+                        <Border
+                                x:Name="p1"
+                                Background="{TemplateBinding Background}"
+                                Opacity="{StaticResource BusyIndicatorParticleOpacity}">
+                            <Border.RenderTransform>
+                                <RotateTransform/>
+                            </Border.RenderTransform>
+                            <Border.RenderTransformOrigin>
+                                <Point X="{StaticResource BusyIndicatorRotationPointX}"
+                                       Y="{StaticResource BusyIndicatorRotationPointY}"/>
+                            </Border.RenderTransformOrigin>
+                            <Ellipse Style="{StaticResource EllipseStyle}" Fill="{TemplateBinding Foreground}">
+                                <Ellipse.RenderTransform>
+                                    <TransformGroup>
+                                        <TranslateTransform X="{StaticResource BusyIndicatorStartingPointX}"
+                                                            Y="{StaticResource BusyIndicatorStartingPointY}"/>
+                                        <RotateTransform Angle="{StaticResource ParticleOriginAngleP1}"/>
+                                    </TransformGroup>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                        </Border>
+                        <Border
+                                x:Name="p2"
+                                Background="{TemplateBinding Background}"
+                                Opacity="{StaticResource BusyIndicatorParticleOpacity}">
+                            <Border.RenderTransform>
+                                <RotateTransform/>
+                            </Border.RenderTransform>
+                            <Border.RenderTransformOrigin>
+                                <Point X="{StaticResource BusyIndicatorRotationPointX}"
+                                       Y="{StaticResource BusyIndicatorRotationPointY}"/>
+                            </Border.RenderTransformOrigin>
+                            <Ellipse Style="{StaticResource EllipseStyle}" Fill="{TemplateBinding Foreground}">
+                                <Ellipse.RenderTransform>
+                                    <TransformGroup>
+                                        <TranslateTransform X="{StaticResource BusyIndicatorStartingPointX}"
+                                                            Y="{StaticResource BusyIndicatorStartingPointY}"/>
+                                        <RotateTransform Angle="{StaticResource ParticleOriginAngleP2}"/>
+                                    </TransformGroup>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                        </Border>
+                        <Border
+                                x:Name="p3"
+                                Background="{TemplateBinding Background}"
+                                Opacity="{StaticResource BusyIndicatorParticleOpacity}">
+                            <Border.RenderTransform>
+                                <RotateTransform/>
+                            </Border.RenderTransform>
+                            <Border.RenderTransformOrigin>
+                                <Point X="{StaticResource BusyIndicatorRotationPointX}"
+                                       Y="{StaticResource BusyIndicatorRotationPointY}"/>
+                            </Border.RenderTransformOrigin>
+                            <Ellipse Style="{StaticResource EllipseStyle}" Fill="{TemplateBinding Foreground}">
+                                <Ellipse.RenderTransform>
+                                    <TransformGroup>
+                                        <TranslateTransform X="{StaticResource BusyIndicatorStartingPointX}"
+                                                            Y="{StaticResource BusyIndicatorStartingPointY}"/>
+                                        <RotateTransform Angle="{StaticResource ParticleOriginAngleP3}"/>
+                                    </TransformGroup>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                        </Border>
+                        <Border
+                                x:Name="p4"
+                                Background="{TemplateBinding Background}"
+                                Opacity="{StaticResource BusyIndicatorParticleOpacity}">
+                            <Border.RenderTransform>
+                                <RotateTransform/>
+                            </Border.RenderTransform>
+                            <Border.RenderTransformOrigin>
+                                <Point X="{StaticResource BusyIndicatorRotationPointX}"
+                                       Y="{StaticResource BusyIndicatorRotationPointY}"/>
+                            </Border.RenderTransformOrigin>
+                            <Ellipse Style="{StaticResource EllipseStyle}" Fill="{TemplateBinding Foreground}">
+                                <Ellipse.RenderTransform>
+                                    <TransformGroup>
+                                        <TranslateTransform X="{StaticResource BusyIndicatorStartingPointX}"
+                                                            Y="{StaticResource BusyIndicatorStartingPointY}"/>
+                                        <RotateTransform Angle="{StaticResource ParticleOriginAngleP4}"/>
+                                    </TransformGroup>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                        </Border>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- controls:BusyIndicator -->
     <Style TargetType="controls:BusyIndicator">
         <Setter Property="Template">
@@ -2513,7 +2714,6 @@
                 <ControlTemplate TargetType="controls:BusyIndicator">
                     <Grid x:Name="OverlayElement" Background="{TemplateBinding OverlayBrush}">
                         <Grid x:Name="BusyContentContainer" Visibility="{TemplateBinding IsBusy}">
-
                             <Grid x:Name="ProgressBarElement" HorizontalAlignment="Center" VerticalAlignment="Center"
                                   Width="250" Height="60">
                                 <Grid.RowDefinitions>
@@ -2535,198 +2735,11 @@
                                     <RowDefinition Height="80"/>
                                     <RowDefinition Height="20"/>
                                 </Grid.RowDefinitions>
+                                <ProgressBar Style="{StaticResource SpinnerProgressBar}" Grid.Row="0"
+                                             Margin="40,40,0,0"/>
                                 <TextBlock Text="{TemplateBinding BusyContent}"
                                            Foreground="{TemplateBinding Foreground}" Grid.Row="1"/>
-                                <Canvas Grid.Row="0" Margin="40,40,0,0">
-                                    <Canvas.Triggers>
-                                        <EventTrigger RoutedEvent="Canvas.Loaded">
-                                            <EventTrigger.Actions>
-                                                <BeginStoryboard>
-                                                    <Storyboard
-                                                            BeginTime="00:00:00.000"
-                                                            Duration="00:00:01.800"
-                                                            RepeatBehavior="Forever">
-                                                        <DoubleAnimationUsingKeyFrames
-                                                                Storyboard.TargetName="p0"
-                                                                Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)">
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:00.000" Value="0"/>
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:00.750" Value="90"/>
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:01.050" Value="270"/>
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:01.800" Value="360"/>
-                                                        </DoubleAnimationUsingKeyFrames>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                                <BeginStoryboard>
-                                                    <Storyboard
-                                                            BeginTime="00:00:00.100"
-                                                            Duration="00:00:01.800"
-                                                            RepeatBehavior="Forever">
-                                                        <DoubleAnimationUsingKeyFrames
-                                                                Storyboard.TargetName="p1"
-                                                                Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)">
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:00.000" Value="0"/>
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:00.750" Value="90"/>
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:01.050" Value="270"/>
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:01.800" Value="360"/>
-                                                        </DoubleAnimationUsingKeyFrames>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                                <BeginStoryboard>
-                                                    <Storyboard
-                                                            BeginTime="00:00:00.200"
-                                                            Duration="00:00:01.800"
-                                                            RepeatBehavior="Forever">
-                                                        <DoubleAnimationUsingKeyFrames
-                                                                Storyboard.TargetName="p2"
-                                                                Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)">
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:00.000" Value="0"/>
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:00.750" Value="90"/>
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:01.050" Value="270"/>
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:01.800" Value="360"/>
-                                                        </DoubleAnimationUsingKeyFrames>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                                <BeginStoryboard>
-                                                    <Storyboard
-                                                            BeginTime="00:00:00.300"
-                                                            Duration="00:00:01.800"
-                                                            RepeatBehavior="Forever">
-                                                        <DoubleAnimationUsingKeyFrames
-                                                                Storyboard.TargetName="p3"
-                                                                Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)">
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:00.000" Value="0"/>
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:00.750" Value="90"/>
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:01.050" Value="270"/>
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:01.800" Value="360"/>
-                                                        </DoubleAnimationUsingKeyFrames>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                                <BeginStoryboard>
-                                                    <Storyboard
-                                                            BeginTime="00:00:00.400"
-                                                            Duration="00:00:01.800"
-                                                            RepeatBehavior="Forever">
-                                                        <DoubleAnimationUsingKeyFrames
-                                                                Storyboard.TargetName="p4"
-                                                                Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)">
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:00.000" Value="0"/>
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:00.750" Value="90"/>
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:01.050" Value="270"/>
-                                                            <EasingDoubleKeyFrame KeyTime="00:00:01.800" Value="360"/>
-                                                        </DoubleAnimationUsingKeyFrames>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </EventTrigger.Actions>
-                                        </EventTrigger>
-                                    </Canvas.Triggers>
-                                    <Border
-                                            x:Name="p0"
-                                            Background="{StaticResource BusyIndicatorParticleBackgroundColor}"
-                                            Opacity="{StaticResource BusyIndicatorParticleOpacity}">
-                                        <Border.RenderTransform>
-                                            <RotateTransform/>
-                                        </Border.RenderTransform>
-                                        <Border.RenderTransformOrigin>
-                                            <Point X="{StaticResource BusyIndicatorRotationPointX}"
-                                                   Y="{StaticResource BusyIndicatorRotationPointY}"/>
-                                        </Border.RenderTransformOrigin>
-                                        <Ellipse Style="{StaticResource EllipseStyle}">
-                                            <Ellipse.RenderTransform>
-                                                <TransformGroup>
-                                                    <TranslateTransform X="{StaticResource BusyIndicatorStartingPointX}"
-                                                                        Y="{StaticResource BusyIndicatorStartingPointY}"/>
-                                                    <RotateTransform Angle="{StaticResource ParticleOriginAngleP0}"/>
-                                                </TransformGroup>
-                                            </Ellipse.RenderTransform>
-                                        </Ellipse>
-                                    </Border>
-                                    <Border
-                                            x:Name="p1"
-                                            Background="{StaticResource BusyIndicatorParticleBackgroundColor}"
-                                            Opacity="{StaticResource BusyIndicatorParticleOpacity}">
-                                        <Border.RenderTransform>
-                                            <RotateTransform/>
-                                        </Border.RenderTransform>
-                                        <Border.RenderTransformOrigin>
-                                            <Point X="{StaticResource BusyIndicatorRotationPointX}"
-                                                   Y="{StaticResource BusyIndicatorRotationPointY}"/>
-                                        </Border.RenderTransformOrigin>
-                                        <Ellipse Style="{StaticResource EllipseStyle}">
-                                            <Ellipse.RenderTransform>
-                                                <TransformGroup>
-                                                    <TranslateTransform X="{StaticResource BusyIndicatorStartingPointX}"
-                                                                        Y="{StaticResource BusyIndicatorStartingPointY}"/>
-                                                    <RotateTransform Angle="{StaticResource ParticleOriginAngleP1}"/>
-                                                </TransformGroup>
-                                            </Ellipse.RenderTransform>
-                                        </Ellipse>
-                                    </Border>
-                                    <Border
-                                            x:Name="p2"
-                                            Background="{StaticResource BusyIndicatorParticleBackgroundColor}"
-                                            Opacity="{StaticResource BusyIndicatorParticleOpacity}">
-                                        <Border.RenderTransform>
-                                            <RotateTransform/>
-                                        </Border.RenderTransform>
-                                        <Border.RenderTransformOrigin>
-                                            <Point X="{StaticResource BusyIndicatorRotationPointX}"
-                                                   Y="{StaticResource BusyIndicatorRotationPointY}"/>
-                                        </Border.RenderTransformOrigin>
-                                        <Ellipse Style="{StaticResource EllipseStyle}">
-                                            <Ellipse.RenderTransform>
-                                                <TransformGroup>
-                                                    <TranslateTransform X="{StaticResource BusyIndicatorStartingPointX}"
-                                                                        Y="{StaticResource BusyIndicatorStartingPointY}"/>
-                                                    <RotateTransform Angle="{StaticResource ParticleOriginAngleP2}"/>
-                                                </TransformGroup>
-                                            </Ellipse.RenderTransform>
-                                        </Ellipse>
-                                    </Border>
-                                    <Border
-                                            x:Name="p3"
-                                            Background="{StaticResource BusyIndicatorParticleBackgroundColor}"
-                                            Opacity="{StaticResource BusyIndicatorParticleOpacity}">
-                                        <Border.RenderTransform>
-                                            <RotateTransform/>
-                                        </Border.RenderTransform>
-                                        <Border.RenderTransformOrigin>
-                                            <Point X="{StaticResource BusyIndicatorRotationPointX}"
-                                                   Y="{StaticResource BusyIndicatorRotationPointY}"/>
-                                        </Border.RenderTransformOrigin>
-                                        <Ellipse Style="{StaticResource EllipseStyle}">
-                                            <Ellipse.RenderTransform>
-                                                <TransformGroup>
-                                                    <TranslateTransform X="{StaticResource BusyIndicatorStartingPointX}"
-                                                                        Y="{StaticResource BusyIndicatorStartingPointY}"/>
-                                                    <RotateTransform Angle="{StaticResource ParticleOriginAngleP3}"/>
-                                                </TransformGroup>
-                                            </Ellipse.RenderTransform>
-                                        </Ellipse>
-                                    </Border>
-                                    <Border
-                                            x:Name="p4"
-                                            Background="{StaticResource BusyIndicatorParticleBackgroundColor}"
-                                            Opacity="{StaticResource BusyIndicatorParticleOpacity}">
-                                        <Border.RenderTransform>
-                                            <RotateTransform/>
-                                        </Border.RenderTransform>
-                                        <Border.RenderTransformOrigin>
-                                            <Point X="{StaticResource BusyIndicatorRotationPointX}"
-                                                   Y="{StaticResource BusyIndicatorRotationPointY}"/>
-                                        </Border.RenderTransformOrigin>
-                                        <Ellipse Style="{StaticResource EllipseStyle}">
-                                            <Ellipse.RenderTransform>
-                                                <TransformGroup>
-                                                    <TranslateTransform X="{StaticResource BusyIndicatorStartingPointX}"
-                                                                        Y="{StaticResource BusyIndicatorStartingPointY}"/>
-                                                    <RotateTransform Angle="{StaticResource ParticleOriginAngleP4}"/>
-                                                </TransformGroup>
-                                            </Ellipse.RenderTransform>
-                                        </Ellipse>
-                                    </Border>
-                                </Canvas>
                             </Grid>
-
                         </Grid>
                     </Grid>
                 </ControlTemplate>
