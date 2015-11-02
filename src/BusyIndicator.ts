@@ -4,21 +4,20 @@ module Fayde.Controls {
         static IsBusyProperty = DependencyProperty.Register("IsBusy", () => Boolean, BusyIndicator);
         static OverlayBrushProperty = DependencyProperty.Register("OverlayBrush", () => Media.Brush, BusyIndicator);
         static IsIndeterminateProperty = DependencyProperty.Register("IsIndeterminate", () => Boolean, BusyIndicator);
-        static BusyContentProperty = DependencyProperty.Register("BusyContent", () => String, BusyIndicator);
+        //static BusyContentProperty = DependencyProperty.Register("BusyContent", () => String, BusyIndicator);
         static ForegroundProperty = DependencyProperty.Register("Foreground", () => Media.Brush, BusyIndicator);
-        static BusyContentTemplateProperty = DependencyProperty.Register("BusyContentTemplate", () => DataTemplate, BusyIndicator, undefined, (d, args) => (<BusyIndicator>d).OnBusyContentTemplateChanged(args));
+        static BusyContentProperty = DependencyProperty.Register("BusyContent", () => Object, BusyIndicator, null, (d, args) => (<BusyIndicator>d)._OnBusyContentChanged(args));
+        static BusyContentTemplateProperty = DependencyProperty.Register("BusyContentTemplate", () => DataTemplate, BusyIndicator);
         IsBusy: boolean;
         OverlayBrush: Media.Brush;
         IsIndeterminate: boolean;
-        BusyContent: string = "";
+        HasContent: boolean;
+        BusyContent: any;
         Foreground : Media.Brush;
         BusyContentTemplate: DataTemplate;
 
-        private _ProgressRingElement : Grid = null;
-        private _ProgressBarElement : Grid = null;
-        private _ProgressBarFillElement : Shapes.Rectangle = null;
-        
-        
+        private _BusyIndicatorContentContainer : Grid = null;        
+        private _BusyContentControl : ContentControl = null;
         
         constructor() {
             super();
@@ -27,24 +26,49 @@ module Fayde.Controls {
         
         OnApplyTemplate() {
             super.OnApplyTemplate();
-            //this._ProgressRingElement = <Grid>this.GetTemplateChild("ProgressRingElement", Grid);
-            //this._ProgressBarElement = <Grid>this.GetTemplateChild("ProgressBarElement", Grid);
-            //this._ProgressBarFillElement = <Shapes.Rectangle>this.GetTemplateChild("ProgressBarFillElement", Shapes.Rectangle);
+            this._BusyIndicatorContentContainer = <Grid>this.GetTemplateChild("BusyIndicatorContentContainer", Grid);
+            this._BusyContentControl = <ContentControl>this.GetTemplateChild("BusyContentControl",ContentControl);
             this.UpdateUI();
         }
         
+        private _OnBusyContentChanged(args: IDependencyPropertyChangedEventArgs) {
+            this.HasContent = args.NewValue != null;
+            this.OnBusyContentChanged(args.OldValue, args.NewValue);
+        }
+        
+        OnBusyContentChanged(oldValue: any, newValue: any) {
+            this._UpdateContentVisuals();
+        }
+        
         OnBusyContentTemplateChanged (args: IDependencyPropertyChangedEventArgs) {
-           alert(JSON.stringify(args));
+           if(args.NewValue){
+               alert("New Value");
+           }else{
+               alert("Empty");
+           }
+           
+        }
+        
+        private _UpdateContentVisuals() {
+            
+            var contentControl = this._BusyContentControl;
+            if (!contentControl)
+                return;
+                alert("Update");
+                
+            //contentControl.Content = this.BusyContent;
+            contentControl.ContentTemplate = this.BusyContentTemplate;
+            
         }
 
+
         private UpdateUI(){
-            alert("");
+            this._UpdateContentVisuals();
         }
 
         
     }
     TemplateParts(BusyIndicator,
-        { Name: "ProgressRingElement", Type: Grid },
-        { Name: "ProgressBarElement", Type: Grid},
-        { Name: "ProgressBarFillElement", Type: Shapes.Rectangle});
+        { Name: "BusyIndicatorContentContainer", Type: Grid },
+        { Name: "BusyContentControl", Type: ContentControl });
 }

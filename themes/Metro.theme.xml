@@ -2721,16 +2721,10 @@
 
     <!-- controls:BusyIndicator -->
     <Style TargetType="controls:BusyIndicator">
-        <Setter Property="Template">
+        <Setter Property="BusyContentTemplate">
             <Setter.Value>
-                <ControlTemplate TargetType="controls:BusyIndicator">
-                    <Grid>
-                        <Grid x:Name="OverlayElement" Background="{TemplateBinding OverlayBrush}">
-                            <Grid x:Name="BusyContentContainer" Visibility="{TemplateBinding IsBusy}">  
-                            </Grid>
-                        </Grid>
-                        <ContentPresenter>
-                            <Grid x:Name="ProgressRingElement"
+                <DataTemplate>
+                    <Grid x:Name="ProgressRingElement"
                                     Width="Auto"
                                     Height="Auto"
                                     HorizontalAlignment="Center" 
@@ -2745,7 +2739,23 @@
                                         VerticalAlignment="Center"
                                         Foreground="{TemplateBinding Foreground}" Grid.Row="1"/>
                             </Grid>
-                        </ContentPresenter>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:BusyIndicator">
+                    <Grid>
+                        <Grid x:Name="OverlayElement" Background="{TemplateBinding OverlayBrush}">
+                            <Grid x:Name="BusyContentContainer" Visibility="{TemplateBinding IsBusy}">  
+                            </Grid>
+                        </Grid>
+                        <Grid x:Name="BusyIndicatorContentContainer">
+                            <ContentControl x:Name="BusyContentControl"
+                                                ContentTemplate="{TemplateBinding BusyContentTemplate}"
+                                                Content="{TemplateBinding BusyContent}" IsTabStop="False"
+                                                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center"/>
+                        </Grid>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
