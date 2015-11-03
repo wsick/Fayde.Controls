@@ -2473,46 +2473,47 @@
 
     <!-- Spinner -->
     <Style x:Key="SpinnerProgressBar" TargetType="ProgressBar">
-        <Setter Property="Background" Value="{StaticResource BusyIndicatorParticleBackgroundColor}" />
-        <Setter Property="Foreground" Value="{StaticResource BusyIndicatorParticleColor}" />
+        <Setter Property="Background" Value="{StaticResource BusyIndicatorParticleBackgroundColor}"/>
+        <Setter Property="Foreground" Value="{StaticResource BusyIndicatorParticleColor}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ProgressBar">
                     <Grid>
-                        <Canvas x:Name="Root" Width="80" Height="80" HorizontalAligment="Center" VerticalAligment="Center">
+                        <Canvas x:Name="Root" Width="80" Height="80" HorizontalAligment="Center"
+                                VerticalAligment="Center">
                             <Canvas.Resources>
                                 <x:Double x:Key="BusyIndicatorParticleOpacity">1</x:Double>
                                 <x:Double x:Key="BusyIndicatorParticleRadius">6</x:Double>
-    
+
                                 <x:Double x:Key="BusyIndicatorStartingPointX">0</x:Double>
                                 <x:Double x:Key="BusyIndicatorStartingPointY">-30</x:Double>
-    
+
                                 <x:Double x:Key="BusyIndicatorRotationPointX">0.5</x:Double>
                                 <x:Double x:Key="BusyIndicatorRotationPointY">0.5</x:Double>
-    
+
                                 <!-- Particle Origin Angles -->
                                 <x:Double x:Key="ParticleOriginAngleP0">0</x:Double>
                                 <x:Double x:Key="ParticleOriginAngleP1">-10</x:Double>
                                 <x:Double x:Key="ParticleOriginAngleP2">-20</x:Double>
                                 <x:Double x:Key="ParticleOriginAngleP3">-30</x:Double>
                                 <x:Double x:Key="ParticleOriginAngleP4">-40</x:Double>
-    
+
                                 <!-- Particle Position & Timing 1 -->
                                 <x:Double x:Key="BusyIndicatorParticleBeginAngle1">0</x:Double>
                                 <x:Double x:Key="BusyIndicatorParticleEndAngle1">90</x:Double>
-    
+
                                 <!-- Particle Position & Timing 2 -->
                                 <x:Double x:Key="BusyIndicatorParticleBeginAngle2">90</x:Double>
                                 <x:Double x:Key="BusyIndicatorParticleEndAngle2">270</x:Double>
-    
+
                                 <!-- Particle Position & Timing 3 -->
                                 <x:Double x:Key="BusyIndicatorParticleBeginAngle3">270</x:Double>
                                 <x:Double x:Key="BusyIndicatorParticleEndAngle3">360</x:Double>
-                                
+
                                 <!-- Particle Position & Timing 3 -->
                                 <x:Double x:Key="BusyIndicatorParticleBeginAngle3">360</x:Double>
                                 <x:Double x:Key="BusyIndicatorParticleEndAngle3">0</x:Double>
-    
+
                                 <Style x:Key="EllipseStyle" TargetType="Ellipse">
                                     <Setter Property="Margin" Value="0,0,0,0"/>
                                     <Setter Property="Width" Value="{StaticResource BusyIndicatorParticleRadius}"/>
@@ -2612,7 +2613,7 @@
                                 </Border.RenderTransform>
                                 <Border.RenderTransformOrigin>
                                     <Point X="{StaticResource BusyIndicatorRotationPointX}"
-                                        Y="{StaticResource BusyIndicatorRotationPointY}"/>
+                                           Y="{StaticResource BusyIndicatorRotationPointY}"/>
                                 </Border.RenderTransformOrigin>
                                 <Ellipse Style="{StaticResource EllipseStyle}" Fill="{TemplateBinding Foreground}">
                                     <Ellipse.RenderTransform>
@@ -2634,7 +2635,7 @@
                                 </Border.RenderTransform>
                                 <Border.RenderTransformOrigin>
                                     <Point X="{StaticResource BusyIndicatorRotationPointX}"
-                                        Y="{StaticResource BusyIndicatorRotationPointY}"/>
+                                           Y="{StaticResource BusyIndicatorRotationPointY}"/>
                                 </Border.RenderTransformOrigin>
                                 <Ellipse Style="{StaticResource EllipseStyle}" Fill="{TemplateBinding Foreground}">
                                     <Ellipse.RenderTransform>
@@ -2656,7 +2657,7 @@
                                 </Border.RenderTransform>
                                 <Border.RenderTransformOrigin>
                                     <Point X="{StaticResource BusyIndicatorRotationPointX}"
-                                        Y="{StaticResource BusyIndicatorRotationPointY}"/>
+                                           Y="{StaticResource BusyIndicatorRotationPointY}"/>
                                 </Border.RenderTransformOrigin>
                                 <Ellipse Style="{StaticResource EllipseStyle}" Fill="{TemplateBinding Foreground}">
                                     <Ellipse.RenderTransform>
@@ -2678,7 +2679,7 @@
                                 </Border.RenderTransform>
                                 <Border.RenderTransformOrigin>
                                     <Point X="{StaticResource BusyIndicatorRotationPointX}"
-                                        Y="{StaticResource BusyIndicatorRotationPointY}"/>
+                                           Y="{StaticResource BusyIndicatorRotationPointY}"/>
                                 </Border.RenderTransformOrigin>
                                 <Ellipse Style="{StaticResource EllipseStyle}" Fill="{TemplateBinding Foreground}">
                                     <Ellipse.RenderTransform>
@@ -2700,7 +2701,7 @@
                                 </Border.RenderTransform>
                                 <Border.RenderTransformOrigin>
                                     <Point X="{StaticResource BusyIndicatorRotationPointX}"
-                                        Y="{StaticResource BusyIndicatorRotationPointY}"/>
+                                           Y="{StaticResource BusyIndicatorRotationPointY}"/>
                                 </Border.RenderTransformOrigin>
                                 <Ellipse Style="{StaticResource EllipseStyle}" Fill="{TemplateBinding Foreground}">
                                     <Ellipse.RenderTransform>
@@ -2725,20 +2726,18 @@
             <Setter.Value>
                 <DataTemplate>
                     <Grid x:Name="ProgressRingElement"
-                                    Width="Auto"
-                                    Height="Auto"
-                                    HorizontalAlignment="Center" 
-                                    VerticalAlignment="Center">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="50"/>
-                                    </Grid.RowDefinitions>
-                                    <ProgressBar Style="{StaticResource SpinnerProgressBar}" Grid.Row="0" Height="80"/>
-                                    <TextBlock Text="{TemplateBinding BusyContent}" 
-                                        HorizontalAlignment="Center" 
-                                        VerticalAlignment="Center"
-                                        Foreground="{TemplateBinding Foreground}" Grid.Row="1"/>
-                            </Grid>
+                          Width="Auto"
+                          Height="Auto"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <ProgressBar Style="{StaticResource SpinnerProgressBar}" Grid.Row="0" Height="80"/>
+
+                        <TextBlock Text="{Binding}" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -2747,14 +2746,13 @@
                 <ControlTemplate TargetType="controls:BusyIndicator">
                     <Grid>
                         <Grid x:Name="OverlayElement" Background="{TemplateBinding OverlayBrush}">
-                            <Grid x:Name="BusyContentContainer" Visibility="{TemplateBinding IsBusy}">  
+                            <Grid x:Name="BusyContentContainer" Visibility="{TemplateBinding IsBusy}">
                             </Grid>
                         </Grid>
                         <Grid x:Name="BusyIndicatorContentContainer">
-                            <ContentControl x:Name="BusyContentControl"
-                                                ContentTemplate="{TemplateBinding BusyContentTemplate}"
-                                                Content="{TemplateBinding BusyContent}" IsTabStop="False"
-                                                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center"/>
+                            <ContentPresenter ContentTemplate="{TemplateBinding BusyContentTemplate}"
+                                              Content="{TemplateBinding BusyContent}"
+                                              Foreground="{TemplateBinding Foreground}"/>
                         </Grid>
                     </Grid>
                 </ControlTemplate>
