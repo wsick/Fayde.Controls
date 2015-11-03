@@ -1,20 +1,26 @@
 class BusyIndicatorViewModel extends Fayde.MVVM.ViewModelBase {
-    /* BUSY INDICATOR TEST */
     private $$interval: number;
     BusyValue = 0.0;
+    BusyMessage = "";
+    ButtonContent = "Start";
 
-    LoadSomething() {
-        if (this.$$interval)
-            clearInterval(this.$$interval);
+    Download() {
+        alert("Download");
         this.BusyValue = 0.0;
+        this.clearInterval(); 
         this.$$interval = setInterval(() => {
-            this.BusyValue += 1.0;
+            this.BusyValue += 10;
             if (this.BusyValue >= 100) {
                 clearInterval(this.$$interval);
             }
-        }, 25);
+        }, 700);
+    }
+    
+    private clearInterval(){
+        if (this.$$interval)
+            clearInterval(this.$$interval);
     }
 
 }
-Fayde.MVVM.NotifyProperties(BusyIndicatorViewModel, ["BusyValue"]);
+Fayde.MVVM.NotifyProperties(BusyIndicatorViewModel, ["BusyValue","BusyMessage","ButtonContent"]);
 export = BusyIndicatorViewModel;
