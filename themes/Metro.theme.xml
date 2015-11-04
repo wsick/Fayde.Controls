@@ -2749,11 +2749,9 @@
                             <Grid x:Name="BusyContentContainer" Visibility="{TemplateBinding IsBusy}">
                             </Grid>
                         </Grid>
-                        <Grid x:Name="BusyIndicatorContentContainer">
-                            <ContentPresenter ContentTemplate="{TemplateBinding BusyContentTemplate}"
-                                              Content="{TemplateBinding BusyContent}"
-                                              Foreground="{TemplateBinding Foreground}"/>
-                        </Grid>
+                        <ContentPresenter ContentTemplate="{TemplateBinding BusyContentTemplate}"
+                                          Content="{TemplateBinding BusyContent}"
+                                          Foreground="{TemplateBinding Foreground}"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
