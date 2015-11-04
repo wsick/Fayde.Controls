@@ -28,16 +28,10 @@
                     <StackPanel Margin="4">
                         <TextBlock Text="Downloading Email" FontWeight="Bold" HorizontalAlignment="Center"/>
                         <StackPanel Margin="4">
-                            <TextBlock Text="Downloading message 0/10..."/>
+                            <TextBlock Text="{Binding BusyMessage}"/>
                             <ProgressBar Value="{Binding BusyValue}" Height="15"/>
                         </StackPanel>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" Content="Download" Click="{EventBinding Download}" HorizontalAlignment="Center" Margin="0 0 2 0"/>
-                        </Grid>
+                        <Button Grid.Column="0" Content="Download" Click="{EventBinding Download}" HorizontalAlignment="Center" Margin="0 0 2 0"/>
                     </StackPanel>
                 </DataTemplate>
             </controls:BusyIndicator.BusyContentTemplate>
