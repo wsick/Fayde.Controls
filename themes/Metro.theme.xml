@@ -2745,11 +2745,10 @@
             <Setter.Value>
                 <ControlTemplate TargetType="controls:BusyIndicator">
                     <Grid>
-                        <Grid x:Name="OverlayElement" Background="{TemplateBinding OverlayBrush}">
-                            <Grid x:Name="BusyContentContainer" Visibility="{TemplateBinding IsBusy}">
-                            </Grid>
-                        </Grid>
+                        <Rectangle Fill="#06020202"/>
                         <ContentPresenter ContentTemplate="{TemplateBinding BusyContentTemplate}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
                                           Content="{TemplateBinding BusyContent}"
                                           Foreground="{TemplateBinding Foreground}"/>
                     </Grid>
