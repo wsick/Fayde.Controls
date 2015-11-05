@@ -2741,11 +2741,19 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="OverlayStyle">
+         <Setter.Value>
+            <Style TargetType="Rectangle">
+               <Setter Property="Fill" Value="White" />
+               <Setter Property="Opacity" Value="0.5" />
+            </Style>
+         </Setter.Value>
+      </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:BusyIndicator">
                     <Grid>
-                        <Rectangle Fill="#06020202"/>
+                        <Rectangle Style="{TemplateBinding OverlayStyle}"/>
                         <ContentPresenter ContentTemplate="{TemplateBinding BusyContentTemplate}"
                                           HorizontalAlignment="Center"
                                           VerticalAlignment="Center"

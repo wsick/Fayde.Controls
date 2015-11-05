@@ -5,6 +5,7 @@ module Fayde.Controls {
         static HasContentProperty = DependencyProperty.RegisterReadOnly("HasContent", () => Boolean, BusyIndicator, false);
         static BusyContentProperty = DependencyProperty.Register("BusyContent", () => Object, BusyIndicator, undefined, (d: BusyIndicator, args) => d.OnBusyContentChanged(args.OldValue, args.NewValue));
         static BusyContentTemplateProperty = DependencyProperty.Register("BusyContentTemplate", () => DataTemplate, BusyIndicator);
+        static OverlayStyleProperty = DependencyProperty.Register("OverlayStyle",() => Style,BusyIndicator);
         IsBusy: boolean;
         OverlayBrush: Media.Brush;
         HasContent: boolean;
