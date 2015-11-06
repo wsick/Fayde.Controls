@@ -2755,8 +2755,8 @@
                     <Grid>
                         <Rectangle Style="{TemplateBinding OverlayStyle}"/>
                         <ContentPresenter ContentTemplate="{TemplateBinding BusyContentTemplate}"
-                                          HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                           Content="{TemplateBinding BusyContent}"
                                           Foreground="{TemplateBinding Foreground}"/>
                     </Grid>
