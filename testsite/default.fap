@@ -26,6 +26,7 @@
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/contextmenu" Content="ContextMenu" />
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/validation-summary" Content="ValidationSummary" />
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/viewbox" Content="Viewbox" />
+            <HyperlinkButton TargetName="ContentFrame" NavigateUri="/busyindicator" Content="Busy indicator" />
         </StackPanel>
         <Frame x:Name="ContentFrame" Grid.Column="1">
             <Frame.UriMapper>
