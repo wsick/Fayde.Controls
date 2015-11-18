@@ -26,18 +26,6 @@ module Fayde.Controls {
     }
     Library.addEnum(Dock, "Dock");
 
-    export enum DatePickerFormat {
-        Long,
-        Short,
-    }
-    Library.addEnum(DatePickerFormat, "DatePickerFormat");
-
-    export enum TimeDisplayMode {
-        Regular,
-        Military
-    }
-    Library.addEnum(TimeDisplayMode, "TimeDisplayMode");
-
     export enum ValidationSummaryFilters {
         None = 0,
         ObjectErrors = 1,

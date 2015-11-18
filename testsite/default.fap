@@ -21,8 +21,6 @@
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/treeview" Content="TreeView" />
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/tabcontrol" Content="TabControl" />
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/wrappanel" Content="WrapPanel" />
-            <HyperlinkButton TargetName="ContentFrame" NavigateUri="/datepicker" Content="DatePicker" />
-            <HyperlinkButton TargetName="ContentFrame" NavigateUri="/timepicker" Content="TimePicker" />
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/contextmenu" Content="ContextMenu" />
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/validation-summary" Content="ValidationSummary" />
             <HyperlinkButton TargetName="ContentFrame" NavigateUri="/viewbox" Content="Viewbox" />
