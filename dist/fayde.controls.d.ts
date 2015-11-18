@@ -4,6 +4,22 @@ declare module Fayde.Controls {
 declare module Fayde.Controls {
     var Library: nullstone.ILibrary;
 }
+declare module Fayde.Controls {
+    class BusyIndicator extends ContentControl {
+        static IsBusyProperty: DependencyProperty;
+        static HasContentProperty: DependencyProperty;
+        static BusyContentProperty: DependencyProperty;
+        static BusyContentTemplateProperty: DependencyProperty;
+        static OverlayStyleProperty: DependencyProperty;
+        IsBusy: boolean;
+        OverlayStyle: Style;
+        HasContent: boolean;
+        BusyContent: any;
+        BusyContentTemplate: DataTemplate;
+        protected OnBusyContentChanged(oldBusyContent: any, newBusyContent: any): void;
+        constructor();
+    }
+}
 declare module Fayde.Controls.Primitives {
     class MenuBase extends Fayde.Controls.ItemsControl {
         static ItemContainerStyleProperty: DependencyProperty;

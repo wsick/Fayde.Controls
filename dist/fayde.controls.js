@@ -2,7 +2,7 @@ var Fayde;
 (function (Fayde) {
     var Controls;
     (function (Controls) {
-        Controls.version = '0.19.1';
+        Controls.version = '0.20.0';
     })(Controls = Fayde.Controls || (Fayde.Controls = {}));
 })(Fayde || (Fayde = {}));
 var Fayde;
@@ -17,6 +17,29 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+var Fayde;
+(function (Fayde) {
+    var Controls;
+    (function (Controls) {
+        var BusyIndicator = (function (_super) {
+            __extends(BusyIndicator, _super);
+            function BusyIndicator() {
+                _super.call(this);
+                this.DefaultStyleKey = BusyIndicator;
+            }
+            BusyIndicator.prototype.OnBusyContentChanged = function (oldBusyContent, newBusyContent) {
+                this.SetCurrentValue(BusyIndicator.HasContentProperty, !!newBusyContent);
+            };
+            BusyIndicator.IsBusyProperty = DependencyProperty.Register("IsBusy", function () { return Boolean; }, BusyIndicator, false);
+            BusyIndicator.HasContentProperty = DependencyProperty.RegisterReadOnly("HasContent", function () { return Boolean; }, BusyIndicator, false);
+            BusyIndicator.BusyContentProperty = DependencyProperty.Register("BusyContent", function () { return Object; }, BusyIndicator, undefined, function (d, args) { return d.OnBusyContentChanged(args.OldValue, args.NewValue); });
+            BusyIndicator.BusyContentTemplateProperty = DependencyProperty.Register("BusyContentTemplate", function () { return Fayde.DataTemplate; }, BusyIndicator);
+            BusyIndicator.OverlayStyleProperty = DependencyProperty.Register("OverlayStyle", function () { return Fayde.Style; }, BusyIndicator);
+            return BusyIndicator;
+        })(Controls.ContentControl);
+        Controls.BusyIndicator = BusyIndicator;
+    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
+})(Fayde || (Fayde = {}));
 var Fayde;
 (function (Fayde) {
     var Controls;
