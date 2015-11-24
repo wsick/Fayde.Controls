@@ -2764,5 +2764,41 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <Style TargetType="controls:Star">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:Star">
+                    <Canvas x:Name="LayoutRootStar">
+                        <Canvas.RenderTransform>
+                            <ScaleTransform x:Name="scaleTransform" />
+                        </Canvas.RenderTransform>
+                        <Path x:Name="Fill" Fill="{TemplateBinding StarFillBrush}"
+                                Data="M 2,12 l 10,0 l 5,-10 l 5,10 l 10,0 l -7,10 l 2,10 l -10,-5 l -10,5 l 2,-10 Z" />
 
+                        <Path x:Name="HalfFill" Fill="{TemplateBinding HalfFillBrush}"
+                                Data="M 2,12 l 10,0 l 5,-10 v 25 l -10,5 l 2,-10 Z M 34,34" />
+
+                        <Path x:Name="Outline" Stroke="{TemplateBinding Foreground}"
+                                StrokeThickness="{TemplateBinding StrokeThickness}"
+                                StrokeLineJoin="{TemplateBinding StrokeLineJoin}"
+                                Data="M 2,12 l 10,0 l 5,-10 l 5,10 l 10,0 l -7,10 l 2,10 l -10,-5 l -10,5 l 2,-10 Z" />
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="controls:StarRatingControl">
+        <Setter Property="Height" Value="34"/>
+        <Setter Property="Width" Value="170"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:StarRatingControl">
+                    <Grid x:Name="LayoutRootStarList" Background="#00FFFFFF" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>
