@@ -11,3 +11,8 @@ test/lib
 lib/
 testsite/.build/
 test/.build/
+*.js
+*.map
+*.json
+*.scc
+dist/
