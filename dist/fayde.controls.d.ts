@@ -75,36 +75,6 @@ declare module Fayde.Controls {
     }
 }
 declare module Fayde.Controls {
-    class DatePicker extends Control {
-        static SelectedMonthProperty: DependencyProperty;
-        static SelectedDayProperty: DependencyProperty;
-        static SelectedYearProperty: DependencyProperty;
-        static SelectedDateProperty: DependencyProperty;
-        SelectedMonth: number;
-        SelectedDay: number;
-        SelectedYear: number;
-        SelectedDate: DateTime;
-        private OnSelectedMonthChanged(args);
-        private OnSelectedDayChanged(args);
-        private OnSelectedYearChanged(args);
-        private OnSelectedDateChanged(args);
-        private _MonthTextBox;
-        private _DayTextBox;
-        private _YearTextBox;
-        private _MonthGesture;
-        private _DayGesture;
-        private _YearGesture;
-        private _SelectionHandler;
-        constructor();
-        OnApplyTemplate(): void;
-        private CoerceMonth(month);
-        private CoerceDay(day);
-        private CoerceYear(year);
-        private CoerceDate();
-        private _UpdateText();
-    }
-}
-declare module Fayde.Controls {
     enum ValidSpinDirections {
         None = 0,
         Increase = 1,
@@ -123,14 +93,6 @@ declare module Fayde.Controls {
         Top = 1,
         Right = 2,
         Bottom = 3,
-    }
-    enum DatePickerFormat {
-        Long = 0,
-        Short = 1,
-    }
-    enum TimeDisplayMode {
-        Regular = 0,
-        Military = 1,
     }
     enum ValidationSummaryFilters {
         None = 0,
@@ -489,46 +451,6 @@ declare module Fayde.Controls {
     }
 }
 declare module Fayde.Controls {
-    class TimePicker extends Control {
-        static SelectedHourProperty: DependencyProperty;
-        static SelectedMinuteProperty: DependencyProperty;
-        static SelectedSecondProperty: DependencyProperty;
-        static SelectedTimeProperty: DependencyProperty;
-        static IsSecondsShownProperty: DependencyProperty;
-        static DisplayModeProperty: DependencyProperty;
-        SelectedHour: number;
-        SelectedMinute: number;
-        SelectedSecond: number;
-        SelectedTime: TimeSpan;
-        IsSecondsShown: boolean;
-        DisplayMode: TimeDisplayMode;
-        private OnSelectedHourChanged(args);
-        private OnSelectedMinuteChanged(args);
-        private OnSelectedSecondChanged(args);
-        private OnSelectedTimeChanged(args);
-        private OnDisplayModeChanged(args);
-        private _HourTextBox;
-        private _MinuteTextBox;
-        private _SecondTextBox;
-        private _SecondSeparator;
-        private _SuffixTextBlock;
-        private _HourGesture;
-        private _MinuteGesture;
-        private _SecondGesture;
-        private _SuffixGesture;
-        private _SelectionHandler;
-        constructor();
-        OnApplyTemplate(): void;
-        private _GetHourInput();
-        private CoerceHour(hour);
-        private CoerceMinute(minute);
-        private CoerceSecond(second);
-        private CoerceTime();
-        private ToggleAmPm();
-        private _UpdateText();
-    }
-}
-declare module Fayde.Controls {
     class TreeView extends ItemsControl {
         static SelectedItemProperty: DependencyProperty;
         static SelectedValueProperty: DependencyProperty;
@@ -877,20 +799,6 @@ declare module Fayde.Controls.Internal {
     }
 }
 declare module Fayde.Controls.Internal {
-    class SelectionHandler {
-        private _ActiveBox;
-        ActiveBox: TextBox;
-        private _IsMouseDown;
-        private _TextBoxes;
-        constructor(textBoxes: TextBox[]);
-        Dispose(): void;
-        private _GotFocus(sender, e);
-        private _MouseDown(sender, e);
-        private _MouseUp(sender, e);
-        private _LostFocus(sender, e);
-    }
-}
-declare module Fayde.Controls.Internal {
     interface ISpinOwner extends UIElement {
         OnSpin(): any;
         OnIncrement(): any;
@@ -945,6 +853,70 @@ declare module Fayde.Controls.Internal {
         SelectAllText(): void;
         UpdateTextBoxText(): void;
         UpdateIsEditable(): void;
+    }
+}
+declare module Fayde.Controls {
+    import Control = Fayde.Controls.Control;
+    class Star extends Control {
+        static StarFillBrushProperty: DependencyProperty;
+        StarFillBrush: Fayde.Media.Brush;
+        static HalfFillBrushProperty: DependencyProperty;
+        HalfFillBrush: Fayde.Media.Brush;
+        static StrokeThicknessProperty: DependencyProperty;
+        StrokeThickness: number;
+        static StrokeLineJoinProperty: DependencyProperty;
+        StrokeLineJoin: Fayde.Shapes.PenLineJoin;
+        private scaleTransform;
+        constructor();
+        Star_SizeChanged(sender: Object, e: Fayde.SizeChangedEventArgs): void;
+        OnApplyTemplate(): void;
+    }
+}
+declare module Fayde.Controls {
+    import Control = Fayde.Controls.Control;
+    import Brush = Fayde.Media.Brush;
+    class StarRating extends Control {
+        static NumberOfStarsProperty: DependencyProperty;
+        static RatingProperty: DependencyProperty;
+        static HoverRatingProperty: DependencyProperty;
+        static StarFillBrushProperty: DependencyProperty;
+        static UnselectedStarFillBrushProperty: DependencyProperty;
+        static StarOutlineBrushProperty: DependencyProperty;
+        static HoverFillBrushProperty: DependencyProperty;
+        static UnselectedHoverFillBrushProperty: DependencyProperty;
+        static HoverOutlineBrushProperty: DependencyProperty;
+        static StrokeThicknessProperty: DependencyProperty;
+        static StrokeLineJoinProperty: DependencyProperty;
+        NumberOfStars: number;
+        Rating: number;
+        HoverRating: number;
+        StarFillBrush: Brush;
+        UnselectedStarFillBrush: Brush;
+        StarOutlineBrush: Brush;
+        HoverFillBrush: Brush;
+        UnselectedHoverFillBrush: Brush;
+        HoverOutlineBrush: Brush;
+        StrokeThickness: number;
+        StrokeLineJoin: Fayde.Shapes.PenLineJoin;
+        OnNumberOfStarsChanged(e: DependencyPropertyChangedEventArgs): void;
+        OnRatingChanged(e: DependencyPropertyChangedEventArgs): void;
+        private stars;
+        private isHovering;
+        private LayoutRootStarList;
+        constructor();
+        OnApplyTemplate(): void;
+        OnMouseEnter(e: Fayde.Input.MouseEventArgs): void;
+        OnMouseMove(e: Fayde.Input.MouseEventArgs): void;
+        OnMouseLeave(e: Fayde.Input.MouseEventArgs): void;
+        OnMouseLeftButtonDown(e: Fayde.Input.MouseEventArgs): void;
+        private HandleMouseOver(mousePos);
+        private IsInBounds(p);
+        private GetRatingFromPosition(mousePos);
+        private IsHovering;
+        CreateStars(): void;
+        RefreshStarRating(): void;
+        private DrawUnhovered();
+        private DrawStarRating(value, fillBrush, outlineBrush, unselectedBrush);
     }
 }
 declare module Fayde.Controls {
