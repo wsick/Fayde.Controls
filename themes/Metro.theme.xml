@@ -2736,22 +2736,23 @@
                         </Grid.RowDefinitions>
                         <ProgressBar Style="{StaticResource SpinnerProgressBar}" Grid.Row="0" Height="80"/>
 
-                        <TextBlock Text="{Binding}" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding}" Grid.Row="1" HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
                     </Grid>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="OverlayStyle">
-         <Setter.Value>
-            <Style TargetType="Rectangle">
-               <Setter Property="Fill" Value="White" />
-               <Setter Property="Opacity" Value="0.5" />
-            </Style>
-         </Setter.Value>
-      </Setter>
+            <Setter.Value>
+                <Style TargetType="Rectangle">
+                    <Setter Property="Fill" Value="White"/>
+                    <Setter Property="Opacity" Value="0.5"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="controls:BusyIndicator" >
+                <ControlTemplate TargetType="controls:BusyIndicator">
                     <Grid Visibility="{TemplateBinding IsBusy}">
                         <Rectangle Style="{TemplateBinding OverlayStyle}"/>
                         <ContentPresenter ContentTemplate="{TemplateBinding BusyContentTemplate}"
@@ -2765,4 +2766,49 @@
         </Setter>
     </Style>
 
+    <!-- controls:Star -->
+    <Style TargetType="controls:Star">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:Star">
+                    <Canvas x:Name="LayoutRootStar">
+                        <Canvas.RenderTransform>
+                            <ScaleTransform x:Name="scaleTransform"/>
+                        </Canvas.RenderTransform>
+                        <Path x:Name="Fill" Fill="{TemplateBinding StarFillBrush}"
+                              Data="M 2,12 l 10,0 l 5,-10 l 5,10 l 10,0 l -7,10 l 2,10 l -10,-5 l -10,5 l 2,-10 Z"/>
+
+                        <Path x:Name="HalfFill" Fill="{TemplateBinding HalfFillBrush}"
+                              Data="M 2,12 l 10,0 l 5,-10 v 25 l -10,5 l 2,-10 Z M 34,34"/>
+
+                        <Path x:Name="Outline" Stroke="{TemplateBinding Foreground}"
+                              StrokeThickness="{TemplateBinding StrokeThickness}"
+                              StrokeLineJoin="{TemplateBinding StrokeLineJoin}"
+                              Data="M 2,12 l 10,0 l 5,-10 l 5,10 l 10,0 l -7,10 l 2,10 l -10,-5 l -10,5 l 2,-10 Z"/>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- controls:StarRating -->
+    <Style TargetType="controls:StarRating">
+        <Setter Property="Height" Value="34"/>
+        <Setter Property="Width" Value="170"/>
+        <Setter Property="StarFillBrush" Value="#FFFF00"/>
+        <Setter Property="UnselectedStarFillBrush" Value="Transparent" />
+        <Setter Property="StarOutlineBrush" Value="#C0C000"/>
+        <Setter Property="HoverFillBrush" Value="#F0F080"/>
+        <Setter Property="HoverOutlineBrush" Value="#A0A000"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:StarRating">
+                    <Grid x:Name="LayoutRootStarList" Background="#00FFFFFF" Width="{TemplateBinding Width}"
+                          Height="{TemplateBinding Height}">
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>
