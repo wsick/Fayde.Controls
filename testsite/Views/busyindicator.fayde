@@ -2,7 +2,7 @@
       xmlns:x="http://schemas.wsick.com/fayde/x"
       xmlns:controls="lib://fayde.controls"
       xmlns:viewmodels="ViewModels"
-      Title="Busy indicator Demo">
+      Title="BusyIndicator Demo">
     <Page.DataContext>
         <viewmodels:BusyIndicatorViewModel />
     </Page.DataContext>

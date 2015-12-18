@@ -1,0 +1,12 @@
+<Page xmlns="http://schemas.wsick.com/fayde"
+      xmlns:x="http://schemas.wsick.com/fayde/x"
+      xmlns:controls="lib://fayde.controls"
+      Title="StarRating Demo">
+    <Page.DataContext>
+    </Page.DataContext>
+    <Grid x:Name="LayoutRoot">
+        <StackPanel>
+            <controls:StarRating />
+        </StackPanel>
+    </Grid>
+</Page>

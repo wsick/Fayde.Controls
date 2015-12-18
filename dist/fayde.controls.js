@@ -2,7 +2,7 @@ var Fayde;
 (function (Fayde) {
     var Controls;
     (function (Controls) {
-        Controls.version = '0.20.0';
+        Controls.version = '0.20.1';
     })(Controls = Fayde.Controls || (Fayde.Controls = {}));
 })(Fayde || (Fayde = {}));
 var Fayde;
@@ -4515,6 +4515,210 @@ var Fayde;
             })();
             Internal.TextBoxFormatter = TextBoxFormatter;
         })(Internal = Controls.Internal || (Controls.Internal = {}));
+    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    var Controls;
+    (function (Controls) {
+        var Control = Fayde.Controls.Control;
+        var Star = (function (_super) {
+            __extends(Star, _super);
+            function Star() {
+                _super.call(this);
+                this.scaleTransform = new Fayde.Media.ScaleTransform();
+                this.DefaultStyleKey = Star;
+                this.SizeChanged.on(this.Star_SizeChanged, this);
+            }
+            Star.prototype.Star_SizeChanged = function (sender, e) {
+                var scaleX = e.NewSize.width / 34;
+                var scaleY = e.NewSize.height / 34;
+                this.scaleTransform.ScaleX = this.scaleTransform.ScaleY = Math.min(scaleX, scaleY);
+            };
+            Star.prototype.OnApplyTemplate = function () {
+                _super.prototype.OnApplyTemplate.call(this);
+                this.scaleTransform = this.GetTemplateChild("scaleTransform", Fayde.Media.ScaleTransform);
+            };
+            Star.StarFillBrushProperty = DependencyProperty.Register("StarFillBrush", function () { return Fayde.Media.Brush; }, Star, (new Fayde.Media.SolidColorBrush(Color.FromRgba(0xFF, 0xFF, 0x80, 0xFF))));
+            Star.HalfFillBrushProperty = DependencyProperty.Register("HalfFillBrush", function () { return Fayde.Media.Brush; }, Star, undefined);
+            Star.StrokeThicknessProperty = DependencyProperty.Register("StrokeThickness", function () { return Number; }, Star, 2.0);
+            Star.StrokeLineJoinProperty = DependencyProperty.Register("StrokeLineJoin", function () { return Fayde.Shapes.PenLineJoin; }, Star, Fayde.Shapes.PenLineJoin.Round);
+            return Star;
+        })(Control);
+        Controls.Star = Star;
+        Fayde.Controls.TemplateParts(Star, { Name: "scaleTransform", Type: Fayde.Media.ScaleTransform });
+    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    var Controls;
+    (function (Controls) {
+        var Control = Fayde.Controls.Control;
+        var Grid = Fayde.Controls.Grid;
+        var GridUnitType = minerva.controls.grid.GridUnitType;
+        var Brush = Fayde.Media.Brush;
+        var StarRating = (function (_super) {
+            __extends(StarRating, _super);
+            function StarRating() {
+                _super.call(this);
+                this.stars = [];
+                this.isHovering = false;
+                this.DefaultStyleKey = StarRating;
+            }
+            StarRating.prototype.OnNumberOfStarsChanged = function (e) {
+                this.CreateStars();
+                this.RefreshStarRating();
+            };
+            StarRating.prototype.OnRatingChanged = function (e) {
+                this.DrawUnhovered();
+            };
+            StarRating.prototype.OnApplyTemplate = function () {
+                _super.prototype.OnApplyTemplate.call(this);
+                this.LayoutRootStarList = this.GetTemplateChild("LayoutRootStarList", Grid);
+                this.CreateStars();
+            };
+            StarRating.prototype.OnMouseEnter = function (e) {
+                _super.prototype.OnMouseEnter.call(this, e);
+                var mousePos = e.GetPosition(this.LayoutRootStarList);
+                this.HandleMouseOver(mousePos);
+            };
+            StarRating.prototype.OnMouseMove = function (e) {
+                _super.prototype.OnMouseMove.call(this, e);
+                var mousePos = e.GetPosition(this.LayoutRootStarList);
+                this.HandleMouseOver(mousePos);
+            };
+            StarRating.prototype.OnMouseLeave = function (e) {
+                _super.prototype.OnMouseLeave.call(this, e);
+                this.IsHovering = false;
+            };
+            StarRating.prototype.OnMouseLeftButtonDown = function (e) {
+                _super.prototype.OnMouseLeftButtonDown.call(this, e);
+                if (this.IsEnabled) {
+                    this.SetCurrentValue(StarRating.RatingProperty, this.GetRatingFromPosition(e.GetPosition(this.LayoutRootStarList)));
+                }
+            };
+            StarRating.prototype.HandleMouseOver = function (mousePos) {
+                if (this.IsEnabled) {
+                    this.IsHovering = this.IsInBounds(mousePos);
+                    if (this.IsHovering) {
+                        this.SetCurrentValue(StarRating.HoverRatingProperty, this.GetRatingFromPosition(mousePos));
+                    }
+                }
+            };
+            StarRating.prototype.IsInBounds = function (p) {
+                if (this.LayoutRootStarList.ColumnDefinitions.Count > 0) {
+                    var maxX = this.LayoutRootStarList.ColumnDefinitions.GetValueAt(0).ActualWidth * this.NumberOfStars;
+                    var maxY = this.LayoutRootStarList.ColumnDefinitions.GetValueAt(0).ActualWidth;
+                    return (p.y >= 0) &&
+                        (p.y < maxY) &&
+                        (p.x >= 0) &&
+                        (p.x < maxX);
+                }
+                return false;
+            };
+            StarRating.prototype.GetRatingFromPosition = function (mousePos) {
+                var maxRating = this.NumberOfStars * 2;
+                var starRatingWidth = this.LayoutRootStarList.ColumnDefinitions.GetValueAt(0).ActualWidth * this.NumberOfStars;
+                var percent = mousePos.x / starRatingWidth;
+                var value = 0.75 + (percent * maxRating);
+                var rating = parseInt(value.toString());
+                if (rating < 0)
+                    rating = 0;
+                if (rating > maxRating)
+                    rating = maxRating;
+                return rating;
+            };
+            Object.defineProperty(StarRating.prototype, "IsHovering", {
+                get: function () {
+                    return this.isHovering;
+                },
+                set: function (value) {
+                    if (this.isHovering != value) {
+                        this.isHovering = value;
+                        if (!this.isHovering) {
+                            this.DrawUnhovered();
+                        }
+                    }
+                },
+                enumerable: true,
+                configurable: true
+            });
+            StarRating.prototype.CreateStars = function () {
+                if (this.LayoutRootStarList != undefined) {
+                    this.stars = new Array();
+                    this.LayoutRootStarList.ColumnDefinitions.Clear();
+                    this.LayoutRootStarList.Children.Clear();
+                    for (var column = 0; column < this.NumberOfStars; column++) {
+                        var cd = new Fayde.Controls.ColumnDefinition();
+                        cd.Width = new Fayde.Controls.GridLength(34, GridUnitType.Star);
+                        this.LayoutRootStarList.ColumnDefinitions.Add(cd);
+                        var star = new Controls.Star();
+                        star.StarFillBrush = this.StarFillBrush;
+                        star.Foreground = this.StarOutlineBrush;
+                        star.SetValue(Fayde.Controls.Grid.ColumnProperty, column);
+                        var strokeThicknessBinding = new Fayde.Data.Binding();
+                        strokeThicknessBinding.ElementName = "LayoutRootStarList";
+                        strokeThicknessBinding.Path = new Fayde.Data.PropertyPath("Parent.StrokeThickness");
+                        star.SetBinding(Controls.Star.StrokeThicknessProperty, strokeThicknessBinding);
+                        star.StrokeThickness = this.StrokeThickness;
+                        var lineJoinBinding = new Fayde.Data.Binding();
+                        lineJoinBinding.ElementName = "LayoutRootStarList";
+                        lineJoinBinding.Path = new Fayde.Data.PropertyPath("Parent.StrokeLineJoin");
+                        star.SetBinding(Controls.Star.StrokeLineJoinProperty, lineJoinBinding);
+                        star.StrokeLineJoin = this.StrokeLineJoin;
+                        this.LayoutRootStarList.Children.Add(star);
+                        this.stars.push(star);
+                    }
+                    this.RefreshStarRating();
+                }
+            };
+            StarRating.prototype.RefreshStarRating = function () {
+                if (this.isHovering) {
+                    this.DrawStarRating(this.HoverRating, this.HoverFillBrush, this.HoverOutlineBrush, this.UnselectedHoverFillBrush);
+                }
+                else {
+                    this.DrawUnhovered();
+                }
+            };
+            StarRating.prototype.DrawUnhovered = function () {
+                this.DrawStarRating(this.Rating, this.StarFillBrush, this.StarOutlineBrush, this.UnselectedStarFillBrush);
+            };
+            StarRating.prototype.DrawStarRating = function (value, fillBrush, outlineBrush, unselectedBrush) {
+                for (var star = 0; star < this.NumberOfStars; star++) {
+                    if (this.stars[star] != undefined) {
+                        if (value >= (star + 1) * 2) {
+                            this.stars[star].StarFillBrush = fillBrush;
+                            this.stars[star].HalfFillBrush = null;
+                        }
+                        else if (value >= 1 + star * 2) {
+                            this.stars[star].StarFillBrush = unselectedBrush;
+                            this.stars[star].HalfFillBrush = fillBrush;
+                        }
+                        else {
+                            this.stars[star].StarFillBrush = unselectedBrush;
+                            this.stars[star].HalfFillBrush = null;
+                        }
+                        this.stars[star].Foreground = outlineBrush;
+                        this.stars[star].StrokeThickness = this.StrokeThickness;
+                        this.stars[star].StrokeLineJoin = this.StrokeLineJoin;
+                    }
+                }
+            };
+            StarRating.NumberOfStarsProperty = DependencyProperty.Register("NumberOfStars", function () { return Number; }, StarRating, 5, function (d, args) { return d.OnNumberOfStarsChanged(args); });
+            StarRating.RatingProperty = DependencyProperty.Register("Rating", function () { return Number; }, StarRating, 0, function (d, args) { return d.OnRatingChanged(args); });
+            StarRating.HoverRatingProperty = DependencyProperty.Register("HoverRating", function () { return Number; }, StarRating, 0, function (d, args) { return d.RefreshStarRating(); });
+            StarRating.StarFillBrushProperty = DependencyProperty.Register("StarFillBrush", function () { return Brush; }, StarRating, undefined, function (d, args) { return d.RefreshStarRating(); });
+            StarRating.UnselectedStarFillBrushProperty = DependencyProperty.Register("UnselectedStarFillBrush", function () { return Brush; }, StarRating, undefined, function (d, args) { return d.RefreshStarRating(); });
+            StarRating.StarOutlineBrushProperty = DependencyProperty.Register("StarOutlineBrush", function () { return Brush; }, StarRating, undefined, function (d, args) { return d.RefreshStarRating(); });
+            StarRating.HoverFillBrushProperty = DependencyProperty.Register("HoverFillBrush", function () { return Brush; }, StarRating, undefined, function (d, args) { return d.RefreshStarRating(); });
+            StarRating.UnselectedHoverFillBrushProperty = DependencyProperty.Register("UnselectedHoverFillBrush", function () { return Brush; }, StarRating, undefined, function (d, args) { return d.RefreshStarRating(); });
+            StarRating.HoverOutlineBrushProperty = DependencyProperty.Register("HoverOutlineBrush", function () { return Brush; }, StarRating, undefined, function (d, args) { return d.RefreshStarRating(); });
+            StarRating.StrokeThicknessProperty = DependencyProperty.Register("StrokeThickness", function () { return Number; }, StarRating, 2.0);
+            StarRating.StrokeLineJoinProperty = DependencyProperty.Register("StrokeLineJoin", function () { return Fayde.Shapes.PenLineJoin; }, StarRating, Fayde.Shapes.PenLineJoin.Round);
+            return StarRating;
+        })(Control);
+        Controls.StarRating = StarRating;
+        Fayde.Controls.TemplateParts(StarRating, { Name: "LayoutRootStarList", Type: Fayde.Controls.Grid });
     })(Controls = Fayde.Controls || (Fayde.Controls = {}));
 })(Fayde || (Fayde = {}));
 var Fayde;
