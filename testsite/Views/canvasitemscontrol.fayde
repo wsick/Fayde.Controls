@@ -1,0 +1,22 @@
+<Page xmlns="http://schemas.wsick.com/fayde"
+      xmlns:x="http://schemas.wsick.com/fayde/x"
+      xmlns:controls="lib://fayde.controls"
+      xmlns:viewmodels="ViewModels"
+      Title="CanvasItemsControl Demo">
+    <Page.DataContext>
+        <viewmodels:CanvasItemsControlViewModel/>
+    </Page.DataContext>
+    <Grid x:Name="LayoutRoot">
+        <controls:CanvasItemsControl ItemsSource="{Binding Items}">
+            <controls:CanvasItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Rectangle Fill="Black"
+                               Width="50"
+                               Height="50"
+                               Canvas.Left="{Binding}"
+                               Canvas.Top="{Binding}"/>
+                </DataTemplate>
+            </controls:CanvasItemsControl.ItemTemplate>
+        </controls:CanvasItemsControl>
+    </Grid>
+</Page>

@@ -2811,4 +2811,15 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!-- controls:CanvasItemsControl -->
+    <Style TargetType="controls:CanvasItemsControl">
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <Canvas />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>
