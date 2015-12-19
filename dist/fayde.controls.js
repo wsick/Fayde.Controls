@@ -2,7 +2,7 @@ var Fayde;
 (function (Fayde) {
     var Controls;
     (function (Controls) {
-        Controls.version = '0.20.1';
+        Controls.version = '0.21.0';
     })(Controls = Fayde.Controls || (Fayde.Controls = {}));
 })(Fayde || (Fayde = {}));
 var Fayde;
@@ -3385,6 +3385,47 @@ var Fayde;
             return UpDownParsingEventArgs;
         })(Fayde.RoutedEventArgs);
         Controls.UpDownParsingEventArgs = UpDownParsingEventArgs;
+    })(Controls = Fayde.Controls || (Fayde.Controls = {}));
+})(Fayde || (Fayde = {}));
+var Fayde;
+(function (Fayde) {
+    var Controls;
+    (function (Controls) {
+        var CanvasItemsControl = (function (_super) {
+            __extends(CanvasItemsControl, _super);
+            function CanvasItemsControl() {
+                _super.call(this);
+                this.DefaultStyleKey = CanvasItemsControl;
+            }
+            CanvasItemsControl.prototype.PrepareContainerForItem = function (container, item) {
+                _super.prototype.PrepareContainerForItem.call(this, container, item);
+                if (container instanceof Fayde.FrameworkElement)
+                    container.TemplateApplied.on(this.BindContainerToCanvas, this);
+            };
+            CanvasItemsControl.prototype.ClearContainerForItem = function (container, item) {
+                _super.prototype.ClearContainerForItem.call(this, container, item);
+                if (container instanceof Fayde.FrameworkElement)
+                    container.TemplateApplied.off(this.BindContainerToCanvas, this);
+                container.ClearValue(Controls.Canvas.LeftProperty);
+                container.ClearValue(Controls.Canvas.TopProperty);
+            };
+            CanvasItemsControl.prototype.BindContainerToCanvas = function (sender, args) {
+                sender.TemplateApplied.off(this.BindContainerToCanvas, this);
+                if (Fayde.VisualTreeHelper.GetChildrenCount(sender) < 1)
+                    return;
+                var root = Fayde.VisualTreeHelper.GetChild(sender, 0);
+                sender.SetBinding(Controls.Canvas.LeftProperty, Fayde.Data.Binding.fromData({
+                    Source: root,
+                    Path: "(Canvas.Left)"
+                }));
+                sender.SetBinding(Controls.Canvas.TopProperty, Fayde.Data.Binding.fromData({
+                    Source: root,
+                    Path: "(Canvas.Top)"
+                }));
+            };
+            return CanvasItemsControl;
+        })(Controls.ItemsControl);
+        Controls.CanvasItemsControl = CanvasItemsControl;
     })(Controls = Fayde.Controls || (Fayde.Controls = {}));
 })(Fayde || (Fayde = {}));
 var Fayde;

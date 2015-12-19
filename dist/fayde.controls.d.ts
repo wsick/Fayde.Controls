@@ -676,6 +676,14 @@ declare module Fayde.Controls {
         constructor(text: string);
     }
 }
+declare module Fayde.Controls {
+    class CanvasItemsControl extends ItemsControl {
+        constructor();
+        PrepareContainerForItem(container: UIElement, item: any): void;
+        ClearContainerForItem(container: UIElement, item: any): void;
+        protected BindContainerToCanvas(sender: FrameworkElement, args: nullstone.IEventArgs): void;
+    }
+}
 declare module Fayde.Controls.contextmenu {
     class RootVisualTracker {
         mousePosition: Point;
