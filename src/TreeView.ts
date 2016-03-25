@@ -132,6 +132,9 @@ module Fayde.Controls {
                     if (this.SelectedContainer.ParentItemsControl == null)
                         this.SelectedContainer.RequiresContainsSelectionUpdate = true;
                 }
+                
+                if (container.Items === null ||
+                    container.Items === undefined) return;
                 var enumerator = container.Items.getEnumerator();
                 while (enumerator.moveNext())
                     stack.push(enumerator.current);

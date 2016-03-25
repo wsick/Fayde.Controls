@@ -612,11 +612,12 @@ module Fayde.Controls {
         var ce = 0;
         if (up) {
             ce = bottom - bottom1.Value;
+            closeEdge.Value = ce;
             return bottom - top1.Value;
         } else {
             ce = top1.Value - top;
+            closeEdge.Value = ce;
             return bottom1.Value - top;
         }
-        closeEdge.Value = ce;
     }
 }
